@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="Academix.Views.StudentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Academix.Views"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:views="clr-namespace:Academix.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="770" d:DesignWidth="1380">
+
+    <DockPanel 
+               LastChildFill="True">
+        <TabControl Background="Transparent">
+           
+            <!--<TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ContentControl></ContentControl>
+                </DataTemplate>
+            </TabControl.ContentTemplate>-->
+            <TabItem Header="Tìm kiếm học sinh" Style="{StaticResource AboveStartTabItem}">
+                <views:SearchStudentView Margin="20"/>
+            </TabItem>
+            <TabItem Header="Tiếp nhận học sinh đầu cấp" Style="{StaticResource AboveMiddleTabItem}">
+                <views:AddNewStudentView Margin="20"/>
+            </TabItem>
+            <TabItem Header="Phân lớp" Style="{StaticResource AboveEndTabItem}">
+                <views:ClassPlacementView Margin="20"/>
+            </TabItem>
+
+        </TabControl>
+    </DockPanel>
+</UserControl>

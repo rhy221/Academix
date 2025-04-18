@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="Academix.Views.ClassPlacementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Academix.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1340">
+    <UserControl.Resources>
+        <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource LightBlueGridViewColumnHeaderStyle}"/>
+    </UserControl.Resources>
+    <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Top"
+                    Orientation="Horizontal"
+                    FlowDirection="RightToLeft"
+                    Margin="0,0,0,20">
+            <StackPanel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource DeepBlueButton}">
+                    <Setter Property="Margin" Value="5,0,5,0"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Content="Hủy phân lớp" />
+            <Button Content="Chuyển đến lớp" />
+            <Button Content="Phân lớp tự động" />
+            <StackPanel Orientation="Horizontal"
+                   VerticalAlignment="Center"
+                   FlowDirection="RightToLeft">
+                <TextBox Height="30"
+                     Width="200"
+                     FlowDirection="LeftToRight"
+                     VerticalAlignment="Center" 
+                     Margin="10,0,0,0"/>
+
+
+
+                <TextBlock FontSize="20"
+                      Height="30"
+                      Foreground="{StaticResource GrayForeground}"
+                      FlowDirection="LeftToRight"
+                      FontWeight="Bold"
+                      VerticalAlignment="Center"
+                      Margin="10,0,0,0"><Run Text="Họ và tên"/></TextBlock>
+            </StackPanel>
+        </StackPanel>
+        
+        <StackPanel Background="White"
+                    Margin="0,0,20,0">
+            <TextBlock
+                Foreground="White"
+                Background="{StaticResource LightBlueBackground}"
+                FontSize="20"
+                FontWeight="Bold"
+                Text="Danh sách lớp"
+                Padding="40,0,40,0"/>
+            
+            <TreeView
+                Background="Transparent"
+                Margin="20">
+                <TreeView.Resources>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="FontSize"
+                            Value="20"/>
+                        <Setter Property="FontWeight"
+                            Value="Bold"/>
+                        <Setter Property="Foreground"
+                            Value="{StaticResource DeepBlueBackground}"/>
+                        <Setter Property="Margin"
+                            Value="0,0,0,10"/>
+                    </Style>
+                </TreeView.Resources>
+                <TreeViewItem Header="Khối 10">
+                    <TreeViewItem Header="Lớp 10a1"/>
+                    <TreeViewItem Header="Lớp 10a2"/>
+                    <TreeViewItem Header="Lớp 10a3"/>
+                    <TreeViewItem Header="Lớp 10a4"/>
+                </TreeViewItem>
+                <TreeViewItem Header="Khối 11">
+                    <TreeViewItem Header="Lớp 11a1"/>
+                    <TreeViewItem Header="Lớp 11a2"/>
+                    <TreeViewItem Header="Lớp 11a3"/>
+                </TreeViewItem>
+                <TreeViewItem Header="Khối 12">
+                    <TreeViewItem Header="Lớp 12a1"/>
+                    <TreeViewItem Header="Lớp 12a2"/>
+                </TreeViewItem>
+            </TreeView>
+
+        </StackPanel>
+        <ListView DockPanel.Dock="Left"
+                  FontSize="20"
+                  HorizontalAlignment="Center"
+                  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="STT" 
+                                    Width="80"/>
+                    <GridViewColumn Header="Họ và tên" 
+                                    Width="300"/>
+                    <GridViewColumn Header="Mã học sinh" 
+                                    Width="200"/>
+                    <GridViewColumn Header="Giới tính" 
+                                    Width="150"/>
+                    <GridViewColumn Header="Ngày sinh" 
+                                    Width="150"/>
+                    <GridViewColumn Header="Check" 
+                                    Width="80"/>
+
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
+</UserControl>

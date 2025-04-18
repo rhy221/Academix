@@ -1,0 +1,176 @@
+﻿<UserControl x:Class="Academix.Views.ClassesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                          xmlns:local="clr-namespace:Academix.Views"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1340">
+    <UserControl.Resources>
+
+        <Style TargetType="GridViewColumnHeader"
+               BasedOn="{StaticResource LightBlueGridViewColumnHeaderStyle}"/>
+
+        <Style TargetType="Button"
+               BasedOn="{StaticResource DeepBlueButton}"/>
+        
+        <Style x:Key="SearchInfoStack" TargetType="StackPanel">
+            <Setter Property="FlowDirection"
+                    Value="RightToLeft"/>
+            <Setter Property="Orientation"
+                    Value="Horizontal"/>
+            <Setter Property="Margin"
+                    Value="0,10,0,10"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Template" 
+                    Value="{StaticResource ComboBoxControlTemplate}"/>
+        </Style>
+
+        <Style TargetType="Expander"
+               BasedOn="{StaticResource LightBlueExpander}"/>
+
+    </UserControl.Resources>
+
+    <DockPanel Background="{StaticResource LightGrayBackground}"
+               LastChildFill="True">
+        <Expander VerticalAlignment="Top"
+            Background="Transparent"
+            BorderBrush="#FF615F5F"
+            FlowDirection="RightToLeft" 
+                  Margin="0,0,20,0"
+            >
+            <Expander.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal"
+                        FlowDirection="LeftToRight"
+                                    Margin="100,0,10,0">
+                        <iconPacks:PackIconMaterial Height="20"
+                            Width="20"
+                            Kind="FileSearch"
+                                                        Foreground="White"
+                            VerticalAlignment="Center"
+                            />
+                        <TextBlock Height="Auto"
+                            Width="Auto"
+                            FontSize="18"
+                                       Foreground="White"
+                                       FontWeight="Bold"
+                            VerticalAlignment="Center"
+                            Margin="10,0,0,0"><Run Text="Thông tin tìm kiếm"/></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </Expander.HeaderTemplate>
+            <StackPanel Background="White">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Setter Property="Width"
+         Value="400"/>
+                        <Setter Property="Height" 
+         Value="35"/>
+                        <Setter Property="FontSize"
+         Value="25"/>
+                        <Setter Property="Foreground"
+         Value="Black"/>
+                        <Setter Property="Background"
+         Value="White"/>
+                        <Setter Property="BorderBrush"
+             Value="{StaticResource GrayBorder}"/>
+                        <Setter Property="BorderThickness"
+         Value="2"/>
+                    </Style>
+
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="FontSize"
+         Value="20"/>
+                        <Setter Property="Foreground"
+         Value="#FF615F5F"/>
+                        <Setter Property="VerticalAlignment"
+         Value="Center"/>
+                        <Setter Property="Margin"
+         Value="20,0,0,0"/>
+                    </Style>
+
+                    <Style TargetType="{x:Type ComboBox}">
+                        <Setter Property="Template"
+             Value="{StaticResource ComboBoxControlTemplate}"/>
+                        <Setter Property="Height"
+             Value="35"/>
+                        <Setter Property="Width"
+             Value="200"/>
+                        <Setter Property="FlowDirection"
+             Value="LeftToRight"/>
+                        <Setter Property="BorderThickness"
+             Value="2"/>
+                    </Style>
+                </StackPanel.Resources>
+                <StackPanel
+                        Orientation="Vertical"
+                        Margin="20,0,20,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type StackPanel}"
+                                   BasedOn="{StaticResource SearchInfoStack}"/>
+                    </StackPanel.Resources>
+                    <StackPanel>
+                        <ComboBox/>
+                        <TextBlock><Run Text="Khối"/></TextBlock>
+                    </StackPanel>
+                    <StackPanel>
+                        <ComboBox/>
+                        <TextBlock><Run Text="GVCN"/></TextBlock>
+                    </StackPanel>
+                    <StackPanel>
+                        <ComboBox/>
+                        <TextBlock><Run Text="Tên lớp"/></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+                <Border 
+                    BorderThickness="0,1,0,0"
+                    BorderBrush="#FF615F5F">
+                    <StackPanel Orientation="Horizontal"
+                                FlowDirection="RightToLeft">
+
+                        <Button Height="40"
+                            Width="140"                               
+                            Margin="20,10,0,10"
+                                >
+                            <StackPanel Orientation="Horizontal"
+                                FlowDirection="LeftToRight">
+                                <iconPacks:PackIconMaterial
+                                    Height="15"
+                                    Width="15"
+                                    Kind="Magnify"
+                                    Foreground="White"
+                                    VerticalAlignment="Center"/>
+                                <TextBlock VerticalAlignment="Center" Foreground="White"><Run Text="Tìm kiếm"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Expander>
+        <ListView Background="White" 
+                  DockPanel.Dock="Left"
+                  FontSize="20"
+                  HorizontalAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="STT"
+                                    Width="100"/>
+                    <GridViewColumn Header="Mã lớp"
+                                    Width="200"/>
+                    <GridViewColumn Header="Tên lớp"
+                                    Width="200"/>
+                    <GridViewColumn Header="Sĩ số"
+                                    Width="150"/>
+                    <GridViewColumn Header="Giáo viên chủ nhiệm"
+                                    Width="250"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </DockPanel>
+</UserControl>

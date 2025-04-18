@@ -9,11 +9,34 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\AcademixIcon.png" />
+    <None Remove="Assets\AcademixLogo.png" />
+    <None Remove="Assets\AcademixWhiteLogo.png" />
+    <None Remove="Assets\HamBarBG.png" />
+    <None Remove="Assets\palette.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Assets\" />
+    <Folder Include="Commands\" />
+    <Folder Include="DbContexts\" />
+    <Folder Include="Converters\" />
+    <Folder Include="Stores\" />
+    <Folder Include="Services\" />
     <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
-    <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\AcademixIcon.png" />
+    <Resource Include="Assets\AcademixLogo.png" />
+    <Resource Include="Assets\AcademixWhiteLogo.png" />
+    <Resource Include="Assets\HamBarBG.png" />
+    <Resource Include="Assets\palette.png" />
   </ItemGroup>
 
 </Project>

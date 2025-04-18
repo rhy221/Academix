@@ -1,0 +1,412 @@
+﻿<UserControl x:Class="Academix.Views.GradeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:local="clr-namespace:Academix.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1340">
+
+    <UserControl.Resources>
+
+       
+    </UserControl.Resources>
+    <DockPanel LastChildFill="True">
+        <Border x:Name="RoundBorder" DockPanel.Dock="Top"
+        HorizontalAlignment="Left"
+        ClipToBounds="True"
+                Background="{StaticResource DeepBlueBackground}"
+            Margin="0,0,0,20">
+            <Border.OpacityMask>
+                <VisualBrush Stretch="None">
+                    <VisualBrush.Visual>
+                        <Border Background="White"  Height="{Binding ActualHeight, ElementName=RoundBorder}"  Width="{Binding ActualWidth, ElementName=RoundBorder}" CornerRadius="8"/>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.OpacityMask>
+            <ListView  Background="Transparent"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+        SelectionMode="Single">
+
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <RadioButton 
+                                Style="{StaticResource DeepBlueRadioButton}" 
+                                Content="{TemplateBinding Content}" 
+                                IsChecked="{Binding IsSelected, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" 
+                            />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.Resources>
+
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+
+                <ListViewItem Content="Học kỳ 1"/>
+                <ListViewItem Content="Học kỳ 2"/>
+            </ListView>
+        </Border>
+
+        <ListView DockPanel.Dock="Top" 
+          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+          Background="{StaticResource DeepBlueBackground}"
+          SelectionMode="Single"
+                  Margin="0,0,0,20">
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <RadioButton 
+                            Style="{StaticResource DeepBlueRadioButton}" 
+                            Content="{TemplateBinding Content}" 
+                            IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListViewItem}, Mode=TwoWay}" 
+                            />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Margin" Value="20,0,0,0"/>
+                </Style>
+            </ListView.Resources>
+
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
+            <ListViewItem Content="Toán"/>
+            <ListViewItem Content="Lý"/>
+            <ListViewItem Content="Hóa"/>
+            <ListViewItem Content="Sinh"/>
+            <ListViewItem Content="Sử"/>
+            <ListViewItem Content="Địa"/>
+            <ListViewItem Content="Văn"/>
+            <ListViewItem Content="Đạo đức"/>
+            <ListViewItem Content="Thể dục"/>
+        </ListView>
+        <Grid DockPanel.Dock="Top"
+              Margin="0,0,0,20">
+            <StackPanel
+                    Orientation="Horizontal"
+                    FlowDirection="RightToLeft"
+                    HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource DeepBlueButton}">
+                        <Setter Property="Margin"
+            Value="5,0,5,0"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Lưu</TextBlock>
+                        <iconPacks:PackIconMaterial
+                            Height="15"
+                            Width="15"
+                            Kind="ContentSave"
+                            VerticalAlignment="Center"
+                            Margin="5,0,0,0">
+
+                        </iconPacks:PackIconMaterial>
+                    </StackPanel>
+                </Button>
+                <Button>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock><Run Text="Xóa"/></TextBlock>
+                        <iconPacks:PackIconMaterial
+                            Height="15"
+                            Width="15"
+                            Kind="CloseCircle"
+                            VerticalAlignment="Center"
+                            Margin="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock><Run Text="Nhập/xuất"/></TextBlock>
+                        <iconPacks:PackIconMaterial
+                            Height="15"
+                            Width="15"
+                            Kind="SwapVerticalBold"
+                            VerticalAlignment="Center"
+                            Margin="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal"
+                    FlowDirection="RightToLeft"
+                            Margin="20,0,0,0">
+                    <ComboBox Height="30"
+                        Width="120"
+                        FlowDirection="LeftToRight"
+                        VerticalAlignment="Center" 
+                        Margin="10,0,0,0">
+                    </ComboBox>
+                    <TextBlock FontSize="20"
+                        Height="30"
+                        Foreground="{StaticResource GrayForeground}"
+                        FlowDirection="LeftToRight"
+                        FontWeight="Bold"
+                        VerticalAlignment="Center"
+                        Margin="10,0,0,0"><Run Text="Khối"/></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                    FlowDirection="RightToLeft"
+                            Margin="20,0,0,0">
+                    <ComboBox Height="30"
+                        Width="120"
+                        FlowDirection="LeftToRight"
+                        VerticalAlignment="Center" 
+                        Margin="10,0,0,0"/>
+                    <TextBlock FontSize="20"
+                        Height="30"
+                        Foreground="{StaticResource GrayForeground}"
+                        FlowDirection="LeftToRight"
+                        FontWeight="Bold"
+                        VerticalAlignment="Center"
+                        Margin="10,0,0,0"><Run Text="Lớp"/></TextBlock>
+                </StackPanel>
+
+            </StackPanel>
+        </Grid>
+
+
+        <DataGrid x:Name="dataGrid" 
+                      SnapsToDevicePixels="True"
+                      UseLayoutRounding="True"
+                      AutoGenerateColumns="False"
+                        HorizontalAlignment="Center"
+          ColumnHeaderHeight="50" ScrollViewer.HorizontalScrollBarVisibility="Visible" 
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      EnableColumnVirtualization="True"
+                      EnableRowVirtualization="True" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False"
+                      >
+            <DataGrid.Resources>
+                <Style x:Key="CustomHeader" TargetType="{x:Type DataGridColumnHeader}">
+                    <!--<Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                                    <Border BorderThickness="0,0,1,0" Background="{StaticResource LightBlueBackground}">
+                                        <ContentPresenter Margin="10,5,10,5"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>-->
+                    <Setter Property="Background"
+                                Value="{StaticResource LightBlueBackground}"/>
+                    <Setter Property="BorderThickness"
+                            Value="1"/>
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Center"/>
+                    <Setter Property="VerticalContentAlignment"
+                                Value="Center"/>
+
+                </Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Foreground"
+                            Value="White"/>
+                    <Setter Property="FontWeight"
+                            Value="Bold"/>
+                    <Setter Property="FontSize"
+                            Value="15"/>
+                    <Setter Property="TextAlignment"
+                            Value="Center"/>
+                </Style>
+                <!--<Style TargetType="DataGridColumnHeadersPresenter">
+                        <Setter Property="Height" Value="60"/>
+                    </Style>-->
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Width="50">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="STT"/>
+                    </DataGridTextColumn.Header>
+
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Width="200">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Họ và tên"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="130">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Mã học sinh"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+
+
+                <DataGridTemplateColumn Width="SizeToHeader">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                    </DataGridTemplateColumn.HeaderStyle>
+                    <DataGridTemplateColumn.Header>
+                        <DockPanel LastChildFill="True">
+                            <TextBlock DockPanel.Dock="Top" 
+                                       TextAlignment="Center"  
+                                       Text="Điểm miệng"/>
+                            <UniformGrid DockPanel.Dock="Top" Rows="1">
+                                <TextBlock Text="M1" TextAlignment="Center" Width="60"/>
+                                <TextBlock Text="M2" TextAlignment="Center" Width="60"/>
+                                <TextBlock Text="M3" TextAlignment="Center" Width="60"/>
+                            </UniformGrid>
+                        </DockPanel>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid HeadersVisibility="None">
+                                <DataGrid.Columns >
+                                    <DataGridTextColumn Width="60"/>
+                                    <DataGridTextColumn Width="60"/>
+                                    <DataGridTextColumn Width="60"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="SizeToHeader">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                    </DataGridTemplateColumn.HeaderStyle>
+                    <DataGridTemplateColumn.Header>
+                        <DockPanel LastChildFill="True">
+                            <TextBlock DockPanel.Dock="Top" 
+                                TextAlignment="Center"  
+                                Text="Điểm 15P"/>
+                            <UniformGrid DockPanel.Dock="Top" Rows="1">
+                                <TextBlock Text="P1" TextAlignment="Center" Width="60"/>
+                                <TextBlock Text="P2" TextAlignment="Center" Width="60"/>
+                                <TextBlock Text="P3" TextAlignment="Center" Width="60"/>
+                            </UniformGrid>
+                        </DockPanel>
+                    </DataGridTemplateColumn.Header>
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid HeadersVisibility="None">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="60"/>
+                                    <DataGridTextColumn Width="60"/>
+                                    <DataGridTextColumn Width="60"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="SizeToHeader">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                    </DataGridTemplateColumn.HeaderStyle>
+                    <DataGridTemplateColumn.Header>
+                        <DockPanel LastChildFill="True">
+                            <TextBlock DockPanel.Dock="Top" 
+                                TextAlignment="Center"  
+                                Text="Điểm 1 tiết"/>
+                            <UniformGrid DockPanel.Dock="Top" Rows="1">
+                                <TextBlock Text="V1" TextAlignment="Center" Width="60"/>
+                                <TextBlock Text="V2" TextAlignment="Center" Width="60"/>
+                                <TextBlock Text="V3" TextAlignment="Center" Width="60"/>
+                                <TextBlock Text="V4" TextAlignment="Center" Width="60"/>
+                            </UniformGrid>
+                        </DockPanel>
+                    </DataGridTemplateColumn.Header>
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid HeadersVisibility="None">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="60"/>
+                                    <DataGridTextColumn Width="60"/>
+                                    <DataGridTextColumn Width="60"/>
+                                    <DataGridTextColumn Width="60"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Width="80" >
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Thi HK"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="80">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="ĐTB"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="100">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Xếp loại"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+
+        <!--<ListView DockPanel.Dock="Top"
+                  FontSize="20" ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                  HorizontalAlignment="Center">
+            <ListView.Resources>
+                <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource LightBlueGridViewColumnHeaderStyle}"/>
+            </ListView.Resources>
+            
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="STT" Width="80"/>
+                    <GridViewColumn Header="Họ và tên" Width="200"/>
+                    <GridViewColumn Header="Mã học sinh" Width="200"/>
+                    <GridViewColumn Header="Điểm miệng" Width="200"/>
+                    <GridViewColumn Header="Điểm 15 phút" Width="200"/>
+                    <GridViewColumn Header="Điểm 1 tiết" Width="200"/>
+                    <GridViewColumn Header="Điểm thi CK" Width="150"/>
+                    <GridViewColumn Header="TBM" Width="100"/>
+                    <GridViewColumn Header="CHECK" Width="100"/>
+
+
+
+
+                </GridView>
+            </ListView.View>
+        </ListView>-->
+    </DockPanel>
+</UserControl>

@@ -190,7 +190,7 @@
                     <iconPacks:PackIconMaterial
                             Height="15"
                             Width="15"
-                            Kind="PlusCircleOutline"
+                            Kind="CloseCircle"
                             Foreground="White"
                             VerticalAlignment="Center"
                             Margin="0,0,5,0"/>
@@ -206,7 +206,7 @@
                     <iconPacks:PackIconMaterial
                             Height="15"
                             Width="15"
-                            Kind="PlusCircleOutline"
+                            Kind="PlusCircle"
                             Foreground="White"
                             VerticalAlignment="Center"
                             Margin="0,0,5,0"/>
@@ -233,12 +233,63 @@
                 FontSize="20" ScrollViewer.HorizontalScrollBarVisibility="Visible"
                   HorizontalAlignment="Center">
 
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xem"/></TextBlock>
+                                <iconPacks:PackIconMaterial
+                                Height="15"
+                                Width="15"
+                                Foreground="{StaticResource DeepBlueForeground}"
+                                Kind="Eye"
+                                VerticalAlignment="Center"
+                                Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Sửa"/></TextBlock>
+                                <iconPacks:PackIconMaterial
+                                                            Height="15"
+                                                            Width="15"
+                                                            Foreground="{StaticResource DeepBlueForeground}"
+                                                            Kind="Pencil"
+                                                            VerticalAlignment="Center"
+                                                            Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xóa"/></TextBlock>
+                                <iconPacks:PackIconMaterial
+                                                            Height="15"
+                                                            Width="15"
+                                                            Foreground="{StaticResource DeepBlueForeground}"
+                                                            Kind="CloseCircle"
+                                                            VerticalAlignment="Center"
+                                                            Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
+
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="100" 
                             Header="STT"/>
-                    <GridViewColumn Header="CHeck"
-                            Width="80"/>
+                    <GridViewColumn
+                            Width="80">
+                        <GridViewColumnHeader>
+                            <CheckBox/>
+                        </GridViewColumnHeader>
+                    </GridViewColumn>
                     <GridViewColumn Header="Mã học sinh"
                             Width="200"/>
                     <GridViewColumn Header="Họ tên"
@@ -247,8 +298,6 @@
                             Width="150"/>
                     <GridViewColumn Header="Giới tính"
                             Width="150"/>
-                    <!--<GridViewColumn Header="Dân tộc"
-                            Width="150"/>-->
                     <GridViewColumn Header="Tên lớp"
                             Width="150"/>
                     <GridViewColumn Header="Trạng thái"

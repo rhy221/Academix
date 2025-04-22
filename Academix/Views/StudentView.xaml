@@ -23,7 +23,7 @@
                 <views:SearchStudentView Margin="20"/>
             </TabItem>
             <TabItem Header="Tiếp nhận học sinh đầu cấp" Style="{StaticResource AboveMiddleTabItem}">
-                <views:AddNewStudentView Margin="20"/>
+                <views:StudentProfile Margin="20"/>
             </TabItem>
             <TabItem Header="Phân lớp" Style="{StaticResource AboveEndTabItem}">
                 <views:ClassPlacementView Margin="20"/>

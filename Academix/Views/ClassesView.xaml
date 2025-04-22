@@ -34,19 +34,68 @@
 
     </UserControl.Resources>
 
-    <DockPanel Background="{StaticResource LightGrayBackground}"
+    <DockPanel 
                LastChildFill="True">
+        <StackPanel Orientation="Horizontal"
+            FlowDirection="RightToLeft"
+            DockPanel.Dock="Top"
+                    Margin="0,0,0,20">
+            <Button 
+                Margin="0,0,10,0">
+                <StackPanel Orientation="Horizontal"
+                    FlowDirection="LeftToRight">
+                    <iconPacks:PackIconMaterial
+                        Height="15"
+                        Width="15"
+                        Kind="CloseCircle"
+                        Foreground="White"
+                        VerticalAlignment="Center"
+                        Margin="0,0,5,0"/>
+                    <TextBlock VerticalAlignment="Center"><Run Text="Xóa"/></TextBlock>
+                </StackPanel>
+
+
+            </Button>
+            <Button 
+                Margin="0,0,5,0">
+                <StackPanel Orientation="Horizontal"
+                    FlowDirection="LeftToRight">
+                    <iconPacks:PackIconMaterial
+                        Height="15"
+                        Width="15"
+                        Kind="PlusCircle"
+                        Foreground="White"
+                        VerticalAlignment="Center"
+                        Margin="0,0,5,0"/>
+                    <TextBlock VerticalAlignment="Center"><Run Text="Thêm mới"/></TextBlock>
+                </StackPanel>
+            </Button>
+            <Button 
+                Margin="0,0,5,0">
+                <StackPanel Orientation="Horizontal"
+                    FlowDirection="LeftToRight">
+                    <TextBlock VerticalAlignment="Center"><Run Text="Nhập xuất"/></TextBlock>
+                    <iconPacks:PackIconMaterial
+                        Height="15"
+                        Width="15"
+                        Kind="SwapVerticalBold"
+                        Foreground="White"
+                        VerticalAlignment="Center"
+                        Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
         <Expander VerticalAlignment="Top"
             Background="Transparent"
             BorderBrush="#FF615F5F"
             FlowDirection="RightToLeft" 
-                  Margin="0,0,20,0"
             >
             <Expander.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal"
                         FlowDirection="LeftToRight"
-                                    Margin="100,0,10,0">
+                                    Margin="80,0,10,0">
                         <iconPacks:PackIconMaterial Height="20"
                             Width="20"
                             Kind="FileSearch"
@@ -99,7 +148,7 @@
                         <Setter Property="Height"
              Value="35"/>
                         <Setter Property="Width"
-             Value="200"/>
+             Value="180"/>
                         <Setter Property="FlowDirection"
              Value="LeftToRight"/>
                         <Setter Property="BorderThickness"
@@ -123,7 +172,7 @@
                     </StackPanel>
                     <StackPanel>
                         <ComboBox/>
-                        <TextBlock><Run Text="Tên lớp"/></TextBlock>
+                        <TextBlock><Run Text="Lớp"/></TextBlock>
                     </StackPanel>
                 </StackPanel>
                 <Border 
@@ -154,20 +203,65 @@
         <ListView Background="White" 
                   DockPanel.Dock="Left"
                   FontSize="20"
-                  HorizontalAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+                  HorizontalAlignment="Center" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                 >
+
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xem"/></TextBlock>
+                                <iconPacks:PackIconMaterial
+                     Height="15"
+                     Width="15"
+                     Foreground="{StaticResource DeepBlueForeground}"
+                     Kind="Eye"
+                     VerticalAlignment="Center"
+                     Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                        
+                    </MenuItem>
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xóa"/></TextBlock>
+                                <iconPacks:PackIconMaterial
+ Height="15"
+ Width="15"
+ Foreground="{StaticResource DeepBlueForeground}"
+ Kind="CloseCircle"
+ VerticalAlignment="Center"
+ Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+
+                    </MenuItem>
+
+
+                </ContextMenu>
+            </ListView.ContextMenu>
 
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="STT"
-                                    Width="100"/>
+                                    Width="80"/>
                     <GridViewColumn Header="Mã lớp"
                                     Width="200"/>
                     <GridViewColumn Header="Tên lớp"
-                                    Width="200"/>
-                    <GridViewColumn Header="Sĩ số"
                                     Width="150"/>
-                    <GridViewColumn Header="Giáo viên chủ nhiệm"
+                    <GridViewColumn Header="Sĩ số"
+                                    Width="100"/>
+                    <GridViewColumn Header="GVCN"
                                     Width="250"/>
+                    <GridViewColumn
+                                    Width="80">
+                        <GridViewColumn.Header>
+                            <CheckBox/>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

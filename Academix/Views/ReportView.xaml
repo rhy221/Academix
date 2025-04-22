@@ -33,7 +33,39 @@
         </Style>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
-
+        <ListView Margin="0,0,20,0"
+                  VerticalAlignment="Top"
+                  Background="{StaticResource DeepBlueBackground}"
+                  BorderThickness="0,1,0,0"
+                 >
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                
+                    <Setter Property="FontSize"
+                            Value="15"/>
+                    <Setter Property="Foreground"
+                            Value="White"/>
+                    <Setter Property="FontWeight"
+                            Value="Bold"/>
+                    <Setter Property="Padding"
+                            Value="10,5,80,5"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{StaticResource DarkBlueBackground}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{StaticResource DarkBlueBackground}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Resources>
+            <ListViewItem Content="Báo cáo tổng kết môn"/>
+            <ListViewItem Content="Báo cáo tổng kết học kỳ"/>
+        </ListView>
         <Expander 
             DockPanel.Dock="Top"
             FlowDirection="RightToLeft" 
@@ -60,11 +92,13 @@
                 </DataTemplate>
             </Expander.HeaderTemplate>
             <StackPanel>
-                <Grid Background="White">
-                    <Grid.Resources>
+                <UniformGrid Background="White"
+                             Columns="2"
+                             FlowDirection="LeftToRight">
+                    <UniformGrid.Resources>
                         <Style TargetType="{x:Type TextBox}">
                             <Setter Property="Width"
-                                Value="400"/>
+                                Value="200"/>
                             <Setter Property="Height" 
                                 Value="35"/>
                             <Setter Property="FontSize"
@@ -96,22 +130,27 @@
                             <Setter Property="Height"
                                 Value="35"/>
                             <Setter Property="Width"
-                                Value="400"/>
+                                Value="250"/>
                             <Setter Property="FlowDirection"
                                 Value="LeftToRight"/>
                             <Setter Property="BorderThickness"
                                 Value="2"/>
                         </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="23*"/>
-                        <ColumnDefinition Width="712*"/>
-                        <ColumnDefinition Width="735*"/>
-                    </Grid.ColumnDefinitions>
+                    </UniformGrid.Resources>
 
-                    <StackPanel Grid.Column="2"
-                        Orientation="Vertical"
-                        Margin="40,0,0,0">
+                    <StackPanel
+                        Orientation="Vertical">
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type StackPanel}"
+                                BasedOn="{StaticResource SearchInfoStack}"/>
+                        </StackPanel.Resources>
+                        <StackPanel>
+                            <ComboBox/>
+                            <TextBlock><Run Text="Năm học"/></TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel
+                        Orientation="Vertical">
                         <StackPanel.Resources>
                             <Style TargetType="{x:Type StackPanel}"
                                 BasedOn="{StaticResource SearchInfoStack}"/>
@@ -121,9 +160,8 @@
                             <TextBlock><Run Text="Học kỳ"/></TextBlock>
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel Grid.Column="1"
-                        Orientation="Vertical"
-                        Margin="17,0,0,0">
+                    <StackPanel
+                        Orientation="Vertical">
                         <StackPanel.Resources>
                             <Style TargetType="{x:Type StackPanel}"
                                 BasedOn="{StaticResource SearchInfoStack}"/>
@@ -133,7 +171,7 @@
                             <TextBlock><Run Text="Môn học"/></TextBlock>
                         </StackPanel>
                     </StackPanel>
-                </Grid>
+                </UniformGrid>
                 <Border Background="White"
                     BorderThickness="0,1,0,0"
                     BorderBrush="#FF615F5F">
@@ -157,7 +195,7 @@
                             <StackPanel Orientation="Horizontal"
                                 FlowDirection="LeftToRight">
                                 <iconPacks:PackIconMaterial
-                                    Kind="MicrosoftExcel"
+                                    Kind="FileExcel"
                                     Foreground="White"
                                     Height="15"
                                     Width="15"

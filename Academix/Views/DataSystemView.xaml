@@ -14,11 +14,8 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <DockPanel>
-            <UniformGrid DockPanel.Dock="Top"
-                Rows="1"
-                   >
-                <Expander 
-                    Margin="0,0,20,0"
+            
+                <Expander DockPanel.Dock="Top"
                           FlowDirection="RightToLeft">
                     <Expander.HeaderTemplate>
                         <DataTemplate>
@@ -41,32 +38,7 @@
                         <views:SystemParametersView/>
                     </ContentControl>
                 </Expander>
-                <Expander 
-                    
-                    Margin="20,0,0,0"
-                    FlowDirection="RightToLeft">
-                    <Expander.HeaderTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal"
-                                FlowDirection="LeftToRight"
-                                Height="30">
-
-                                <TextBlock Height="Auto"
-                                    Width="Auto"
-                                    FontSize="18"
-                                    VerticalAlignment="Center"
-                                    Foreground="White"
-                                    FontWeight="Bold"
-                                    Margin="10,0,100,0"><Run Text="Danh sách khối/lớp"/></TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </Expander.HeaderTemplate>
-                    <ContentControl Margin="0,20,0,0"
-                                    FlowDirection="LeftToRight">
-                        <views:ClassesSystemView/>
-                    </ContentControl>
-                </Expander>
-            </UniformGrid>
+           
             <Expander DockPanel.Dock="Top"
                 
                 Margin="0,20,0,20"

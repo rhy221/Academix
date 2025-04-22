@@ -102,8 +102,12 @@
                                     Width="150"/>
                     <GridViewColumn Header="Ngày sinh" 
                                     Width="150"/>
-                    <GridViewColumn Header="Check" 
-                                    Width="80"/>
+                    <GridViewColumn 
+                                    Width="80">
+                        <GridViewColumn.Header>
+                            <CheckBox/>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
 
                 </GridView>
             </ListView.View>

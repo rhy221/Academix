@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Academix.Views
 {
     /// <summary>
-    /// Interaction logic for ModifyStudentView.xaml
+    /// Interaction logic for StudentProfile.xaml
     /// </summary>
-    public partial class ModifyStudentView : UserControl
+    public partial class StudentProfile : UserControl
     {
-        public ModifyStudentView()
+        public StudentProfile()
         {
             InitializeComponent();
         }

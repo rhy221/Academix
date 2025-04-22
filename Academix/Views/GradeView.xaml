@@ -190,8 +190,8 @@
                       UseLayoutRounding="True"
                       AutoGenerateColumns="False"
                         HorizontalAlignment="Center"
-          ColumnHeaderHeight="50" ScrollViewer.HorizontalScrollBarVisibility="Visible" 
-                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+          ColumnHeaderHeight="50" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                       EnableColumnVirtualization="True"
                       EnableRowVirtualization="True" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False"
                       >

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Academix.Views"
+     xmlns:views="clr-namespace:Academix.Views"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" x:Class="Academix.Views.ReportView"
              mc:Ignorable="d" 
               d:DesignHeight="720" d:DesignWidth="1340">
@@ -33,7 +34,7 @@
         </Style>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
-        <ListView Margin="0,0,20,0"
+        <!--<ListView Margin="0,0,20,0"
                   VerticalAlignment="Top"
                   Background="{StaticResource DeepBlueBackground}"
                   BorderThickness="0,1,0,0"
@@ -65,7 +66,7 @@
             </ListView.Resources>
             <ListViewItem Content="Báo cáo tổng kết môn"/>
             <ListViewItem Content="Báo cáo tổng kết học kỳ"/>
-        </ListView>
+        </ListView>-->
         <Expander 
             DockPanel.Dock="Top"
             FlowDirection="RightToLeft" 
@@ -208,13 +209,31 @@
                 </Border>
             </StackPanel>
         </Expander>
-        <Grid DockPanel.Dock="Top"
+        <!--<Grid DockPanel.Dock="Top"
               Background="{StaticResource LightBlueBackground}">
             <TextBlock FontSize="20"
                        Foreground="White"
                        FontWeight="Bold"
                        Margin="20,10,0,10">Mẫu báo cáo</TextBlock>
         </Grid>
-        <Grid Background="BlueViolet"></Grid>
+        <Grid Background="BlueViolet"></Grid>-->
+        <TabControl
+            TabStripPlacement="Left">
+            <TabControl.Resources>
+                <Style TargetType="TabItem"
+                       BasedOn="{StaticResource LeftTabItem}">
+                    
+                    <Setter Property="Padding"
+                            Value="18,8,50,8"/>
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="Báo cáo tổng kết môn">
+                <views:SubjectReportView/>
+            </TabItem>
+            <TabItem Header="Báo cáo tổng kểt học kỳ">
+                <views:SemesterReportView/>
+
+            </TabItem>
+        </TabControl>
     </DockPanel>
 </UserControl>

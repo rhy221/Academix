@@ -86,31 +86,58 @@
             </TreeView>
 
         </StackPanel>
-        <ListView DockPanel.Dock="Left"
+        <DataGrid DockPanel.Dock="Left"
                   FontSize="20"
                   HorizontalAlignment="Center"
                   >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="STT" 
-                                    Width="80"/>
-                    <GridViewColumn Header="Họ và tên" 
-                                    Width="300"/>
-                    <GridViewColumn Header="Mã học sinh" 
-                                    Width="200"/>
-                    <GridViewColumn Header="Giới tính" 
-                                    Width="150"/>
-                    <GridViewColumn Header="Ngày sinh" 
-                                    Width="150"/>
-                    <GridViewColumn 
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="STT"
                                     Width="80">
-                        <GridViewColumn.Header>
-                            <CheckBox/>
-                        </GridViewColumn.Header>
-                    </GridViewColumn>
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader"
+                               BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Họ và tên" 
+                                    Width="300">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Mã học sinh" 
+                                    Width="200">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Giới tính" 
+                                    Width="150">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Ngày sinh" 
+                                    Width="150">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridCheckBoxColumn Width="80">
+                    <DataGridCheckBoxColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader"
+                BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridCheckBoxColumn.HeaderStyle>
+                    <DataGridCheckBoxColumn.Header>
+                        <CheckBox/>
+                    </DataGridCheckBoxColumn.Header>
 
-                </GridView>
-            </ListView.View>
-        </ListView>
+                </DataGridCheckBoxColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        
     </DockPanel>
 </UserControl>

@@ -3,4 +3,29 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Resources/Colors.xaml"/>
     </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="LightBlueHeader" TargetType="{x:Type DataGridColumnHeader}">
+        <!--<Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                    <Border BorderThickness="0,0,1,0" Background="{StaticResource LightBlueBackground}">
+                        <ContentPresenter Margin="10,5,10,5"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>-->
+        <Setter Property="Background"
+                Value="{StaticResource LightBlueBackground}"/>
+        <Setter Property="Foreground"
+                Value="White"/>
+        <Setter Property="FontWeight"
+                Value="Bold"/>
+        <Setter Property="BorderThickness"
+            Value="1"/>
+        <Setter Property="HorizontalContentAlignment"
+            Value="Center"/>
+        <Setter Property="VerticalContentAlignment"
+                Value="Center"/>
+
+    </Style>
 </ResourceDictionary>

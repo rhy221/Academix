@@ -15,7 +15,7 @@
 
         <Style TargetType="Button"
                BasedOn="{StaticResource DeepBlueButton}"/>
-        
+
         <Style x:Key="SearchInfoStack" TargetType="StackPanel">
             <Setter Property="FlowDirection"
                     Value="RightToLeft"/>
@@ -200,71 +200,91 @@
                 </Border>
             </StackPanel>
         </Expander>
-        <ListView Background="White" 
-                  DockPanel.Dock="Left"
+        <DataGrid DockPanel.Dock="Left"
+                  Background="White"                   
                   FontSize="20"
                   HorizontalAlignment="Center" 
-                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                 >
-
-            <ListView.ContextMenu>
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem>
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xem"/></TextBlock>
                                 <iconPacks:PackIconMaterial
-                     Height="15"
-                     Width="15"
-                     Foreground="{StaticResource DeepBlueForeground}"
-                     Kind="Eye"
-                     VerticalAlignment="Center"
-                     Margin="5,0,0,0"/>
+                    Height="15"
+                    Width="15"
+                    Foreground="{StaticResource DeepBlueForeground}"
+                    Kind="Eye"
+                    VerticalAlignment="Center"
+                    Margin="5,0,0,0"/>
                             </StackPanel>
                         </MenuItem.Header>
-                        
+
                     </MenuItem>
                     <MenuItem>
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xóa"/></TextBlock>
                                 <iconPacks:PackIconMaterial
- Height="15"
- Width="15"
- Foreground="{StaticResource DeepBlueForeground}"
- Kind="CloseCircle"
- VerticalAlignment="Center"
- Margin="5,0,0,0"/>
+Height="15"
+Width="15"
+Foreground="{StaticResource DeepBlueForeground}"
+Kind="CloseCircle"
+VerticalAlignment="Center"
+Margin="5,0,0,0"/>
                             </StackPanel>
                         </MenuItem.Header>
 
                     </MenuItem>
-
-
                 </ContextMenu>
-            </ListView.ContextMenu>
-
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="STT"
-                                    Width="80"/>
-                    <GridViewColumn Header="Mã lớp"
-                                    Width="200"/>
-                    <GridViewColumn Header="Tên lớp"
-                                    Width="150"/>
-                    <GridViewColumn Header="Sĩ số"
-                                    Width="100"/>
-                    <GridViewColumn Header="GVCN"
-                                    Width="250"/>
-                    <GridViewColumn
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="STT"
                                     Width="80">
-                        <GridViewColumn.Header>
-                            <CheckBox/>
-                        </GridViewColumn.Header>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Tên lớp"
+                                    Width="150">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Sĩ số"
+                                    Width="100">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="GVCN"
+                                    Width="250">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Năm học"
+                                    Width="200">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+
+                <DataGridCheckBoxColumn Width="80">
+                    <DataGridCheckBoxColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader"
+                               BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridCheckBoxColumn.HeaderStyle>
+                    <DataGridCheckBoxColumn.Header>
+                        <CheckBox/>
+                    </DataGridCheckBoxColumn.Header>
+
+                </DataGridCheckBoxColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+       
+
 
     </DockPanel>
 </UserControl>

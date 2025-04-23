@@ -196,26 +196,7 @@
                       EnableRowVirtualization="True" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False"
                       >
             <DataGrid.Resources>
-                <Style x:Key="CustomHeader" TargetType="{x:Type DataGridColumnHeader}">
-                    <!--<Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
-                                    <Border BorderThickness="0,0,1,0" Background="{StaticResource LightBlueBackground}">
-                                        <ContentPresenter Margin="10,5,10,5"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>-->
-                    <Setter Property="Background"
-                                Value="{StaticResource LightBlueBackground}"/>
-                    <Setter Property="BorderThickness"
-                            Value="1"/>
-                    <Setter Property="HorizontalContentAlignment"
-                            Value="Center"/>
-                    <Setter Property="VerticalContentAlignment"
-                                Value="Center"/>
-
-                </Style>
+                
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Foreground"
                             Value="White"/>
@@ -235,7 +216,7 @@
 
                 <DataGridTextColumn Width="50">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.Header>
                         <TextBlock Text="STT"/>
@@ -245,7 +226,7 @@
 
                 <DataGridTextColumn Width="200">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Họ và tên"/>
@@ -253,7 +234,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Width="130">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Mã học sinh"/>
@@ -264,7 +245,7 @@
 
                 <DataGridTemplateColumn Width="SizeToHeader">
                     <DataGridTemplateColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTemplateColumn.HeaderStyle>
                     <DataGridTemplateColumn.Header>
                         <DockPanel LastChildFill="True">
@@ -293,7 +274,7 @@
 
                 <DataGridTemplateColumn Width="SizeToHeader">
                     <DataGridTemplateColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTemplateColumn.HeaderStyle>
                     <DataGridTemplateColumn.Header>
                         <DockPanel LastChildFill="True">
@@ -323,7 +304,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="SizeToHeader">
                     <DataGridTemplateColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTemplateColumn.HeaderStyle>
                     <DataGridTemplateColumn.Header>
                         <DockPanel LastChildFill="True">
@@ -356,7 +337,7 @@
 
                 <DataGridTextColumn Width="80" >
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Thi HK"/>
@@ -364,7 +345,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Width="80">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.Header>
                         <TextBlock Text="ĐTB"/>
@@ -372,7 +353,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Width="100">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.Header>
                         <TextBlock Text="Xếp loại"/>

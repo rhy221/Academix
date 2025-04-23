@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Commands\" />
     <Folder Include="DbContexts\" />
     <Folder Include="Converters\" />

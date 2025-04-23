@@ -228,24 +228,23 @@
                 </StackPanel>
             </Button>
         </StackPanel>
-        <ListView Background="White" 
+        <DataGrid Background="White" 
                 DockPanel.Dock="Top"
-                FontSize="20" ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                FontSize="20" ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   HorizontalAlignment="Center">
-
-            <ListView.ContextMenu>
+            <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem>
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xem"/></TextBlock>
                                 <iconPacks:PackIconMaterial
-                                Height="15"
-                                Width="15"
-                                Foreground="{StaticResource DeepBlueForeground}"
-                                Kind="Eye"
-                                VerticalAlignment="Center"
-                                Margin="5,0,0,0"/>
+                Height="15"
+                Width="15"
+                Foreground="{StaticResource DeepBlueForeground}"
+                Kind="Eye"
+                VerticalAlignment="Center"
+                Margin="5,0,0,0"/>
                             </StackPanel>
                         </MenuItem.Header>
                     </MenuItem>
@@ -254,12 +253,12 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Sửa"/></TextBlock>
                                 <iconPacks:PackIconMaterial
-                                                            Height="15"
-                                                            Width="15"
-                                                            Foreground="{StaticResource DeepBlueForeground}"
-                                                            Kind="Pencil"
-                                                            VerticalAlignment="Center"
-                                                            Margin="5,0,0,0"/>
+                                            Height="15"
+                                            Width="15"
+                                            Foreground="{StaticResource DeepBlueForeground}"
+                                            Kind="Pencil"
+                                            VerticalAlignment="Center"
+                                            Margin="5,0,0,0"/>
                             </StackPanel>
                         </MenuItem.Header>
                     </MenuItem>
@@ -268,44 +267,83 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xóa"/></TextBlock>
                                 <iconPacks:PackIconMaterial
-                                                            Height="15"
-                                                            Width="15"
-                                                            Foreground="{StaticResource DeepBlueForeground}"
-                                                            Kind="CloseCircle"
-                                                            VerticalAlignment="Center"
-                                                            Margin="5,0,0,0"/>
+                                            Height="15"
+                                            Width="15"
+                                            Foreground="{StaticResource DeepBlueForeground}"
+                                            Kind="CloseCircle"
+                                            VerticalAlignment="Center"
+                                            Margin="5,0,0,0"/>
                             </StackPanel>
                         </MenuItem.Header>
                     </MenuItem>
 
                 </ContextMenu>
-            </ListView.ContextMenu>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="100" 
-                            Header="STT"/>
-                    <GridViewColumn
-                            Width="80">
-                        <GridViewColumnHeader>
-                            <CheckBox/>
-                        </GridViewColumnHeader>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Mã học sinh"
-                            Width="200"/>
-                    <GridViewColumn Header="Họ tên"
-                            Width="250"/>
-                    <GridViewColumn Header="Ngày sinh"
-                            Width="150"/>
-                    <GridViewColumn Header="Giới tính"
-                            Width="150"/>
-                    <GridViewColumn Header="Tên lớp"
-                            Width="150"/>
-                    <GridViewColumn Header="Trạng thái"
-                            Width="150"/>
-                </GridView>
-            </ListView.View>
-            <ListViewItem/>
-        </ListView>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="STT"
+                                    Width="100">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader"
+                               BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridCheckBoxColumn Width="80">
+                    <DataGridCheckBoxColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridCheckBoxColumn.HeaderStyle>
+                    <DataGridCheckBoxColumn.Header>
+                        <CheckBox/>
+                    </DataGridCheckBoxColumn.Header>
+
+                </DataGridCheckBoxColumn>
+                <DataGridTextColumn Header="Mã học sinh"
+                            Width="200">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Họ tên"
+                            Width="250">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Ngày sinh"
+                            Width="150">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Giới tính"
+                            Width="150">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Tên lớp"
+                            Width="150">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Trạng thái"
+                            Width="150">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+
+            </DataGrid.Columns>
+
+        </DataGrid>
 
     </DockPanel>
 

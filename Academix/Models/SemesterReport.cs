@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Academix.Models
 {
-    class SemesterReport: Report
+    public class SemesterReport: Report
     {
         public string Semester { get; }
         public string SchoolYear { get; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Academix.Models
 {
-    class Classroom
+    public class Classroom
     {
         public string ID { get; } // NamHoc_TenLop
         public string Name => ID.Substring(4);

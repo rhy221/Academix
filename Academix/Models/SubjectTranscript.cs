@@ -9,7 +9,7 @@ using System.Windows.Navigation;
 
 namespace Academix.Models
 {
-    class SubjectTranscript
+    public class SubjectTranscript
     {
         public string ID { get; }
         public string Semester { get; }

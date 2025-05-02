@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Academix.Models
 {
-   abstract class Report
+   public abstract class Report
     {
         public string ID { get; }
 

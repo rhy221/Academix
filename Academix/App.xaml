@@ -19,7 +19,7 @@
                 <ResourceDictionary Source="/Resources/Styles/CustomDataGrids.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/CustomListViews.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/CustomTabControls.xaml"/>
-
+                <ResourceDictionary Source="/Resources/Styles/CustomToggleButtons.xaml"/>
                 <ResourceDictionary Source="/Resources/Colors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         

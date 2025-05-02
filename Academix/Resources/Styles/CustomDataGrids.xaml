@@ -21,7 +21,7 @@
         <Setter Property="FontWeight"
                 Value="Bold"/>
         <Setter Property="BorderThickness"
-            Value="1"/>
+            Value="1,0,0,1"/>
         <Setter Property="HorizontalContentAlignment"
             Value="Center"/>
         <Setter Property="VerticalContentAlignment"

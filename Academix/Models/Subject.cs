@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Academix.Models
 {
-    class Subject
+    public class Subject
     {
         public static string Oral = "M";
         public static string Short = "15P";
@@ -24,6 +24,13 @@ namespace Academix.Models
             ID = iD;
             Name = name;
             _scores = new Dictionary<string, int>() { [Oral] = 3, [Short] = 3, [Period] = 4, [Final] = 1 };
+        }
+
+        public Subject(string iD, string name, Dictionary<string, int> score)
+        {
+            ID = iD;
+            Name = name;
+            _scores = score;
         }
 
         public Subject(Subject other)

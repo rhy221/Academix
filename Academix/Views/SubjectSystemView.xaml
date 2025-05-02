@@ -4,33 +4,50 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Academix.Views"
+                 xmlns:viewModels="clr-namespace:Academix.ViewModels"
+    xmlns:converters="clr-namespace:Academix.Converters"
+                 xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
              x:Class="Academix.Views.SubjectSystemView"
              mc:Ignorable="d" 
              d:DesignHeight="770" d:DesignWidth="1380">
+    <UserControl.DataContext>
+        <viewModels:SubjectSystemViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <DataTemplate x:Key="ToggleModifyContent">
+            <StackPanel Orientation="Horizontal"
+                        FlowDirection="LeftToRight">
+                <iconPacks:PackIconMaterial
+                                         Height="15"
+                                         Width="15"
+                                         Kind="Pencil"
+                                         Foreground="White"
+                                         VerticalAlignment="Center"
+                                         Margin="0,0,5,0"/>
+                <TextBlock VerticalAlignment="Center"><Run Text="Sửa"/></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="ToggleCloseContent">
+            <StackPanel Orientation="Horizontal"
+FlowDirection="LeftToRight">
+                <iconPacks:PackIconMaterial
+                 Height="15"
+                 Width="15"
+                 Kind="CloseCircle"
+                 Foreground="White"
+                 VerticalAlignment="Center"
+                 Margin="0,0,5,0"/>
+                <TextBlock VerticalAlignment="Center"><Run Text="Đóng"/></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>
+    </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Top"
               Margin="0,0,0,20">
-            <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Left"
-                        Margin="20,0,0,0">
-                <StackPanel Orientation="Horizontal"
-                FlowDirection="RightToLeft">
-                    <ComboBox Height="30"
-                    Width="120"
-                    FlowDirection="LeftToRight"
-                    VerticalAlignment="Center" 
-                    Margin="10,0,0,0"/>
-                    <TextBlock FontSize="20"
-                    Height="30"
-                    Foreground="{StaticResource GrayForeground}"
-                    FlowDirection="LeftToRight"
-                    FontWeight="Bold"
-                    VerticalAlignment="Center"
-                    Margin="10,0,0,0"><Run Text="Khối"/></TextBlock>
-                </StackPanel>
 
-            </StackPanel>
             <StackPanel 
             Orientation="Horizontal"
             FlowDirection="RightToLeft"
@@ -40,8 +57,10 @@
                         <Setter Property="Margin"
                  Value="5,0,5,0"/>
                     </Style>
+                    
                 </StackPanel.Resources>
-                <Button>
+                <Button
+                    Command="{Binding SaveCommand}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock><Run Text="Lưu"/></TextBlock>
                         <iconPacks:PackIconMaterial
@@ -52,7 +71,7 @@
                             Margin="5,0,0,0"/>
                     </StackPanel>
                 </Button>
-                <Button>
+                <!--<Button>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock><Run Text="Khôi phục"/></TextBlock>
                         <iconPacks:PackIconMaterial
@@ -62,34 +81,283 @@
                             VerticalAlignment="Center"
                             Margin="5,0,0,0"/>
                     </StackPanel>
-                </Button>
-                <Button>
-                    <StackPanel Orientation="Horizontal"
-                        FlowDirection="LeftToRight">
-                        <iconPacks:PackIconMaterial
-                            Height="15"
-                            Width="15"
-                            Kind="PlusCircleOutline"
-                            Foreground="White"
-                            VerticalAlignment="Center"
-                            Margin="0,0,5,0"/>
-                        <TextBlock VerticalAlignment="Center"><Run Text="Thêm mới"/></TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock><Run Text="Nhập/xuất"/></TextBlock>
-                        <iconPacks:PackIconMaterial
-                            Height="15"
-                            Width="15"
-                            Kind="SwapVerticalBold"
-                            VerticalAlignment="Center"
-                            Margin="5,0,0,0"/>
-                    </StackPanel>
-                </Button>
+                </Button>-->
+                <ToggleButton x:Name="ModifyToggleButton" 
+                              IsChecked="False"
+                             >
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton"
+                               BasedOn="{StaticResource DeepBlueToggleButton}">
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked"
+                                         Value="True">
+                                    <Setter Property="ContentTemplate"
+                                            Value="{StaticResource ToggleCloseContent}"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked"
+         Value="False">
+                                    <Setter Property="ContentTemplate"
+            Value="{StaticResource ToggleModifyContent}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+            
+                    </ToggleButton.Style>
+                    
+                   
+                </ToggleButton>
             </StackPanel>
         </Grid>
-        <DataGrid DockPanel.Dock="Top" HorizontalAlignment="Center">
+        <TabControl DockPanel.Dock="Right"
+                    VerticalAlignment="Top"
+                    Visibility="Collapsed"
+                    Background="Transparent"
+                    BorderThickness="0">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Width"
+Value="200"/>
+                    <Setter Property="Height" 
+Value="35"/>
+                    <Setter Property="FontSize"
+Value="20"/>
+                    <Setter Property="Foreground"
+Value="{StaticResource GrayForeground}"/>
+                    <Setter Property="Background"
+Value="White"/>
+                    <Setter Property="BorderBrush"
+Value="{StaticResource GrayBorder}"/>
+                    <Setter Property="BorderThickness"
+Value="2"/>
+                    <Setter Property="Padding"
+                            Value="10,0,0,0"/>
+                </Style>
+
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="FontSize"
+Value="20"/>
+                    <Setter Property="Foreground"
+Value="#FF615F5F"/>
+                    <Setter Property="VerticalAlignment"
+Value="Center"/>
+                    <Setter Property="Padding"
+               Value="10,0,10,0"/>
+                    <Setter  Property="FontWeight"
+                 Value="Bold"/>
+                    <Setter Property="FlowDirection"
+                Value="LeftToRight"/>
+                </Style>
+                <Style TargetType="{x:Type Button}"
+           BasedOn="{StaticResource DeepBlueButton}">
+                    <Setter Property="FlowDirection"
+                Value="LeftToRight"/>
+                    <Setter Property="Margin"
+                Value="10,0,0,0"/>
+
+                </Style>
+
+            </TabControl.Resources>
+            <TabControl.Style>
+                <Style TargetType="TabControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=ModifyToggleButton}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                     Value="{x:Static Visibility.Collapsed}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TabControl.Style>
+            <TabItem Header="Thêm mới">
+                <TabItem.Style>
+                    <Style TargetType="TabItem"
+                           BasedOn="{StaticResource AboveStartTabItem}"/>
+                </TabItem.Style>
+                <StackPanel Background="White"
+                    VerticalAlignment="Top"
+                    Visibility="Visible"
+                    Margin="0,10,0,0">
+                    <StackPanel Orientation="Horizontal"
+                        Margin="0,20,0,20">
+                        <TextBlock><Run Text="Tên môn"/></TextBlock>
+                        <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <UniformGrid Columns="2">
+                        <UniformGrid.Resources>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="FlowDirection"
+                                Value="RightToLeft"/>
+                                <Setter Property="Margin"
+                                Value="0,0,10,20"/>
+                            </Style>
+                            <Style TargetType="{x:Type Controls:NumericUpDown}">
+
+                                <Setter Property="Minimum"
+                               Value="0"/>
+                                <Setter Property="Foreground"
+                                Value="{StaticResource GrayForeground}"/>
+                                <Setter Property="FontSize"
+                                Value="20"/>
+                                <Setter Property="FontWeight"
+                                Value="Bold"/>
+                                <Setter Property="BorderBrush"
+                                Value="{StaticResource GrayBorder}"/>
+                                <Setter Property="BorderThickness"
+                                Value="2"/>
+                                <Setter Property="FlowDirection"
+                                Value="LeftToRight"/>
+                                <Setter Property="Width"
+                                Value="130"/>
+                                <Setter Property="Padding"
+                                Value="0,0,150,0"/>
+
+
+                            </Style>
+                        </UniformGrid.Resources>
+                        <StackPanel Orientation="Horizontal" >
+                            <Controls:NumericUpDown Value="{Binding NewOralNum, Mode=TwoWay}"/>
+
+                            <TextBlock><Run Text="Miệng"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Controls:NumericUpDown Value="{Binding NewShortNum, Mode=TwoWay}"/>
+                            <TextBlock><Run Text="15 Phút"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Controls:NumericUpDown  Value="{Binding NewPeriodNum, Mode=TwoWay}"/>
+                            <TextBlock><Run Text="1 Tiết"/></TextBlock>
+                        </StackPanel>
+                    </UniformGrid>
+                    <Button HorizontalAlignment="Right" Margin="0,0,20,20"
+                            Command="{Binding AddNewCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial
+                        Height="15"
+                        Width="15"
+                        Kind="PlusCircle"
+                        VerticalAlignment="Center"
+                        Margin="5,0,0,0"/>
+                            <TextBlock Foreground="White" 
+                                   FontSize="18"><Run Text="Thêm mới"/></TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+            </TabItem>
+            <TabItem Header="Sửa"
+                        >
+                <TabItem.Style>
+                    <Style TargetType="TabItem"
+           BasedOn="{StaticResource AboveEndTabItem}"/>
+                </TabItem.Style>
+                <StackPanel Background="White"
+                    VerticalAlignment="Top"
+                    Margin="0,10,0,0">
+                    
+                    <StackPanel Orientation="Horizontal"
+                        Margin="0,20,0,20"
+                        Visibility="Visible">
+                        <TextBlock><Run Text="Mã môn"/></TextBlock>
+                        <TextBox
+                            IsReadOnly="True"
+                            Text="{Binding ModifyID, Mode=OneWay}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                        Margin="0,0,0,20">
+                        <TextBlock><Run Text="Tên môn"/></TextBlock>
+                        <TextBox Text="{Binding ModifyName, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <UniformGrid Columns="2">
+                        <UniformGrid.Resources>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="FlowDirection"
+                                    Value="RightToLeft"/>
+                                <Setter Property="Margin"
+                                    Value="0,0,10,20"/>
+                            </Style>
+                            <Style TargetType="{x:Type Controls:NumericUpDown}">
+
+                                <Setter Property="Minimum"
+                                    Value="0"/>
+                                <Setter Property="Foreground"
+                                    Value="{StaticResource GrayForeground}"/>
+                                <Setter Property="FontSize"
+                                    Value="20"/>
+                                <Setter Property="FontWeight"
+                                    Value="Bold"/>
+                                <Setter Property="BorderBrush"
+                                    Value="{StaticResource GrayBorder}"/>
+                                <Setter Property="BorderThickness"
+                                    Value="2"/>
+                                <Setter Property="FlowDirection"
+                                    Value="LeftToRight"/>
+                                <Setter Property="Width"
+                                    Value="130"/>
+                                <Setter Property="Padding"
+                                    Value="0,0,150,0"/>
+
+
+                            </Style>
+                        </UniformGrid.Resources>
+                        <StackPanel Orientation="Horizontal" >
+                            <Controls:NumericUpDown Value="{Binding ModifyOralNum, Mode=TwoWay}"/>
+
+                            <TextBlock><Run Text="Miệng"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Controls:NumericUpDown Value="{Binding ModifyShortNum, Mode=TwoWay}"/>
+                            <TextBlock><Run Text="15 Phút"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Controls:NumericUpDown Value="{Binding ModifyPeriodNum, Mode=TwoWay}"  />
+                            <TextBlock><Run Text="1 Tiết"/></TextBlock>
+                        </StackPanel>
+                    </UniformGrid>
+                    <Button HorizontalAlignment="Right" Margin="0,0,20,20"
+                            Command="{Binding ModifyCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial
+                                Height="15"
+                                Width="15"
+                                Kind="Pencil"
+                                VerticalAlignment="Center"
+                                Margin="5,0,0,0"/>
+                            <TextBlock Foreground="White" 
+                                FontSize="18"><Run Text="Sửa"/></TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+            </TabItem>
+        </TabControl>
+        <DataGrid DockPanel.Dock="Right"
+                  HorizontalAlignment="Center"
+                  ItemsSource="{Binding Subjects}"
+                  AutoGenerateColumns="False"
+                  FontSize="20"
+                  SelectionUnit="FullRow"
+                  SelectionMode="Single"
+                  AlternationCount="10000"
+                  Margin="0,0,20,0"
+                  SelectedItem="{Binding SelectedSubject}"
+                  IsReadOnly="True">
             <DataGrid.Resources>
                 <Style x:Key="CustomHeader" TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background"
@@ -105,47 +373,79 @@
                     <Setter Property="FontWeight"
                             Value="Bold"/>
                     <Setter Property="FontSize"
-                            Value="15"/>
+                            Value="18"/>
                 </Style>
+
             </DataGrid.Resources>
+
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="TextBlock.TextAlignment" 
+                            Value="Center"/>
+                    <Setter Property="BorderThickness"
+                            Value="1,0,0,1"/>
+                    <Setter Property="BorderBrush"
+                            Value="{StaticResource GrayBorder}"/>
+                    <Setter Property="TextElement.FontSize"
+                            Value="20"/>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="STT"
-                                    Width="100">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="STT" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
+                                      Path=AlternationIndex, 
+                                      Converter={StaticResource IndexToOneBasedConverter},
+                                      Mode=OneWay}"
+                       HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource CustomHeader}" />
+                    </DataGridTemplateColumn.HeaderStyle>
+                </DataGridTemplateColumn>
+
                 <DataGridTextColumn Header="Mã môn học"
-                    Width="200">
+                                    Width="200"
+                                    Binding="{Binding ID}"
+                                    IsReadOnly="True">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Tên môn học"
-                    Width="200">
+                                    Width="200"
+                                    Binding="{Binding Name}"
+                                    IsReadOnly="True">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
+
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Số con điểm miệng"
-                    Width="180">
+                                    Width="180" 
+                                    Binding="{Binding OralNum, Mode=TwoWay}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Số con điểm 15P"
-                    Width="180">
+                                    Width="180"
+                                    Binding="{Binding ShortNum, Mode=TwoWay}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Số con điểm 1 tiết"
-                    Width="180">
+                                    Width="180"
+                                    Binding="{Binding PeriodNum, Mode=TwoWay}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+
     </DockPanel>
 </UserControl>

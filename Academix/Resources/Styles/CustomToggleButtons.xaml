@@ -1,0 +1,56 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Resources/Colors.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <Style x:Key="RoundCornerToggleButton" 
+   TargetType="{x:Type ToggleButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid x:Name="Root">
+                        <Border x:Name="Border"
+                        CornerRadius="20"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter x:Name="ContentSite" 
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Center"
+                                      Margin="20,5,20,5"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DeepBlueToggleButton"
+          TargetType="{x:Type ToggleButton}"
+          BasedOn="{StaticResource RoundCornerToggleButton}">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" 
+                    Value="True">
+                <Setter Property="Background"
+                       Value="{StaticResource DeeperBlueBackground}"/>
+            </Trigger>
+            <Trigger Property="IsPressed"
+                    Value="True">
+                <Setter Property="Background"
+                       Value="{StaticResource DarkBlueBackground}"/>
+            </Trigger>
+        </Style.Triggers>
+        <Setter Property="Foreground"
+Value="White"/>
+        <Setter Property="FontSize"
+Value="20"/>
+        <Setter Property="FontWeight"
+Value="Bold"/>
+        <Setter Property="BorderThickness"
+        Value="0"/>
+        <Setter Property="Background"
+        Value="{StaticResource DeepBlueBackground}"/>
+
+    </Style>
+
+</ResourceDictionary>

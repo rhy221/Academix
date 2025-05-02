@@ -4,9 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Academix.Views"
+             xmlns:viewModels="clr-namespace:Academix.ViewModels"
+             
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" x:Class="Academix.Views.SystemParametersView"
              mc:Ignorable="d"  d:DesignHeight="770" d:DesignWidth="1380"
                 >
+    <UserControl.DataContext>
+        <viewModels:SystemParametersViewModel/>
+    </UserControl.DataContext>
     <UserControl.Resources>
         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource DeepBlueButton}">
             <Setter Property="Margin"
@@ -28,7 +33,7 @@
                         Margin="5,0,0,0"/>
                 </StackPanel>
             </Button>
-            <Button>
+            <!--<Button>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock><Run Text="Khôi phục"/></TextBlock>
                     <iconPacks:PackIconMaterial
@@ -38,7 +43,7 @@
                         VerticalAlignment="Center"
                         Margin="5,0,0,0"/>
                 </StackPanel>
-            </Button>
+            </Button>-->
         </StackPanel>
         <Border BorderBrush="{StaticResource GrayBorder}"
             BorderThickness="2"
@@ -77,6 +82,15 @@
                                 Value="Center"/>
                         <Setter Property="Margin"
                                 Value="100,20,0,10"/>
+                        <Setter Property="TextAlignment"
+                                Value="Center"/>
+                        <Setter Property="FontSize"
+                                Value="20"/>
+                        <Setter Property="FontWeight"
+                                Value="Bold"/>
+                        <Setter Property="Foreground"
+                                Value="{StaticResource GrayForeground}"/>
+
                     </Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="FontSize"
@@ -95,12 +109,12 @@
                 <UniformGrid Columns="2">
                     <StackPanel Orientation="Horizontal"
                                 FlowDirection="RightToLeft">
-                        <TextBox/>
+                        <TextBox Text="{Binding MaximumAge}"/>
                         <TextBlock><Run Text="Tuổi tối đa"/></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
                                 FlowDirection="RightToLeft">
-                        <TextBox/>
+                        <TextBox Text="{Binding MinimumAge}"/>
                         <TextBlock><Run Text="Tuổi tối thiểu"/></TextBlock>
                     </StackPanel>
                 </UniformGrid>
@@ -108,7 +122,7 @@
                 <UniformGrid Columns="2">
                     <StackPanel Orientation="Horizontal"
                         FlowDirection="RightToLeft">
-                        <TextBox/>
+                        <TextBox Text="{Binding MaximumClassize}"/>
                         <TextBlock><Run Text="Sĩ số tối đa"/></TextBlock>
                     </StackPanel>
                     
@@ -117,22 +131,22 @@
                 <UniformGrid Columns="2">
                     <StackPanel Orientation="Horizontal"
                         FlowDirection="RightToLeft">
-                        <TextBox/>
+                        <TextBox Text="{Binding MinimumScore}"/>
                         <TextBlock><Run Text="Điểm tối thiểu"/></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
                         FlowDirection="RightToLeft">
-                        <TextBox/>
+                        <TextBox Text="{Binding MaximumScore}"/>
                         <TextBlock><Run Text="Điểm tối đa"/></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
                         FlowDirection="RightToLeft">
-                        <TextBox/>
+                        <TextBox Text="{Binding PassingGrade}"/>
                         <TextBlock><Run Text="Điểm đạt"/></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
                         FlowDirection="RightToLeft">
-                        <TextBox/>
+                        <TextBox Text="{Binding SubjectPassingGrade}"/>
                         <TextBlock><Run Text="Điểm đạt môn"/></TextBlock>
                     </StackPanel>
                 </UniformGrid>

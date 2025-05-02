@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace Academix.Models
 {
-    class Student
+    public class Student
     {
         public string ID { get; }
         public string Name { get; set; }

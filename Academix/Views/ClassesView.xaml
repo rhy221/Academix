@@ -9,7 +9,32 @@
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1340">
     <UserControl.Resources>
-
+        <DataTemplate x:Key="ToggleModifyContent">
+            <StackPanel Orientation="Horizontal"
+                        FlowDirection="LeftToRight">
+                <iconPacks:PackIconMaterial
+                                         Height="15"
+                                         Width="15"
+                                         Kind="Pencil"
+                                         Foreground="White"
+                                         VerticalAlignment="Center"
+                                         Margin="0,0,5,0"/>
+                <TextBlock VerticalAlignment="Center"><Run Text="Thêm/Sửa"/></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="ToggleCloseContent">
+            <StackPanel Orientation="Horizontal"
+FlowDirection="LeftToRight">
+                <iconPacks:PackIconMaterial
+                 Height="15"
+                 Width="15"
+                 Kind="CloseCircle"
+                 Foreground="White"
+                 VerticalAlignment="Center"
+                 Margin="0,0,5,0"/>
+                <TextBlock VerticalAlignment="Center"><Run Text="Đóng"/></TextBlock>
+            </StackPanel>
+        </DataTemplate>
         <Style TargetType="GridViewColumnHeader"
                BasedOn="{StaticResource LightBlueGridViewColumnHeaderStyle}"/>
 
@@ -56,20 +81,30 @@
 
 
             </Button>
-            <Button 
-                Margin="0,0,5,0">
-                <StackPanel Orientation="Horizontal"
-                    FlowDirection="LeftToRight">
-                    <iconPacks:PackIconMaterial
-                        Height="15"
-                        Width="15"
-                        Kind="PlusCircle"
-                        Foreground="White"
-                        VerticalAlignment="Center"
-                        Margin="0,0,5,0"/>
-                    <TextBlock VerticalAlignment="Center"><Run Text="Thêm mới"/></TextBlock>
-                </StackPanel>
-            </Button>
+            <ToggleButton x:Name="ModifyToggleButton" 
+                IsChecked="False"
+                            Margin="0,0,10,0" >
+                <ToggleButton.Style>
+                    <Style TargetType="{x:Type ToggleButton}"
+                        BasedOn="{StaticResource DeepBlueToggleButton}">
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked"
+                                Value="True">
+                                <Setter Property="ContentTemplate"
+                                    Value="{StaticResource ToggleCloseContent}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked"
+                                Value="False">
+                                <Setter Property="ContentTemplate"
+                                    Value="{StaticResource ToggleModifyContent}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                </ToggleButton.Style>
+
+
+            </ToggleButton>
             <Button 
                 Margin="0,0,5,0">
                 <StackPanel Orientation="Horizontal"
@@ -82,7 +117,7 @@
                         Foreground="White"
                         VerticalAlignment="Center"
                         Margin="5,0,0,0"/>
-                </StackPanel>
+                </StackPanel>                  
             </Button>
         </StackPanel>
 
@@ -90,7 +125,8 @@
             Background="Transparent"
             BorderBrush="#FF615F5F"
             FlowDirection="RightToLeft" 
-            >
+            DockPanel.Dock="Top"
+                  Margin="0,0,0,20">
             <Expander.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal"
@@ -148,20 +184,21 @@
                         <Setter Property="Height"
              Value="35"/>
                         <Setter Property="Width"
-             Value="180"/>
+             Value="400"/>
                         <Setter Property="FlowDirection"
              Value="LeftToRight"/>
                         <Setter Property="BorderThickness"
              Value="2"/>
                     </Style>
                 </StackPanel.Resources>
-                <StackPanel
-                        Orientation="Vertical"
-                        Margin="20,0,20,0">
-                    <StackPanel.Resources>
+                <UniformGrid
+                    Columns="2"
+                    Margin="20,0,20,0"
+                    FlowDirection="LeftToRight">
+                    <UniformGrid.Resources>
                         <Style TargetType="{x:Type StackPanel}"
-                                   BasedOn="{StaticResource SearchInfoStack}"/>
-                    </StackPanel.Resources>
+                            BasedOn="{StaticResource SearchInfoStack}"/>
+                    </UniformGrid.Resources>
                     <StackPanel>
                         <ComboBox/>
                         <TextBlock><Run Text="Khối"/></TextBlock>
@@ -174,7 +211,7 @@
                         <ComboBox/>
                         <TextBlock><Run Text="Lớp"/></TextBlock>
                     </StackPanel>
-                </StackPanel>
+                </UniformGrid>
                 <Border 
                     BorderThickness="0,1,0,0"
                     BorderBrush="#FF615F5F">
@@ -200,11 +237,178 @@
                 </Border>
             </StackPanel>
         </Expander>
-        <DataGrid DockPanel.Dock="Left"
-                  Background="White"                   
-                  FontSize="20"
-                  HorizontalAlignment="Center" 
-                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
+        <TabControl DockPanel.Dock="Right"
+            Visibility="Collapsed"
+            Background="Transparent"
+            BorderThickness="0"
+                    >
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Width"
+                        Value="200"/>
+                    <Setter Property="Height" 
+                        Value="35"/>
+                    <Setter Property="FontSize"
+                        Value="20"/>
+                    <Setter Property="Foreground"
+                        Value="{StaticResource GrayForeground}"/>
+                    <Setter Property="Background"
+                        Value="White"/>
+                    <Setter Property="BorderBrush"
+                        Value="{StaticResource GrayBorder}"/>
+                    <Setter Property="BorderThickness"
+                        Value="2"/>
+                    <Setter Property="Padding"
+                        Value="10,0,0,0"/>
+                    <Setter Property="FlowDirection"
+                            Value="LeftToRight"/>
+                    <Setter Property="Margin"
+                            Value="20,0,0,0"/>
+                </Style>
+
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="FontSize"
+                        Value="20"/>
+                    <Setter Property="Foreground"
+                        Value="#FF615F5F"/>
+                    <Setter Property="VerticalAlignment"
+                        Value="Center"/>
+                    <Setter Property="Padding"
+                        Value="10,0,10,0"/>
+                    <Setter  Property="FontWeight"
+                        Value="Bold"/>
+                    <Setter Property="FlowDirection"
+                        Value="LeftToRight"/>
+                </Style>
+                <Style TargetType="{x:Type Button}"
+                    BasedOn="{StaticResource DeepBlueButton}">
+                    <Setter Property="FlowDirection"
+                        Value="LeftToRight"/>
+                    <Setter Property="Margin"
+                        Value="10,0,0,0"/>
+
+                </Style>
+                <Style TargetType="StackPanel">
+                    <Setter Property="FlowDirection"
+                            Value="RightToLeft"/>
+                </Style>
+
+            </TabControl.Resources>
+            <TabControl.Style>
+                <Style TargetType="{x:Type TabControl}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=ModifyToggleButton}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                Value="{x:Static Visibility.Collapsed}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TabControl.Style>
+            <TabItem Header="Thêm mới">
+                <TabItem.Style>
+                    <Style TargetType="{x:Type TabItem}"
+                        BasedOn="{StaticResource AboveStartTabItem}"/>
+                </TabItem.Style>
+                <StackPanel Background="White"
+                VerticalAlignment="Top"
+                Visibility="Visible"        
+                Margin="0,0,0,0"
+                    FlowDirection="LeftToRight">
+
+                    <StackPanel Orientation="Horizontal"
+                    Margin="0,20,0,20">
+                        <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
+                        <TextBlock><Run Text="Tên lớp"/></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                   Margin="0,0,0,20">
+                        <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
+                        <TextBlock><Run Text="GVCN"/></TextBlock>
+                    </StackPanel>
+                    <Button HorizontalAlignment="Right" Margin="0,0,20,20"
+                    >
+                        <StackPanel Orientation="Horizontal"
+                                FlowDirection="LeftToRight">
+                            <iconPacks:PackIconMaterial
+                            Height="15"
+                            Width="15"
+                            Kind="PlusCircle"
+                            VerticalAlignment="Center"
+                            Margin="5,0,0,0"/>
+                            <TextBlock Foreground="White" 
+                            FontSize="18"><Run Text="Thêm mới"/></TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+            </TabItem>
+            <TabItem Header="Sửa"
+                        >
+                <TabItem.Style>
+                    <Style TargetType="{x:Type TabItem}"
+                        BasedOn="{StaticResource AboveEndTabItem}"/>
+                </TabItem.Style>
+                <StackPanel Background="White"
+                    VerticalAlignment="Top"
+                    Visibility="Visible"
+                    FlowDirection="LeftToRight">
+
+                    <StackPanel Orientation="Horizontal"
+                        Margin="0,20,0,20">
+                        <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
+                        <TextBlock><Run Text="Tên lớp"/></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                        Margin="0,0,0,20">
+                        <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
+                        <TextBlock><Run Text="GVCN"/></TextBlock>
+                    </StackPanel>
+                    <Button HorizontalAlignment="Right" Margin="0,0,20,20"
+                    >
+                        <StackPanel Orientation="Horizontal"
+                            FlowDirection="LeftToRight">
+                            <iconPacks:PackIconMaterial
+                                Height="15"
+                                Width="15"
+                                Kind="Pencil"
+                                VerticalAlignment="Center"
+                                Margin="5,0,0,0"/>
+                            <TextBlock Foreground="White" 
+                                FontSize="18"><Run Text="Sửa"/></TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+            </TabItem>
+        </TabControl>
+        <DataGrid
+             AutoGenerateColumns="False"
+ FontSize="20"
+ SelectionUnit="FullRow"
+ SelectionMode="Single"
+ AlternationCount="10000"
+ Margin="0,0,20,0"
+            HorizontalAlignment="Center"
+            IsReadOnly="True"
+            DockPanel.Dock="Right">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem>
@@ -243,7 +447,7 @@ Margin="5,0,0,0"/>
                 <DataGridTextColumn Header="STT"
                                     Width="80">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource LightBlueHeader}"/>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Tên lớp"
@@ -259,7 +463,7 @@ Margin="5,0,0,0"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="GVCN"
-                                    Width="250">
+                                    Width="200">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
@@ -273,7 +477,7 @@ Margin="5,0,0,0"/>
 
                 <DataGridCheckBoxColumn Width="80">
                     <DataGridCheckBoxColumn.HeaderStyle>
-                        <Style TargetType="DataGridColumnHeader"
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
                                BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridCheckBoxColumn.HeaderStyle>
                     <DataGridCheckBoxColumn.Header>
@@ -283,7 +487,7 @@ Margin="5,0,0,0"/>
                 </DataGridCheckBoxColumn>
             </DataGrid.Columns>
         </DataGrid>
-       
+
 
 
     </DockPanel>

@@ -67,148 +67,6 @@
             <ListViewItem Content="Báo cáo tổng kết môn"/>
             <ListViewItem Content="Báo cáo tổng kết học kỳ"/>
         </ListView>-->
-        <Expander 
-            DockPanel.Dock="Top"
-            FlowDirection="RightToLeft" 
-            Margin="0,0,0,20">
-            <Expander.HeaderTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal"
-                        FlowDirection="LeftToRight"
-                        Height="30">
-                        <iconPacks:PackIconMaterial Height="20"
-                            Width="20"
-                            Kind="FileSearch"
-                            VerticalAlignment="Center"
-                            Foreground="White"
-                            Margin="10,0,0,0"/>
-                        <TextBlock Height="Auto"
-                            Width="Auto"
-                            FontSize="20"
-                                   Foreground="White"
-                                   FontWeight="Bold"
-                            VerticalAlignment="Center"
-                            Margin="10,0,0,0"><Run Text="Thông tin tìm kiếm"/></TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </Expander.HeaderTemplate>
-            <StackPanel>
-                <UniformGrid Background="White"
-                             Columns="2"
-                             FlowDirection="LeftToRight">
-                    <UniformGrid.Resources>
-                        <Style TargetType="{x:Type TextBox}">
-                            <Setter Property="Width"
-                                Value="200"/>
-                            <Setter Property="Height" 
-                                Value="35"/>
-                            <Setter Property="FontSize"
-                                Value="25"/>
-                            <Setter Property="Foreground"
-                                Value="Black"/>
-                            <Setter Property="Background"
-                                Value="White"/>
-                            <Setter Property="BorderBrush"
-                                Value="{StaticResource GrayBorder}"/>
-                            <Setter Property="BorderThickness"
-                                Value="2"/>
-                        </Style>
-
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="FontSize"
-                                Value="20"/>
-                            <Setter Property="Foreground"
-                                Value="#FF615F5F"/>
-                            <Setter Property="VerticalAlignment"
-                                Value="Center"/>
-                            <Setter Property="Margin"
-                                Value="20,0,0,0"/>
-                        </Style>
-
-                        <Style TargetType="{x:Type ComboBox}">
-                            <Setter Property="Template"
-                                Value="{StaticResource ComboBoxControlTemplate}"/>
-                            <Setter Property="Height"
-                                Value="35"/>
-                            <Setter Property="Width"
-                                Value="250"/>
-                            <Setter Property="FlowDirection"
-                                Value="LeftToRight"/>
-                            <Setter Property="BorderThickness"
-                                Value="2"/>
-                        </Style>
-                    </UniformGrid.Resources>
-
-                    <StackPanel
-                        Orientation="Vertical">
-                        <StackPanel.Resources>
-                            <Style TargetType="{x:Type StackPanel}"
-                                BasedOn="{StaticResource SearchInfoStack}"/>
-                        </StackPanel.Resources>
-                        <StackPanel>
-                            <ComboBox/>
-                            <TextBlock><Run Text="Năm học"/></TextBlock>
-                        </StackPanel>
-                    </StackPanel>
-                    <StackPanel
-                        Orientation="Vertical">
-                        <StackPanel.Resources>
-                            <Style TargetType="{x:Type StackPanel}"
-                                BasedOn="{StaticResource SearchInfoStack}"/>
-                        </StackPanel.Resources>
-                        <StackPanel>
-                            <ComboBox/>
-                            <TextBlock><Run Text="Học kỳ"/></TextBlock>
-                        </StackPanel>
-                    </StackPanel>
-                    <StackPanel
-                        Orientation="Vertical">
-                        <StackPanel.Resources>
-                            <Style TargetType="{x:Type StackPanel}"
-                                BasedOn="{StaticResource SearchInfoStack}"/>
-                        </StackPanel.Resources>
-                        <StackPanel>
-                            <ComboBox/>
-                            <TextBlock><Run Text="Môn học"/></TextBlock>
-                        </StackPanel>
-                    </StackPanel>
-                </UniformGrid>
-                <Border Background="White"
-                    BorderThickness="0,1,0,0"
-                    BorderBrush="#FF615F5F">
-                    <StackPanel Orientation="Horizontal"
-                        FlowDirection="RightToLeft">
-
-                        <Button>
-                            <StackPanel Orientation="Horizontal"
-                                FlowDirection="LeftToRight">
-                                <iconPacks:PackIconMaterial
-                                    Kind="FilePdfBox"
-                                    Foreground="White"
-                                    Height="15"
-                                    Width="15"
-                                    VerticalAlignment="Center"
-                                    Margin="0,0,5,0"/>
-                                <TextBlock VerticalAlignment="Center"><Run Text="Xuất PDF"/></TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button>
-                            <StackPanel Orientation="Horizontal"
-                                FlowDirection="LeftToRight">
-                                <iconPacks:PackIconMaterial
-                                    Kind="FileExcel"
-                                    Foreground="White"
-                                    Height="15"
-                                    Width="15"
-                                    VerticalAlignment="Center"
-                                    Margin="0,0,5,0"/>
-                                <TextBlock VerticalAlignment="Center"><Run Text="Xuất Excel"/></TextBlock>
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Expander>
         <!--<Grid DockPanel.Dock="Top"
               Background="{StaticResource LightBlueBackground}">
             <TextBlock FontSize="20"
@@ -218,7 +76,8 @@
         </Grid>
         <Grid Background="BlueViolet"></Grid>-->
         <TabControl
-            TabStripPlacement="Left">
+            TabStripPlacement="Left"
+            BorderThickness="0">
             <TabControl.Resources>
                 <Style TargetType="TabItem"
                        BasedOn="{StaticResource LeftTabItem}">
@@ -227,7 +86,8 @@
                             Value="18,8,50,8"/>
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="Báo cáo tổng kết môn">
+            <TabItem Header="Báo cáo tổng kết môn"
+                     >
                 <views:SubjectReportView/>
             </TabItem>
             <TabItem Header="Báo cáo tổng kểt học kỳ">

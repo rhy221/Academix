@@ -107,7 +107,7 @@ FlowDirection="LeftToRight">
 
             </ToggleButton>
             <Button 
-                Margin="0,0,5,0" Click="Button_Click">
+                Margin="0,0,5,0">
                 <StackPanel Orientation="Horizontal"
                     FlowDirection="LeftToRight">
                     <TextBlock VerticalAlignment="Center"><Run Text="Nhập xuất"/></TextBlock>

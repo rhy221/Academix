@@ -105,11 +105,11 @@ namespace Academix.ViewModels
             //Classrooms.Add(new Classroom("2024_11B1", 35, "HK2", "2023-2024", "Cô C", new List<Student>()));
             UpdateFiltered();
 
-            SearchCommand = new RelayCommand((Action<object>)(obj => Search()));
-            AddCommand = new RelayCommand((Action<object>)(obj => AddClass()));
-            EditCommand = new RelayCommand((Action<object>)(obj => EditClass()));
-            DeleteCommand = new RelayCommand((Action<object>)(obj => DeleteSelected()));
-            ImportExportCommand = new RelayCommand((Action<object>)(obj => ImportExport()));
+            SearchCommand = new RelayCommand(Search);
+            AddCommand = new RelayCommand(AddClass);
+            EditCommand = new RelayCommand(EditClass);
+            DeleteCommand = new RelayCommand(DeleteSelected);
+            ImportExportCommand = new RelayCommand(ImportExport);
 
         }
 

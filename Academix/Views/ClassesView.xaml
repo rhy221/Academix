@@ -66,7 +66,8 @@ FlowDirection="LeftToRight">
             DockPanel.Dock="Top"
                     Margin="0,0,0,20">
             <Button 
-                Margin="0,0,10,0">
+                Margin="0,0,10,0"
+                Command="{Binding DeleteCommand}">
                 <StackPanel Orientation="Horizontal"
                     FlowDirection="LeftToRight">
                     <iconPacks:PackIconMaterial
@@ -106,7 +107,7 @@ FlowDirection="LeftToRight">
 
             </ToggleButton>
             <Button 
-                Margin="0,0,5,0">
+                Margin="0,0,5,0" Click="Button_Click">
                 <StackPanel Orientation="Horizontal"
                     FlowDirection="LeftToRight">
                     <TextBlock VerticalAlignment="Center"><Run Text="Nhập xuất"/></TextBlock>
@@ -117,7 +118,7 @@ FlowDirection="LeftToRight">
                         Foreground="White"
                         VerticalAlignment="Center"
                         Margin="5,0,0,0"/>
-                </StackPanel>                  
+                </StackPanel>
             </Button>
         </StackPanel>
 
@@ -221,6 +222,7 @@ FlowDirection="LeftToRight">
                         <Button Height="40"
                             Width="140"                               
                             Margin="20,10,0,10"
+                            Command="{Binding SearchCommand}"
                                 >
                             <StackPanel Orientation="Horizontal"
                                 FlowDirection="LeftToRight">
@@ -343,7 +345,7 @@ FlowDirection="LeftToRight">
                         <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
                         <TextBlock><Run Text="GVCN"/></TextBlock>
                     </StackPanel>
-                    <Button HorizontalAlignment="Right" Margin="0,0,20,20"
+                    <Button HorizontalAlignment="Right" Margin="0,0,20,20" Command="{Binding AddCommand}"
                     >
                         <StackPanel Orientation="Horizontal"
                                 FlowDirection="LeftToRight">
@@ -381,7 +383,7 @@ FlowDirection="LeftToRight">
                         <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
                         <TextBlock><Run Text="GVCN"/></TextBlock>
                     </StackPanel>
-                    <Button HorizontalAlignment="Right" Margin="0,0,20,20"
+                    <Button HorizontalAlignment="Right" Margin="0,0,20,20" Command="{Binding EditCommand}"
                     >
                         <StackPanel Orientation="Horizontal"
                             FlowDirection="LeftToRight">

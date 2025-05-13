@@ -105,11 +105,12 @@ namespace Academix.ViewModels
             //Classrooms.Add(new Classroom("2024_11B1", 35, "HK2", "2023-2024", "Cô C", new List<Student>()));
             UpdateFiltered();
 
-            SearchCommand = new RelayCommand(Search);
-            AddCommand = new RelayCommand(AddClass);
-            EditCommand = new RelayCommand(EditClass);
-            DeleteCommand = new RelayCommand(DeleteSelected);
-            ImportExportCommand = new RelayCommand(ImportExport);
+            SearchCommand = new RelayCommand((Action<object>)(obj => Search()));
+            AddCommand = new RelayCommand((Action<object>)(obj => AddClass()));
+            EditCommand = new RelayCommand((Action<object>)(obj => EditClass()));
+            DeleteCommand = new RelayCommand((Action<object>)(obj => DeleteSelected()));
+            ImportExportCommand = new RelayCommand((Action<object>)(obj => ImportExport()));
+
         }
 
         private void UpdateFiltered()
@@ -137,13 +138,13 @@ namespace Academix.ViewModels
             if (string.IsNullOrWhiteSpace(NewClassName) || string.IsNullOrWhiteSpace(NewTeacher))
                 return;
 
-            string id = "TỰ THÊM";  
+            string id = "TỰ THÊM";
             if (Classrooms.Any(c => c.ID == id))
-                return; 
+                return;
 
             var newClass = new Classroom(
                 id,
-                0,  
+                0,
                 "HỌC KỲ NÀO",
                 DateTime.Now.Year + "-" + (DateTime.Now.Year + 1), // Năm học
                 NewTeacher,

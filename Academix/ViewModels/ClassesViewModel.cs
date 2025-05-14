@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace Academix.ViewModels
 {
-    public class ClassesViewModel : INotifyPropertyChanged
+    public class ClassesViewModel : BaseViewModel
     {
         private string selectedSemester;
         private string selectedSchoolYear;
@@ -29,7 +29,7 @@ namespace Academix.ViewModels
             set
             {
                 selectedSemester = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedSemester));
             }
         }
 
@@ -39,7 +39,7 @@ namespace Academix.ViewModels
             set
             {
                 selectedSchoolYear = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedSchoolYear));
             }
         }
 
@@ -49,7 +49,7 @@ namespace Academix.ViewModels
             set
             {
                 selectedTeacher = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedTeacher));
             }
         }
 
@@ -59,7 +59,7 @@ namespace Academix.ViewModels
             set
             {
                 selectedClassroom = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedClassroom));
                 if (selectedClassroom != null)
                 {
                     NewClassName = selectedClassroom.Name;
@@ -74,7 +74,7 @@ namespace Academix.ViewModels
             set
             {
                 newClassName = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(NewClassName));
             }
         }
 
@@ -84,7 +84,7 @@ namespace Academix.ViewModels
             set
             {
                 newTeacher = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(NewTeacher));
             }
         }
 
@@ -192,8 +192,6 @@ namespace Academix.ViewModels
             // Nhập/xuất file CSV hoặc Excel (chưa triển khai)
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    
     }
 }

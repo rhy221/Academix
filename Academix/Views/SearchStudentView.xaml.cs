@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Academix.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,27 @@ namespace Academix.Views
         public SearchStudentView()
         {
             InitializeComponent();
+        }
+
+        private void ModifyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MainView.Visibility = Visibility.Collapsed;
+            ExtendView.Visibility = Visibility.Visible;
+            ExtendView.Content = new ModifyStudentViewModel(MainView, ExtendView);
+        }
+
+        private void ViewMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MainView.Visibility = Visibility.Collapsed;
+            ExtendView.Visibility = Visibility.Visible;
+            ExtendView.Content = new ViewStudentViewModel(MainView, ExtendView);
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainView.Visibility = Visibility.Collapsed;
+            ExtendView.Visibility = Visibility.Visible;
+            ExtendView.Content = new AddStudentViewModel(MainView, ExtendView);
         }
     }
 }

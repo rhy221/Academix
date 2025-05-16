@@ -1,5 +1,4 @@
-﻿using Academix.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,22 +16,13 @@ using System.Windows.Shapes;
 namespace Academix.Views
 {
     /// <summary>
-    /// Interaction logic for ClassesView.xaml
+    /// Interaction logic for AddStudentView.xaml
     /// </summary>
-    public partial class ClassesView : UserControl
+    public partial class AddStudentView : UserControl
     {
-        public ClassesView()
+        public AddStudentView()
         {
             InitializeComponent();
         }
-
-        private void ViewMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            MainView.Visibility = Visibility.Collapsed;
-            ExtendView.Visibility = Visibility.Visible;
-            ExtendView.Content = new ViewClassViewModel(MainView,ExtendView);
-        }
-
-       
     }
 }

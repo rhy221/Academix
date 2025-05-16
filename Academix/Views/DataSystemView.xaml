@@ -12,59 +12,29 @@
                BasedOn="{StaticResource LightBlueExpander}"/>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <DockPanel>
-            
-                <Expander DockPanel.Dock="Top"
-                          FlowDirection="RightToLeft">
-                    <Expander.HeaderTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal"
-                                FlowDirection="LeftToRight"
-                                Height="30">
 
-                                <TextBlock Height="Auto"
-                                    Width="Auto"
-                                    FontSize="18"
-                                    VerticalAlignment="Center"
-                                    Foreground="White"
-                                    FontWeight="Bold"
-                                    Margin="10,0,100,0"><Run Text="Thông số hệ thống"/></TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </Expander.HeaderTemplate>
-                    <ContentControl Margin="0,20,0,0"
-                                    FlowDirection="LeftToRight">
-                        <views:SystemParametersView/>
-                    </ContentControl>
-                </Expander>
-           
-            <Expander DockPanel.Dock="Top"
-                
-                Margin="0,20,0,20"
-                      FlowDirection="RightToLeft">
-                <Expander.HeaderTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal"
-                            FlowDirection="LeftToRight"
-                            Height="30">
+    <DockPanel>
+        <TabControl
+                TabStripPlacement="Left"
+                BorderThickness="0"
+                Background="Transparent">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}"
+                        BasedOn="{StaticResource LeftTabItem}">
+                    <Setter Property="FontSize"
+                            Value="18"/>
+                    <Setter Property="Padding"
+                            Value="18,8,50,8"/>
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="Thông số hệ thống"
+                     >
+                <views:SystemParametersView/>
+            </TabItem>
+            <TabItem Header="Danh sách môn học">
+                <views:SubjectSystemView/>
 
-                            <TextBlock Height="Auto"
-                                Width="Auto"
-                                FontSize="18"
-                                VerticalAlignment="Center"
-                                Foreground="White"
-                                FontWeight="Bold"
-                                Margin="10,0,10,0"><Run Text="Danh sách môn học"/></TextBlock>
-                        </StackPanel>
-                    </DataTemplate>
-                </Expander.HeaderTemplate>
-                <ContentControl Margin="0,20,0,0"
-                                FlowDirection="LeftToRight">
-                    <views:SubjectSystemView/>
-                </ContentControl>
-            </Expander>
-        </DockPanel>
-
-    </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 </UserControl>

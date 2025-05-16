@@ -17,7 +17,6 @@ namespace Academix.ViewModels
         public IEnumerable<SubjectViewModel> Subjects => _subjects;
         public int Size => _subjects.Count;
         private SubjectViewModel _currentModifyingSubject;
-
         public string ModifyID => _currentModifyingSubject.ID;
         public string ModifyName
         {
@@ -159,16 +158,20 @@ namespace Academix.ViewModels
 
         private void AddNewSubject()
         {
-            _subjects.Add(new SubjectViewModel(new Subject(Guid.NewGuid().ToString(), _addNewSubject.Name, new Dictionary<string, int>() { [Subject.Oral] = NewOralNum, [Subject.Short] = NewShortNum, [Subject.Period] = NewPeriodNum})));
+            if(!string.IsNullOrWhiteSpace(_addNewSubject.Name))
+                _subjects.Add(new SubjectViewModel(new Subject(Guid.NewGuid().ToString(), _addNewSubject.Name, new Dictionary<string, int>() { [Subject.Oral] = NewOralNum, [Subject.Short] = NewShortNum, [Subject.Period] = NewPeriodNum})));
         }
 
         private void ModifySubject()
         {
-            
-            _selectedSubject.Name = _currentModifyingSubject.Name;
-            _selectedSubject.OralNum = _currentModifyingSubject.OralNum;
-            _selectedSubject.ShortNum = _currentModifyingSubject.ShortNum;
-            _selectedSubject.PeriodNum = _currentModifyingSubject.PeriodNum;
+            if(!string.IsNullOrWhiteSpace(_selectedSubject.Name))
+            {
+                _selectedSubject.Name = _currentModifyingSubject.Name;
+                _selectedSubject.OralNum = _currentModifyingSubject.OralNum;
+                _selectedSubject.ShortNum = _currentModifyingSubject.ShortNum;
+                _selectedSubject.PeriodNum = _currentModifyingSubject.PeriodNum;
+            }
+           
         }
 
         private void ShowSelectedSubject(SubjectViewModel subject)
@@ -179,8 +182,6 @@ namespace Academix.ViewModels
             OnPropertyChanged(nameof(ModifyOralNum));
             OnPropertyChanged(nameof(ModifyShortNum));
             OnPropertyChanged(nameof(ModifyPeriodNum));
-
-
         }
 
         private void SaveData()

@@ -57,7 +57,7 @@ FlowDirection="LeftToRight">
                         <Setter Property="Margin"
                  Value="5,0,5,0"/>
                     </Style>
-                    
+
                 </StackPanel.Resources>
                 <Button
                     Command="{Binding SaveCommand}">
@@ -101,22 +101,22 @@ FlowDirection="LeftToRight">
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
-            
+
                     </ToggleButton.Style>
-                    
-                   
+
+
                 </ToggleButton>
             </StackPanel>
         </Grid>
         <TabControl DockPanel.Dock="Right"
                     VerticalAlignment="Top"
                     Visibility="Collapsed"
-                    Background="Transparent"
+                   
                     BorderThickness="0">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Width"
-Value="200"/>
+Value="150"/>
                     <Setter Property="Height" 
 Value="35"/>
                     <Setter Property="FontSize"
@@ -131,6 +131,8 @@ Value="{StaticResource GrayBorder}"/>
 Value="2"/>
                     <Setter Property="Padding"
                             Value="10,0,0,0"/>
+                    <Setter Property="FlowDirection"
+                            Value="LeftToRight"/>
                 </Style>
 
                 <Style TargetType="{x:Type TextBlock}">
@@ -151,8 +153,30 @@ Value="Center"/>
            BasedOn="{StaticResource DeepBlueButton}">
                     <Setter Property="FlowDirection"
                 Value="LeftToRight"/>
-                    <Setter Property="Margin"
-                Value="10,0,0,0"/>
+
+
+                </Style>
+
+                <Style TargetType="{x:Type Controls:NumericUpDown}">
+
+                    <Setter Property="Minimum"
+Value="0"/>
+                    <Setter Property="Foreground"
+Value="{StaticResource GrayForeground}"/>
+                    <Setter Property="FontSize"
+Value="20"/>
+                    <Setter Property="FontWeight"
+Value="Bold"/>
+                    <Setter Property="BorderBrush"
+Value="{StaticResource GrayBorder}"/>
+                    <Setter Property="BorderThickness"
+Value="2"/>
+                    <Setter Property="FlowDirection"
+Value="LeftToRight"/>
+                    <Setter Property="Width"
+                            Value="100"/>
+                    <Setter Property="Padding"
+                           Value="0,0,110,0"/>
 
                 </Style>
 
@@ -190,47 +214,27 @@ Value="Center"/>
                     <Style TargetType="TabItem"
                            BasedOn="{StaticResource AboveStartTabItem}"/>
                 </TabItem.Style>
-                <StackPanel Background="White"
+                <StackPanel
                     VerticalAlignment="Top"
                     Visibility="Visible"
-                    Margin="0,10,0,0">
+                    Margin="10"
+                    FlowDirection="RightToLeft">
                     <StackPanel Orientation="Horizontal"
-                        Margin="0,20,0,20">
-                        <TextBlock><Run Text="Tên môn"/></TextBlock>
+                        Margin="0,0,0,20">
                         <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
+                        <TextBlock><Run Text="Tên môn"/></TextBlock>
                     </StackPanel>
-                    <UniformGrid Columns="2">
-                        <UniformGrid.Resources>
-                            <Style TargetType="{x:Type StackPanel}">
-                                <Setter Property="FlowDirection"
-                                Value="RightToLeft"/>
+                    <StackPanel
+                        Orientation="Vertical"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Right"
+                        >
+                        <StackPanel.Resources>
+                            <Style TargetType="StackPanel">
                                 <Setter Property="Margin"
-                                Value="0,0,10,20"/>
+                                        Value="0,0,0,20"/>
                             </Style>
-                            <Style TargetType="{x:Type Controls:NumericUpDown}">
-
-                                <Setter Property="Minimum"
-                               Value="0"/>
-                                <Setter Property="Foreground"
-                                Value="{StaticResource GrayForeground}"/>
-                                <Setter Property="FontSize"
-                                Value="20"/>
-                                <Setter Property="FontWeight"
-                                Value="Bold"/>
-                                <Setter Property="BorderBrush"
-                                Value="{StaticResource GrayBorder}"/>
-                                <Setter Property="BorderThickness"
-                                Value="2"/>
-                                <Setter Property="FlowDirection"
-                                Value="LeftToRight"/>
-                                <Setter Property="Width"
-                                Value="130"/>
-                                <Setter Property="Padding"
-                                Value="0,0,150,0"/>
-
-
-                            </Style>
-                        </UniformGrid.Resources>
+                        </StackPanel.Resources>
                         <StackPanel Orientation="Horizontal" >
                             <Controls:NumericUpDown Value="{Binding NewOralNum, Mode=TwoWay}"/>
 
@@ -244,8 +248,8 @@ Value="Center"/>
                             <Controls:NumericUpDown  Value="{Binding NewPeriodNum, Mode=TwoWay}"/>
                             <TextBlock><Run Text="1 Tiết"/></TextBlock>
                         </StackPanel>
-                    </UniformGrid>
-                    <Button HorizontalAlignment="Right" Margin="0,0,20,20"
+                    </StackPanel>
+                    <Button HorizontalAlignment="Left" 
                             Command="{Binding AddNewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconMaterial
@@ -267,55 +271,30 @@ Value="Center"/>
                     <Style TargetType="TabItem"
            BasedOn="{StaticResource AboveEndTabItem}"/>
                 </TabItem.Style>
-                <StackPanel Background="White"
+                <StackPanel 
                     VerticalAlignment="Top"
-                    Margin="0,10,0,0">
-                    
+                    Margin="10"
+                    FlowDirection="RightToLeft">
                     <StackPanel Orientation="Horizontal"
-                        Margin="0,20,0,20"
-                        Visibility="Visible">
+                        Margin="0,0,0,20">
+                        <TextBox IsReadOnly="True" Text="{Binding ModifyID, Mode=OneWay}"/>
                         <TextBlock><Run Text="Mã môn"/></TextBlock>
-                        <TextBox
-                            IsReadOnly="True"
-                            Text="{Binding ModifyID, Mode=OneWay}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
                         Margin="0,0,0,20">
-                        <TextBlock><Run Text="Tên môn"/></TextBlock>
                         <TextBox Text="{Binding ModifyName, Mode=TwoWay}"/>
+                        <TextBlock><Run Text="Tên môn"/></TextBlock>
                     </StackPanel>
-                    <UniformGrid Columns="2">
-                        <UniformGrid.Resources>
+                    <StackPanel
+                        Orientation="Vertical"
+                        HorizontalAlignment="Right"
+                        >
+                        <StackPanel.Resources>
                             <Style TargetType="{x:Type StackPanel}">
-                                <Setter Property="FlowDirection"
-                                    Value="RightToLeft"/>
                                 <Setter Property="Margin"
-                                    Value="0,0,10,20"/>
+                                    Value="0,0,0,20"/>
                             </Style>
-                            <Style TargetType="{x:Type Controls:NumericUpDown}">
-
-                                <Setter Property="Minimum"
-                                    Value="0"/>
-                                <Setter Property="Foreground"
-                                    Value="{StaticResource GrayForeground}"/>
-                                <Setter Property="FontSize"
-                                    Value="20"/>
-                                <Setter Property="FontWeight"
-                                    Value="Bold"/>
-                                <Setter Property="BorderBrush"
-                                    Value="{StaticResource GrayBorder}"/>
-                                <Setter Property="BorderThickness"
-                                    Value="2"/>
-                                <Setter Property="FlowDirection"
-                                    Value="LeftToRight"/>
-                                <Setter Property="Width"
-                                    Value="130"/>
-                                <Setter Property="Padding"
-                                    Value="0,0,150,0"/>
-
-
-                            </Style>
-                        </UniformGrid.Resources>
+                        </StackPanel.Resources>
                         <StackPanel Orientation="Horizontal" >
                             <Controls:NumericUpDown Value="{Binding ModifyOralNum, Mode=TwoWay}"/>
 
@@ -326,11 +305,11 @@ Value="Center"/>
                             <TextBlock><Run Text="15 Phút"/></TextBlock>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Controls:NumericUpDown Value="{Binding ModifyPeriodNum, Mode=TwoWay}"  />
+                            <Controls:NumericUpDown  Value="{Binding ModifyPeriodNum, Mode=TwoWay}"/>
                             <TextBlock><Run Text="1 Tiết"/></TextBlock>
                         </StackPanel>
-                    </UniformGrid>
-                    <Button HorizontalAlignment="Right" Margin="0,0,20,20"
+                    </StackPanel>
+                    <Button HorizontalAlignment="Left"
                             Command="{Binding ModifyCommand}">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconMaterial
@@ -356,7 +335,7 @@ Value="Center"/>
                   SelectionMode="Single"
                   AlternationCount="10000"
                   Margin="0,0,20,0"
-                  SelectedItem="{Binding SelectedSubject}"
+                  SelectedItem="{Binding SelectedSubject, Mode=TwoWay}"
                   IsReadOnly="True">
             <DataGrid.Resources>
                 <Style x:Key="CustomHeader" TargetType="{x:Type DataGridColumnHeader}">
@@ -387,11 +366,11 @@ Value="Center"/>
                     <Setter Property="BorderBrush"
                             Value="{StaticResource GrayBorder}"/>
                     <Setter Property="TextElement.FontSize"
-                            Value="20"/>
+                            Value="18"/>
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="STT" Width="80">
+                <DataGridTemplateColumn Header="STT" Width="60">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
@@ -407,7 +386,7 @@ Value="Center"/>
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Mã môn học"
-                                    Width="200"
+                                    Width="140"
                                     Binding="{Binding ID}"
                                     IsReadOnly="True">
                     <DataGridTextColumn.HeaderStyle>
@@ -415,7 +394,7 @@ Value="Center"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Tên môn học"
-                                    Width="200"
+                                    Width="140"
                                     Binding="{Binding Name}"
                                     IsReadOnly="True">
                     <DataGridTextColumn.HeaderStyle>

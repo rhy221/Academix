@@ -10,7 +10,7 @@
 
     <UserControl.Resources>
 
-       
+
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <Border x:Name="RoundBorder" DockPanel.Dock="Top"
@@ -56,6 +56,13 @@
                 <ListViewItem Content="Học kỳ 2"/>
             </ListView>
         </Border>
+        <TextBlock DockPanel.Dock="Top"
+            FontSize="20"
+            Foreground="{StaticResource GrayForeground}"
+            FlowDirection="LeftToRight"
+            FontWeight="Bold"
+            HorizontalAlignment="Left"
+            Margin="20,0,0,10"><Run Text="Danh sách môn học"/></TextBlock>
 
         <ListView DockPanel.Dock="Top" 
           ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -196,7 +203,7 @@
                       EnableRowVirtualization="True" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False"
                       >
             <DataGrid.Resources>
-                
+
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Foreground"
                             Value="White"/>

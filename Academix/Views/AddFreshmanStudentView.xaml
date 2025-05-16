@@ -1,0 +1,289 @@
+﻿<UserControl x:Class="Academix.Views.AddFreshmanStudentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Academix.Views"
+                                     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1340">
+    <UserControl.Resources>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize"
+                 Value="20"/>
+            <Setter Property="Foreground"
+                 Value="{StaticResource GrayForeground}"/>
+            <Setter Property="VerticalAlignment"
+                 Value="Center"/>
+            <Setter Property="Padding"
+                    Value="20,0,0,0"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Template" 
+                 Value="{StaticResource ComboBoxControlTemplate}"/>
+            <Setter Property="Height"
+                 Value="35"/>
+            <Setter Property="Width"
+                 Value="280"/>
+            <Setter Property="FlowDirection"
+                 Value="LeftToRight"/>
+
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Height"
+         Value="35"/>
+            <Setter Property="Width"
+         Value="280"/>
+            <Setter Property="BorderBrush"
+                 Value="{StaticResource GrayBorder}"/>
+            <Setter Property="BorderThickness"
+                 Value="2"/>
+            <Setter Property="FlowDirection"
+                 Value="LeftToRight"/>
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="Height"
+                 Value="35"/>
+            <Setter Property="Width"
+                 Value="280"/>
+            <Setter Property="BorderBrush"
+                 Value="{StaticResource GrayBorder}"/>
+            <Setter Property="BorderThickness"
+                 Value="2"/>
+            <Setter Property="FlowDirection"
+                 Value="LeftToRight"/>
+        </Style>
+
+        <Style x:Key="InforStackStyle" TargetType="StackPanel">
+            <Setter Property="FlowDirection"
+                 Value="RightToLeft"/>
+            <Setter Property="Orientation"
+                 Value="Horizontal"/>
+        </Style>
+
+    </UserControl.Resources>
+    <DockPanel Background="Transparent">
+
+        <StackPanel DockPanel.Dock="Top"
+            Orientation="Horizontal"
+            FlowDirection="RightToLeft"
+            Margin="0,0,0,20">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}"
+                    BasedOn="{StaticResource DeepBlueButton}">
+                    <Setter Property="Margin"
+                        Value="5,0,5,0"/>
+                </Style>
+            </StackPanel.Resources>
+
+            <Button>
+                <StackPanel Orientation="Horizontal"
+                    FlowDirection="LeftToRight">
+                    <iconPacks:PackIconMaterial
+                        Height="15"
+                        Width="15"
+                        Kind="Undo"
+                        Foreground="White"
+                        VerticalAlignment="Center"
+                        Margin="0,0,5,0"/>
+                    <TextBlock VerticalAlignment="Center"
+                        Foreground="White"
+                        Margin="0,0,0,0"><Run Text="Làm lại"/></TextBlock>
+                </StackPanel>
+            </Button>
+            <Button>
+                <StackPanel Orientation="Horizontal"
+                    FlowDirection="LeftToRight">
+                    <iconPacks:PackIconMaterial
+                        Height="15"
+                        Width="15"
+                        Kind="ContentSave"
+                        Foreground="White"
+                        VerticalAlignment="Center"
+                        Margin="0,0,5,0"/>
+                    <TextBlock VerticalAlignment="Center"
+                        Foreground="White"
+                        Margin="0,0,0,0"><Run Text="Lưu"/></TextBlock>
+                </StackPanel>
+            </Button>
+            <Button>
+                <StackPanel Orientation="Horizontal"
+                    FlowDirection="LeftToRight">
+                    <iconPacks:PackIconMaterial
+                        Height="15"
+                        Width="15"
+                        Kind="Import"
+                        Foreground="White"
+                        VerticalAlignment="Center"
+                        Margin="0,0,5,0"/>
+                    <TextBlock VerticalAlignment="Center"
+                        Foreground="White"
+                        Margin="0,0,0,0"><Run Text="Nhập"/></TextBlock>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+
+        <Grid DockPanel.Dock="Top"
+            Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0"
+                Background="{StaticResource LightGrayBackground}"
+                Height="150"
+                Width="150"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left" 
+                Margin="40,60,0,0"
+                  >
+                <iconPacks:PackIconMaterial Height="100" 
+                    Width="100"
+                    Kind="Account"
+                    Foreground="{StaticResource GrayBackground}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"/>
+                <Image/>
+                <Button VerticalAlignment="Bottom"
+                    Background="{StaticResource GrayBackground}"
+                    Opacity="0.8"
+                    Height="35">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter Content="{TemplateBinding Content}"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterial
+                            Height="20"
+                            Width="20"
+                            Foreground="White"
+                            Kind="Camera"
+                            VerticalAlignment="Center"/>
+                        <TextBlock Foreground="White"
+                            FontWeight="Normal"
+                            VerticalAlignment="Center"
+                            Margin="10,0,0,0"><Run Text="Tải ảnh"/></TextBlock>
+                    </StackPanel>
+
+
+                </Button>
+            </Grid>
+            <UniformGrid Grid.Column="1"
+                Columns="2"
+                Margin="20" >
+                <UniformGrid.Resources>
+                    <Style TargetType="{x:Type StackPanel}"
+                        BasedOn="{StaticResource InforStackStyle}"/>
+                </UniformGrid.Resources>
+                <StackPanel>
+                    <ComboBox/>
+                    <TextBlock>
+                        
+                        <Run Text="Khối"/>
+                    </TextBlock>
+
+                </StackPanel>
+                <StackPanel>
+                    <ComboBox/>
+                    <TextBlock>
+                         
+                        <Run Text="Lớp học"/>
+                    </TextBlock>
+
+                </StackPanel>
+                <StackPanel>
+                    <ComboBox/>
+                    <TextBlock>
+                         <Run Foreground="Red" Text="*"/>
+                        <Run Text="Trạng thái"/>
+                    </TextBlock>
+
+                </StackPanel>
+                <StackPanel />
+                <StackPanel>
+                    <TextBox/>
+                    <TextBlock>
+                         <Run Foreground="Red" Text="*"/>
+                        <Run Text="Họ tên"/>
+                    </TextBlock>
+
+                </StackPanel>
+                <StackPanel>
+                    <TextBox/>
+                    <TextBlock>
+                         <Run Foreground="Red" Text="*"/>
+                        <Run Text="Mã học sinh"/>
+                    </TextBlock>
+
+                </StackPanel>
+                <StackPanel/>
+                <StackPanel >
+                    <StackPanel FlowDirection="LeftToRight"
+                        Width="280">
+                        <CheckBox/>
+                        <TextBlock><Run Text="Sinh mã tự động"/></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel>
+                    <ComboBox/>
+                    <TextBlock>
+                         <Run Foreground="Red" Text="*"/>
+                        <Run Text="Giới tính"/>
+                    </TextBlock>
+
+                </StackPanel>
+                <StackPanel >
+                    <DatePicker/>
+                    <TextBlock>
+                         <Run Foreground="Red" Text="*"/>
+                        <Run Text="Ngày sinh"/>
+                    </TextBlock>
+
+                </StackPanel>
+                <StackPanel>
+                    <ComboBox/>
+                    <TextBlock>
+                         <Run Foreground="Red" Text="*"/>
+                        <Run Text="Tỉnh/Thành"/>
+                    </TextBlock>
+
+                </StackPanel>
+                <StackPanel>
+                    <DatePicker/>
+                    <TextBlock>
+                         <Run Foreground="Red" Text="*"/>
+                        <Run Text="Xã/Phường"/>
+                    </TextBlock>
+
+                </StackPanel>
+                <StackPanel >
+                    <ComboBox/>
+                    <TextBlock>
+                         <Run Foreground="Red" Text="*"/>
+                        <Run Text="Quận/Huyện"/>
+                    </TextBlock>
+
+                </StackPanel>
+
+            </UniformGrid>
+        </Grid>
+    </DockPanel>
+</UserControl>

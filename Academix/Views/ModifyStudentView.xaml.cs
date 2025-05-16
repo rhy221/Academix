@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Academix.Views
 {
     /// <summary>
-    /// Interaction logic for AddNewSubjectView.xaml
+    /// Interaction logic for ModifyStudentView.xaml
     /// </summary>
-    public partial class AddNewSubjectView : Window
+    public partial class ModifyStudentView : UserControl
     {
-        public AddNewSubjectView()
+        public ModifyStudentView()
         {
             InitializeComponent();
         }

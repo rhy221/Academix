@@ -34,47 +34,7 @@
         </Style>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
-        <!--<ListView Margin="0,0,20,0"
-                  VerticalAlignment="Top"
-                  Background="{StaticResource DeepBlueBackground}"
-                  BorderThickness="0,1,0,0"
-                 >
-            <ListView.Resources>
-                <Style TargetType="ListViewItem">
-                
-                    <Setter Property="FontSize"
-                            Value="15"/>
-                    <Setter Property="Foreground"
-                            Value="White"/>
-                    <Setter Property="FontWeight"
-                            Value="Bold"/>
-                    <Setter Property="Padding"
-                            Value="10,5,80,5"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver"
-                                 Value="True">
-                            <Setter Property="Background"
-                                    Value="{StaticResource DarkBlueBackground}"/>
-                        </Trigger>
-                        <Trigger Property="IsSelected"
-                                 Value="True">
-                            <Setter Property="Background"
-                                    Value="{StaticResource DarkBlueBackground}"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.Resources>
-            <ListViewItem Content="Báo cáo tổng kết môn"/>
-            <ListViewItem Content="Báo cáo tổng kết học kỳ"/>
-        </ListView>-->
-        <!--<Grid DockPanel.Dock="Top"
-              Background="{StaticResource LightBlueBackground}">
-            <TextBlock FontSize="20"
-                       Foreground="White"
-                       FontWeight="Bold"
-                       Margin="20,10,0,10">Mẫu báo cáo</TextBlock>
-        </Grid>
-        <Grid Background="BlueViolet"></Grid>-->
+        
         <TabControl
             TabStripPlacement="Left"
             BorderThickness="0">

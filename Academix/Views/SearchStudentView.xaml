@@ -4,12 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Academix.Views"
+                 xmlns:viewModels="clr-namespace:Academix.ViewModels"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" x:Class="Academix.Views.SearchStudentView"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1340">
 
     <UserControl.Resources>
-
+        <DataTemplate DataType="{x:Type viewModels:AddStudentViewModel}">
+            <local:AddStudentView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ViewStudentViewModel}">
+            <local:ViewStudentView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ModifyStudentViewModel}">
+            <local:ModifyStudentView/>
+        </DataTemplate>
         <Style TargetType="GridViewColumnHeader"
            BasedOn="{StaticResource LightBlueGridViewColumnHeaderStyle}"/>
         <Style TargetType="Button"
@@ -30,322 +39,338 @@
         <Style TargetType="Expander"
               BasedOn="{StaticResource LightBlueExpander}"/>
     </UserControl.Resources>
-    <DockPanel Background="Transparent"
-            LastChildFill="True">
-        <Expander 
+
+    <Grid>
+        <ContentControl x:Name="MainView">
+            <DockPanel Background="Transparent"
+            LastChildFill="True"
+                   Visibility="Visible">
+                <Expander 
                 Background="Transparent"
                 BorderBrush="#FF615F5F"
                 DockPanel.Dock="Top"
                 Margin="0,0,0,10"
                 FlowDirection="RightToLeft"
             >
-            <Expander.HeaderTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal"
+                    <Expander.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal"
                             FlowDirection="LeftToRight"
                             Height="30">
-                        <iconPacks:PackIconMaterial Height="20"
+                                <iconPacks:PackIconMaterial Height="20"
                                 Width="20"
                                 Kind="FileSearch"
                                 Foreground="White"
                                 VerticalAlignment="Center"
                                 Margin="10,0,0,0"/>
-                        <TextBlock Height="Auto"
+                                <TextBlock Height="Auto"
                                 Width="Auto"
                                 FontSize="18"
                                 VerticalAlignment="Center"
-                                   Foreground="White"
-                                   FontWeight="Bold"
+                                Foreground="White"
+                                FontWeight="Bold"
                                 Margin="10,0,0,0"><Run Text="Thông tin tìm kiếm"/></TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </Expander.HeaderTemplate>
-            <StackPanel>
-                <Grid Background="White">
-                    <Grid.Resources>
-                        <Style TargetType="{x:Type TextBox}">
-                            <Setter Property="Width"
+                            </StackPanel>
+                        </DataTemplate>
+                    </Expander.HeaderTemplate>
+                    <StackPanel>
+                        <Grid Background="White">
+                            <Grid.Resources>
+                                <Style TargetType="{x:Type TextBox}">
+                                    <Setter Property="Width"
                                     Value="400"/>
-                            <Setter Property="Height" 
+                                    <Setter Property="Height" 
                                     Value="35"/>
-                            <Setter Property="FontSize"
+                                    <Setter Property="FontSize"
                                     Value="25"/>
-                            <Setter Property="Foreground"
+                                    <Setter Property="Foreground"
                                     Value="Black"/>
-                            <Setter Property="Background"
+                                    <Setter Property="Background"
                                     Value="White"/>
-                            <Setter Property="BorderBrush"
+                                    <Setter Property="BorderBrush"
                                     Value="{StaticResource GrayBorder}"/>
-                            <Setter Property="BorderThickness"
+                                    <Setter Property="BorderThickness"
                                     Value="2"/>
-                        </Style>
+                                </Style>
 
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="FontSize"
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="FontSize"
                                     Value="20"/>
-                            <Setter Property="Foreground"
+                                    <Setter Property="Foreground"
                                     Value="#FF615F5F"/>
-                            <Setter Property="VerticalAlignment"
+                                    <Setter Property="VerticalAlignment"
                                     Value="Center"/>
-                            <Setter Property="Margin"
+                                    <Setter Property="Margin"
                                     Value="20,0,0,0"/>
-                        </Style>
+                                </Style>
 
-                        <Style TargetType="{x:Type ComboBox}">
-                            <Setter Property="Template"
+                                <Style TargetType="{x:Type ComboBox}">
+                                    <Setter Property="Template"
                                     Value="{StaticResource ComboBoxControlTemplate}"/>
-                            <Setter Property="Height"
+                                    <Setter Property="Height"
                                     Value="35"/>
-                            <Setter Property="Width"
+                                    <Setter Property="Width"
                                     Value="400"/>
-                            <Setter Property="FlowDirection"
+                                    <Setter Property="FlowDirection"
                                     Value="LeftToRight"/>
-                            <Setter Property="BorderThickness"
+                                    <Setter Property="BorderThickness"
                                     Value="2"/>
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="23*"/>
-                        <ColumnDefinition Width="712*"/>
-                        <ColumnDefinition Width="735*"/>
-                    </Grid.ColumnDefinitions>
+                                </Style>
+                            </Grid.Resources>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="23*"/>
+                                <ColumnDefinition Width="712*"/>
+                                <ColumnDefinition Width="735*"/>
+                            </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="2"
+                            <StackPanel Grid.Column="2"
                             Orientation="Vertical"
                             Margin="40,0,0,0">
-                        <StackPanel.Resources>
-                            <Style TargetType="{x:Type StackPanel}"
+                                <StackPanel.Resources>
+                                    <Style TargetType="{x:Type StackPanel}"
                                     BasedOn="{StaticResource SearchInfoStack}"/>
-                        </StackPanel.Resources>
-                        <StackPanel>
-                            <ComboBox/>
-                            <TextBlock><Run Text="Khối"/></TextBlock>
-                        </StackPanel>
-                        <StackPanel>
-                            <ComboBox/>
-                            <TextBlock><Run Text="Giới tính"/></TextBlock>
-                        </StackPanel>
-                        <StackPanel>
-                            <TextBox/>
-                            <TextBlock><Run Text="Họ tên"/></TextBlock>
-                        </StackPanel>
-                        <StackPanel>
-                            <ComboBox/>
-                            <TextBlock><Run Text="Dân tộc"/></TextBlock>
-                        </StackPanel>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1"
+                                </StackPanel.Resources>
+                                <StackPanel>
+                                    <ComboBox/>
+                                    <TextBlock><Run Text="Khối"/></TextBlock>
+                                </StackPanel>
+                                <StackPanel>
+                                    <ComboBox/>
+                                    <TextBlock><Run Text="Giới tính"/></TextBlock>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBox/>
+                                    <TextBlock><Run Text="Họ tên"/></TextBlock>
+                                </StackPanel>
+                                <StackPanel>
+                                    <ComboBox/>
+                                    <TextBlock><Run Text="Dân tộc"/></TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1"
                             Orientation="Vertical"
                             Margin="17,0,0,0">
-                        <StackPanel.Resources>
-                            <Style TargetType="{x:Type StackPanel}"
+                                <StackPanel.Resources>
+                                    <Style TargetType="{x:Type StackPanel}"
                                     BasedOn="{StaticResource SearchInfoStack}"/>
-                        </StackPanel.Resources>
-                        <StackPanel>
-                            <ComboBox/>
-                            <TextBlock><Run Text="Lớp học"/></TextBlock>
-                        </StackPanel>
-                        <StackPanel>
-                            <TextBox/>
-                            <TextBlock><Run Text="Mã học sinh"/></TextBlock>
-                        </StackPanel>
-                        <StackPanel>
-                            <ComboBox/>
-                            <TextBlock><Run Text="Trạng thái"/></TextBlock>
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
-                <Border Background="White"
+                                </StackPanel.Resources>
+                                <StackPanel>
+                                    <ComboBox/>
+                                    <TextBlock><Run Text="Lớp học"/></TextBlock>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBox/>
+                                    <TextBlock><Run Text="Mã học sinh"/></TextBlock>
+                                </StackPanel>
+                                <StackPanel>
+                                    <ComboBox/>
+                                    <TextBlock><Run Text="Trạng thái"/></TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                        <Border Background="White"
                         BorderThickness="0,1,0,0"
                         BorderBrush="#FF615F5F">
-                    <StackPanel Orientation="Horizontal"
+                            <StackPanel Orientation="Horizontal"
                             FlowDirection="RightToLeft">
 
-                        <Button                               
+                                <Button                               
                                 Margin="20,10,0,10"
                                 >
-                            <StackPanel Orientation="Horizontal"
+                                    <StackPanel Orientation="Horizontal"
                                     FlowDirection="LeftToRight">
-                                <iconPacks:PackIconMaterial
+                                        <iconPacks:PackIconMaterial
                                         Height="15"
                                         Width="15"
                                         Kind="Magnify"
                                         Foreground="White"
                                         VerticalAlignment="Center"/>
-                                <TextBlock VerticalAlignment="Center"><Run Text="Tìm kiếm"/></TextBlock>
+                                        <TextBlock VerticalAlignment="Center"><Run Text="Tìm kiếm"/></TextBlock>
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
-                        </Button>
+                        </Border>
                     </StackPanel>
-                </Border>
-            </StackPanel>
-        </Expander>
-        <StackPanel Orientation="Horizontal"
+                </Expander>
+                <StackPanel Orientation="Horizontal"
                 FlowDirection="RightToLeft"
                 DockPanel.Dock="Top"
                 Margin="20,0,20,10">
-            <Button 
+                    <Button 
                     Margin="0,0,10,0">
-                <StackPanel Orientation="Horizontal"
+                        <StackPanel Orientation="Horizontal"
                         FlowDirection="LeftToRight">
-                    <iconPacks:PackIconMaterial
+                            <iconPacks:PackIconMaterial
                             Height="15"
                             Width="15"
                             Kind="CloseCircle"
                             Foreground="White"
                             VerticalAlignment="Center"
                             Margin="0,0,5,0"/>
-                    <TextBlock VerticalAlignment="Center"><Run Text="Xóa"/></TextBlock>
-                </StackPanel>
+                            <TextBlock VerticalAlignment="Center"><Run Text="Xóa"/></TextBlock>
+                        </StackPanel>
 
 
-            </Button>
-            <Button 
+                    </Button>
+                    <Button x:Name="AddButton"
+                            Click="AddButton_Click"
                     Margin="0,0,5,0">
-                <StackPanel Orientation="Horizontal"
+                        <StackPanel Orientation="Horizontal"
                         FlowDirection="LeftToRight">
-                    <iconPacks:PackIconMaterial
+                            <iconPacks:PackIconMaterial
                             Height="15"
                             Width="15"
                             Kind="PlusCircle"
                             Foreground="White"
                             VerticalAlignment="Center"
                             Margin="0,0,5,0"/>
-                    <TextBlock VerticalAlignment="Center"><Run Text="Thêm mới"/></TextBlock>
-                </StackPanel>
-            </Button>
-            <Button 
+                            <TextBlock VerticalAlignment="Center"><Run Text="Thêm mới"/></TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button 
                     Margin="0,0,5,0">
-                <StackPanel Orientation="Horizontal"
+                        <StackPanel Orientation="Horizontal"
                         FlowDirection="LeftToRight">
-                    <TextBlock VerticalAlignment="Center"><Run Text="Nhập xuất"/></TextBlock>
-                    <iconPacks:PackIconMaterial
+                            <TextBlock VerticalAlignment="Center"><Run Text="Nhập xuất"/></TextBlock>
+                            <iconPacks:PackIconMaterial
                             Height="15"
                             Width="15"
                             Kind="SwapVerticalBold"
                             Foreground="White"
                             VerticalAlignment="Center"
                             Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
-            </Button>
-        </StackPanel>
-        <DataGrid Background="White" 
+                <DataGrid Background="White" 
                 DockPanel.Dock="Top"
                 FontSize="20" ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                  HorizontalAlignment="Center">
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem>
-                        <MenuItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xem"/></TextBlock>
-                                <iconPacks:PackIconMaterial
-                Height="15"
-                Width="15"
-                Foreground="{StaticResource DeepBlueForeground}"
-                Kind="Eye"
-                VerticalAlignment="Center"
-                Margin="5,0,0,0"/>
-                            </StackPanel>
-                        </MenuItem.Header>
-                    </MenuItem>
-                    <MenuItem>
-                        <MenuItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Sửa"/></TextBlock>
-                                <iconPacks:PackIconMaterial
-                                            Height="15"
-                                            Width="15"
-                                            Foreground="{StaticResource DeepBlueForeground}"
-                                            Kind="Pencil"
-                                            VerticalAlignment="Center"
-                                            Margin="5,0,0,0"/>
-                            </StackPanel>
-                        </MenuItem.Header>
-                    </MenuItem>
-                    <MenuItem>
-                        <MenuItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xóa"/></TextBlock>
-                                <iconPacks:PackIconMaterial
-                                            Height="15"
-                                            Width="15"
-                                            Foreground="{StaticResource DeepBlueForeground}"
-                                            Kind="CloseCircle"
-                                            VerticalAlignment="Center"
-                                            Margin="5,0,0,0"/>
-                            </StackPanel>
-                        </MenuItem.Header>
-                    </MenuItem>
+                HorizontalAlignment="Center">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem x:Name="ViewMenuItem" Click="ViewMenuItem_Click">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xem"/></TextBlock>
+                                        <iconPacks:PackIconMaterial
+                                        Height="15"
+                                        Width="15"
+                                        Foreground="{StaticResource DeepBlueForeground}"
+                                        Kind="Eye"
+                                        VerticalAlignment="Center"
+                                        Margin="5,0,0,0"/>
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem x:Name="ModifyMenuItem" Click="ModifyMenuItem_Click">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Sửa"/></TextBlock>
+                                        <iconPacks:PackIconMaterial
+                                        Height="15"
+                                        Width="15"
+                                        Foreground="{StaticResource DeepBlueForeground}"
+                                        Kind="Pencil"
+                                        VerticalAlignment="Center"
+                                        Margin="5,0,0,0"/>
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem>
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xóa"/></TextBlock>
+                                        <iconPacks:PackIconMaterial
+                                        Height="15"
+                                        Width="15"
+                                        Foreground="{StaticResource DeepBlueForeground}"
+                                        Kind="CloseCircle"
+                                        VerticalAlignment="Center"
+                                        Margin="5,0,0,0"/>
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
 
-                </ContextMenu>
-            </DataGrid.ContextMenu>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="STT"
-                                    Width="100">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="DataGridColumnHeader"
-                               BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-                <DataGridCheckBoxColumn Width="80">
-                    <DataGridCheckBoxColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}"
-BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridCheckBoxColumn.HeaderStyle>
-                    <DataGridCheckBoxColumn.Header>
-                        <CheckBox/>
-                    </DataGridCheckBoxColumn.Header>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="STT"
+                        Width="80">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}"
+                                BasedOn="{StaticResource LightBlueHeader}"/>
+                            </DataGridTextColumn.HeaderStyle>
+                        </DataGridTextColumn>
+                        <DataGridCheckBoxColumn Width="80">
+                            <DataGridCheckBoxColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}"
+                                BasedOn="{StaticResource LightBlueHeader}"/>
+                            </DataGridCheckBoxColumn.HeaderStyle>
+                            <DataGridCheckBoxColumn.Header>
+                                <CheckBox/>
+                            </DataGridCheckBoxColumn.Header>
 
-                </DataGridCheckBoxColumn>
-                <DataGridTextColumn Header="Mã học sinh"
-                            Width="200">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}"
-                            BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Họ tên"
-                            Width="250">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}"
-                            BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Ngày sinh"
-                            Width="150">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}"
-                            BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Giới tính"
-                            Width="150">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}"
-                            BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Tên lớp"
-                            Width="150">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}"
-                            BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Trạng thái"
-                            Width="150">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}"
-                            BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
+                        </DataGridCheckBoxColumn>
+                        <DataGridTextColumn Header="Mã học sinh"
+                        Width="180">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}"
+                                BasedOn="{StaticResource LightBlueHeader}"/>
+                            </DataGridTextColumn.HeaderStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Họ tên"
+                        Width="280">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}"
+                                BasedOn="{StaticResource LightBlueHeader}"/>
+                            </DataGridTextColumn.HeaderStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Giới tính"
+                        Width="120">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}"
+                                BasedOn="{StaticResource LightBlueHeader}"/>
+                            </DataGridTextColumn.HeaderStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Lớp"
+                        Width="100">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}"
+                                BasedOn="{StaticResource LightBlueHeader}"/>
+                            </DataGridTextColumn.HeaderStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="TB HK I"
+                        Width="120">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}"
+                                BasedOn="{StaticResource LightBlueHeader}"/>
+                            </DataGridTextColumn.HeaderStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="TB HK II"
+                        Width="120">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}"
+                                BasedOn="{StaticResource LightBlueHeader}"/>
+                            </DataGridTextColumn.HeaderStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Trạng thái"
+                        Width="*">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}"
+                                BasedOn="{StaticResource LightBlueHeader}"/>
+                            </DataGridTextColumn.HeaderStyle>
+                        </DataGridTextColumn>
 
-            </DataGrid.Columns>
+                    </DataGrid.Columns>
 
-        </DataGrid>
+                </DataGrid>
 
-    </DockPanel>
+            </DockPanel>
 
+        </ContentControl>
 
+        <ContentControl x:Name="ExtendView" Visibility="Collapsed"/>
+
+    </Grid>
 </UserControl>

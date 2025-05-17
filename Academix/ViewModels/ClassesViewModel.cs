@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace Academix.ViewModels
 {
-    public class ClassesViewModel : INotifyPropertyChanged
+    public class ClassesViewModel : BaseViewModel
     {
         private string selectedSemester;
         private string selectedSchoolYear;
@@ -29,7 +29,7 @@ namespace Academix.ViewModels
             set
             {
                 selectedSemester = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedSemester));
             }
         }
 
@@ -39,7 +39,7 @@ namespace Academix.ViewModels
             set
             {
                 selectedSchoolYear = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedSchoolYear));
             }
         }
 
@@ -49,7 +49,7 @@ namespace Academix.ViewModels
             set
             {
                 selectedTeacher = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedTeacher));
             }
         }
 
@@ -59,11 +59,11 @@ namespace Academix.ViewModels
             set
             {
                 selectedClassroom = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedClassroom));
                 if (selectedClassroom != null)
                 {
                     NewClassName = selectedClassroom.Name;
-                    NewTeacher = selectedClassroom.TeacherName;
+                    NewTeacherName = selectedClassroom.TeacherName;
                 }
             }
         }
@@ -74,17 +74,17 @@ namespace Academix.ViewModels
             set
             {
                 newClassName = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(NewClassName));
             }
         }
 
-        public string NewTeacher
+        public string NewTeacherName
         {
             get => newTeacher;
             set
             {
                 newTeacher = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(NewTeacherName));
             }
         }
 
@@ -100,9 +100,9 @@ namespace Academix.ViewModels
             FilteredClassrooms = new ObservableCollection<Classroom>();
 
             // Thêm dữ liệu mẫu
-            //Classrooms.Add(new Classroom("2024_10A1", 40, "HK1", "2024-2025", "Thầy A", new List<Student>()));
-            //Classrooms.Add(new Classroom("2024_10A2", 38, "HK1", "2024-2025", "Thầy B", new List<Student>()));
-            //Classrooms.Add(new Classroom("2024_11B1", 35, "HK2", "2023-2024", "Cô C", new List<Student>()));
+            Classrooms.Add(new Classroom("2024_10A1", 40, "HK1", "2024-2025", "Thầy A", new List<Student>()));
+            Classrooms.Add(new Classroom("2024_10A2", 38, "HK1", "2024-2025", "Thầy B", new List<Student>()));
+            Classrooms.Add(new Classroom("2024_11B1", 35, "HK2", "2023-2024", "Cô C", new List<Student>()));
             UpdateFiltered();
 
             SearchCommand = new RelayCommand(Search);
@@ -135,7 +135,7 @@ namespace Academix.ViewModels
 
         private void AddClass()
         {
-            if (string.IsNullOrWhiteSpace(NewClassName) || string.IsNullOrWhiteSpace(NewTeacher))
+            if (string.IsNullOrWhiteSpace(NewClassName) || string.IsNullOrWhiteSpace(NewTeacherName))
                 return;
 
             string id = "TỰ THÊM";
@@ -147,7 +147,7 @@ namespace Academix.ViewModels
                 0,
                 "HỌC KỲ NÀO",
                 DateTime.Now.Year + "-" + (DateTime.Now.Year + 1), // Năm học
-                NewTeacher,
+                NewTeacherName,
                 new List<Student>()
             );
 
@@ -157,7 +157,7 @@ namespace Academix.ViewModels
 
         private void EditClass()
         {
-            if (SelectedClassroom == null || string.IsNullOrWhiteSpace(NewTeacher))
+            if (SelectedClassroom == null || string.IsNullOrWhiteSpace(NewTeacherName))
                 return;
 
             string id = SelectedClassroom.ID;
@@ -166,7 +166,7 @@ namespace Academix.ViewModels
                 SelectedClassroom.Size,
                 SelectedClassroom.Semester,
                 SelectedClassroom.SchoolYear,
-                NewTeacher,
+                NewTeacherName,
                 SelectedClassroom.Students);
 
             int index = Classrooms.IndexOf(SelectedClassroom);

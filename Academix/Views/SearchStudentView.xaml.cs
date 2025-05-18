@@ -24,7 +24,9 @@ namespace Academix.Views
         public SearchStudentView()
         {
             InitializeComponent();
+            this.DataContext = new SearchStudentViewModel();
         }
+
 
         private void ModifyMenuItem_Click(object sender, RoutedEventArgs e)
         {

@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows;
+using Academix.Models;
 
 namespace Academix.ViewModels
 {
     public class ViewStudentViewModel
     {
+        public StudentDisplayModel Student { get; }
         private ContentControl _mainView;
         private ContentControl _container;
         public ICommand BackCommand { get; }
@@ -36,5 +38,8 @@ namespace Academix.ViewModels
             _container.Content = null;
             _mainView.Visibility = Visibility.Visible;
         }
+
+
     }
 }
+

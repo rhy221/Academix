@@ -96,7 +96,7 @@
                 </StackPanel>
             </Button>
 
-            <Button>
+            <Button Command="{Binding ResetCommand}">
                 <StackPanel Orientation="Horizontal"
                     FlowDirection="LeftToRight">
                     <iconPacks:PackIconMaterial
@@ -111,7 +111,7 @@
                         Margin="0,0,0,0"><Run Text="Làm lại"/></TextBlock>
                 </StackPanel>
             </Button>
-            <Button>
+            <Button Command="{Binding SaveCommand}">
                 <StackPanel Orientation="Horizontal"
                     FlowDirection="LeftToRight">
                     <iconPacks:PackIconMaterial
@@ -150,8 +150,9 @@
                     Foreground="{StaticResource GrayBackground}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"/>
-                <Image/>
-                <Button VerticalAlignment="Bottom"
+                <Image Height="150" Source="{Binding ProfileImage}"/>
+                <Button Command="{Binding UploadImageCommand}"
+                    VerticalAlignment="Bottom"
                     Background="{StaticResource GrayBackground}"
                     Opacity="0.8"
                     Height="35">
@@ -195,7 +196,9 @@
                         BasedOn="{StaticResource InforStackStyle}"/>
                 </UniformGrid.Resources>
                 <StackPanel>
-                    <ComboBox/>
+                    <ComboBox
+                        ItemsSource="{Binding GradeList}"
+                        SelectedItem="{Binding SelectedGrade, Mode=TwoWay}"/>
                     <TextBlock>
                         <Run  Foreground="Red" Text="*"/>
                         <Run Text="Khối"/>
@@ -203,7 +206,9 @@
 
                 </StackPanel>
                 <StackPanel>
-                    <ComboBox/>
+                    <ComboBox
+                        ItemsSource="{Binding FilteredClassList}"
+                        SelectedItem="{Binding SelectedClass, Mode=TwoWay}"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Lớp học"/>
@@ -211,7 +216,9 @@
 
                 </StackPanel>
                 <StackPanel>
-                    <ComboBox/>
+                    <ComboBox 
+                        ItemsSource="{Binding StatusList}"
+                        SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Trạng thái"/>
@@ -220,7 +227,7 @@
                 </StackPanel>
                 <StackPanel />
                 <StackPanel>
-                    <TextBox/>
+                    <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Họ tên"/>
@@ -228,7 +235,7 @@
 
                 </StackPanel>
                 <StackPanel>
-                    <TextBox/>
+                    <TextBox Text="{Binding StudentID, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Mã học sinh"/>
@@ -239,12 +246,14 @@
                 <StackPanel >
                     <StackPanel FlowDirection="LeftToRight"
                         Width="280">
-                        <CheckBox/>
+                        <CheckBox />
                         <TextBlock><Run Text="Sinh mã tự động"/></TextBlock>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel>
-                    <ComboBox/>
+                    <ComboBox
+                        ItemsSource="{Binding GenderList}"
+                        SelectedItem="{Binding SelectedGender, Mode=TwoWay}"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Giới tính"/>
@@ -252,7 +261,7 @@
 
                 </StackPanel>
                 <StackPanel >
-                    <DatePicker/>
+                    <DatePicker SelectedDate="{Binding DateOfBirth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="33" Width="216"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Ngày sinh"/>
@@ -260,7 +269,10 @@
 
                 </StackPanel>
                 <StackPanel>
-                    <ComboBox/>
+                    <ComboBox
+                        ItemsSource="{Binding Provinces}"
+                        SelectedItem="{Binding SelectedProvince, Mode=TwoWay}"                        
+                        DisplayMemberPath="name"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Tỉnh/Thành"/>
@@ -268,7 +280,10 @@
 
                 </StackPanel>
                 <StackPanel>
-                    <DatePicker/>
+                    <ComboBox
+                        ItemsSource="{Binding Wards}"
+                        DisplayMemberPath="name"
+                        SelectedItem="{Binding SelectedWard, Mode=TwoWay}"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Xã/Phường"/>
@@ -276,7 +291,10 @@
 
                 </StackPanel>
                 <StackPanel >
-                    <ComboBox/>
+                    <ComboBox
+                        ItemsSource="{Binding Districts}"
+                        SelectedItem="{Binding SelectedDistrict, Mode=TwoWay}"                        
+                        DisplayMemberPath="name"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Quận/Huyện"/>

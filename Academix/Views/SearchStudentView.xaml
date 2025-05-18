@@ -131,19 +131,25 @@
                                     BasedOn="{StaticResource SearchInfoStack}"/>
                                 </StackPanel.Resources>
                                 <StackPanel>
-                                    <ComboBox/>
+                                    <ComboBox
+                                        ItemsSource="{Binding GradeList}"
+                                        SelectedItem="{Binding SelectedGrade, Mode=TwoWay}"/>
                                     <TextBlock><Run Text="Khối"/></TextBlock>
                                 </StackPanel>
                                 <StackPanel>
-                                    <ComboBox/>
+                                    <ComboBox
+                                        ItemsSource="{Binding GenderList}"
+                                        SelectedItem="{Binding SelectedGender, Mode=TwoWay}"/>
                                     <TextBlock><Run Text="Giới tính"/></TextBlock>
                                 </StackPanel>
                                 <StackPanel>
-                                    <TextBox/>
+                                    <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock><Run Text="Họ tên"/></TextBlock>
                                 </StackPanel>
                                 <StackPanel>
-                                    <ComboBox/>
+                                    <ComboBox
+                                        ItemsSource="{Binding EthnicityList}"
+                                        SelectedItem="{Binding SelectedEthnicity, Mode=TwoWay}"/>
                                     <TextBlock><Run Text="Dân tộc"/></TextBlock>
                                 </StackPanel>
                             </StackPanel>
@@ -155,15 +161,19 @@
                                     BasedOn="{StaticResource SearchInfoStack}"/>
                                 </StackPanel.Resources>
                                 <StackPanel>
-                                    <ComboBox/>
+                                    <ComboBox
+                                        ItemsSource="{Binding FilteredClassList}"
+                                        SelectedItem="{Binding SelectedClass, Mode=TwoWay}"/>
                                     <TextBlock><Run Text="Lớp học"/></TextBlock>
                                 </StackPanel>
                                 <StackPanel>
-                                    <TextBox/>
+                                    <TextBox Text="{Binding StudentID, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock><Run Text="Mã học sinh"/></TextBlock>
                                 </StackPanel>
                                 <StackPanel>
-                                    <ComboBox/>
+                                    <ComboBox
+                                        ItemsSource="{Binding StatusList}"
+                                        SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"/>
                                     <TextBlock><Run Text="Trạng thái"/></TextBlock>
                                 </StackPanel>
                             </StackPanel>
@@ -174,7 +184,7 @@
                             <StackPanel Orientation="Horizontal"
                             FlowDirection="RightToLeft">
 
-                                <Button                               
+                                <Button Command="{Binding SearchCommand}"                              
                                 Margin="20,10,0,10"
                                 >
                                     <StackPanel Orientation="Horizontal"
@@ -242,10 +252,12 @@
                         </StackPanel>
                     </Button>
                 </StackPanel>
-                <DataGrid Background="White" 
-                DockPanel.Dock="Top"
-                FontSize="20" ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                HorizontalAlignment="Center">
+                <DataGrid ItemsSource="{Binding Students}" 
+                        AutoGenerateColumns="False"
+                        Background="White" 
+                        DockPanel.Dock="Top"
+                        FontSize="20" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                        HorizontalAlignment="Center">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem x:Name="ViewMenuItem" Click="ViewMenuItem_Click">
@@ -253,12 +265,12 @@
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xem"/></TextBlock>
                                         <iconPacks:PackIconMaterial
-                                        Height="15"
-                                        Width="15"
-                                        Foreground="{StaticResource DeepBlueForeground}"
-                                        Kind="Eye"
-                                        VerticalAlignment="Center"
-                                        Margin="5,0,0,0"/>
+                                                Height="15"
+                                                Width="15"
+                                                Foreground="{StaticResource DeepBlueForeground}"
+                                                Kind="Eye"
+                                                VerticalAlignment="Center"
+                                                Margin="5,0,0,0"/>
                                     </StackPanel>
                                 </MenuItem.Header>
                             </MenuItem>
@@ -267,12 +279,12 @@
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Sửa"/></TextBlock>
                                         <iconPacks:PackIconMaterial
-                                        Height="15"
-                                        Width="15"
-                                        Foreground="{StaticResource DeepBlueForeground}"
-                                        Kind="Pencil"
-                                        VerticalAlignment="Center"
-                                        Margin="5,0,0,0"/>
+                                                Height="15"
+                                                Width="15"
+                                                Foreground="{StaticResource DeepBlueForeground}"
+                                                Kind="Pencil"
+                                                VerticalAlignment="Center"
+                                                Margin="5,0,0,0"/>
                                     </StackPanel>
                                 </MenuItem.Header>
                             </MenuItem>
@@ -281,12 +293,12 @@
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xóa"/></TextBlock>
                                         <iconPacks:PackIconMaterial
-                                        Height="15"
-                                        Width="15"
-                                        Foreground="{StaticResource DeepBlueForeground}"
-                                        Kind="CloseCircle"
-                                        VerticalAlignment="Center"
-                                        Margin="5,0,0,0"/>
+                                                Height="15"
+                                                Width="15"
+                                                Foreground="{StaticResource DeepBlueForeground}"
+                                                Kind="CloseCircle"
+                                                VerticalAlignment="Center"
+                                                Margin="5,0,0,0"/>
                                     </StackPanel>
                                 </MenuItem.Header>
                             </MenuItem>
@@ -296,16 +308,17 @@
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="STT"
-                        Width="80">
+                                                    Binding="{Binding Index}"
+                                                    Width="80">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"
-                                BasedOn="{StaticResource LightBlueHeader}"/>
+                                        BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridCheckBoxColumn Width="80">
                             <DataGridCheckBoxColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"
-                                BasedOn="{StaticResource LightBlueHeader}"/>
+                                        BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridCheckBoxColumn.HeaderStyle>
                             <DataGridCheckBoxColumn.Header>
                                 <CheckBox/>
@@ -313,52 +326,59 @@
 
                         </DataGridCheckBoxColumn>
                         <DataGridTextColumn Header="Mã học sinh"
-                        Width="180">
+                                                    Binding="{Binding ID}"
+                                                    Width="180">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"
-                                BasedOn="{StaticResource LightBlueHeader}"/>
+                                        BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Họ tên"
-                        Width="280">
+                                                    Binding="{Binding Name}"
+                                                    Width="280">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"
-                                BasedOn="{StaticResource LightBlueHeader}"/>
+                                        BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Giới tính"
-                        Width="120">
+                                                    Binding="{Binding Gender}"
+                                                    Width="120">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"
-                                BasedOn="{StaticResource LightBlueHeader}"/>
+                                        BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Lớp"
-                        Width="100">
+                                                    Binding="{Binding ClassName}"
+                                                    Width="100">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"
-                                BasedOn="{StaticResource LightBlueHeader}"/>
+                                        BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="TB HK I"
-                        Width="120">
+                                                    Binding="{Binding GPA1}"
+                                                    Width="120">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"
-                                BasedOn="{StaticResource LightBlueHeader}"/>
+                                        BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="TB HK II"
-                        Width="120">
+                                                    Binding="{Binding GPA2}"
+                                                    Width="120">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"
-                                BasedOn="{StaticResource LightBlueHeader}"/>
+                                        BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Trạng thái"
-                        Width="*">
+                                                    Binding="{Binding Status}"
+                                                    Width="*">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"
-                                BasedOn="{StaticResource LightBlueHeader}"/>
+                                        BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
 

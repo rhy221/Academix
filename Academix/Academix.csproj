@@ -14,18 +14,25 @@
     <None Remove="Assets\AcademixWhiteLogo.png" />
     <None Remove="Assets\HamBarBG.png" />
     <None Remove="Assets\palette.png" />
+    <None Remove="Resources\DonViHanhChinhVietNam.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\DonViHanhChinhVietNam.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="DbContexts\" />
     <Folder Include="Stores\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.10" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>

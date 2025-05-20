@@ -10,6 +10,7 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1340">
+    
     <UserControl.DataContext>
         <viewModels:ClassesViewModel/>
     </UserControl.DataContext>
@@ -18,6 +19,7 @@
             <views:ViewClassView/>
         </DataTemplate>
     </UserControl.Resources>
+
 
     <Grid>
         <ContentControl  x:Name="MainView">
@@ -375,12 +377,14 @@ FlowDirection="LeftToRight">
 
                             <StackPanel Orientation="Horizontal"
                     Margin="0,20,0,20">
-                                <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
+                                <TextBox Text="{Binding NewClassName, Mode=TwoWay}"/>
                                 <TextBlock><Run Text="Tên lớp"/></TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal"
                     Margin="0,0,0,20">
-                                <ComboBox SelectedItem="{Binding NewName, Mode=TwoWay}"/>
+                                <ComboBox 
+                                    SelectedItem="{Binding SelectedTeacherName}" ItemsSource="{Binding Teachers}"
+                                    />
                                 <TextBlock><Run Text="GVCN"/></TextBlock>
                             </StackPanel>
                             <Button HorizontalAlignment="Right" Margin="0,0,20,20" Command="{Binding AddCommand}"
@@ -401,6 +405,7 @@ FlowDirection="LeftToRight">
 
                     </TabItem>
                     <TabItem Header="Sửa"
+                             Visibility="{Binding IsModifyTabVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                 >
                         <TabItem.Style>
                             <Style TargetType="{x:Type TabItem}"
@@ -413,12 +418,12 @@ FlowDirection="LeftToRight">
 
                             <StackPanel Orientation="Horizontal"
                     Margin="0,20,0,20">
-                                <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
+                                <TextBox Text="{Binding NewClassName, Mode=TwoWay}"/>
                                 <TextBlock><Run Text="Tên lớp"/></TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal"
-                    Margin="0,0,0,20">
-                                <ComboBox SelectedItem="{Binding NewName, Mode=TwoWay}"/>
+                    Margin="0,0,0,20" Visibility="{Binding IsModifyTabVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <ComboBox SelectedItem="{Binding SelectedTeacherName}" ItemsSource="{Binding Teachers}"/>
                                 <TextBlock><Run Text="GVCN"/></TextBlock>
                             </StackPanel>
                             <Button HorizontalAlignment="Right" Margin="0,0,20,20" Command="{Binding EditCommand}"
@@ -440,6 +445,9 @@ FlowDirection="LeftToRight">
                     </TabItem>
                 </TabControl>
                 <DataGrid
+                    ItemsSource="{Binding FilteredClassrooms}"
+    SelectedItem="{Binding SelectedClassroom, Mode=TwoWay}"
+                
         AutoGenerateColumns="False"
         FontSize="20"
         SelectionUnit="FullRow"
@@ -485,37 +493,37 @@ FlowDirection="LeftToRight">
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="STT"
-                Width="80">
+                Width="80" Binding="{Binding ID}">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Tên lớp"
-                Width="150">
+                Width="150" Binding="{Binding Name}">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Sĩ số"
-                Width="100">
+                Width="100" Binding="{Binding Size}">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="GVCN"
-                Width="200">
+                Width="200" Binding="{Binding TeacherName}">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Năm học"
-                Width="200">
+                Width="200" Binding="{Binding SchoolYear}">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
 
-                        <DataGridCheckBoxColumn Width="80">
+                        <DataGridCheckBoxColumn Width="80" Binding="{Binding IsSelected}">
                             <DataGridCheckBoxColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"
                         BasedOn="{StaticResource LightBlueHeader}"/>

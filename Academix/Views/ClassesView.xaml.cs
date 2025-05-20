@@ -24,6 +24,7 @@ namespace Academix.Views
         public ClassesView()
         {
             InitializeComponent();
+            this.DataContext = new ClassesViewModel();
         }
 
         private void ViewMenuItem_Click(object sender, RoutedEventArgs e)

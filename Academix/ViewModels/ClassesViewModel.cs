@@ -157,7 +157,9 @@ namespace Academix.ViewModels
             if (string.IsNullOrWhiteSpace(NewClassName) || string.IsNullOrWhiteSpace(SelectedTeacherName))
                 return;
 
-            string id = NewClassName.Replace(" ", "") + "_" + DateTime.Now.Ticks;
+            string yearPrefix = DateTime.Now.Year.ToString();
+            string id = $"{yearPrefix}_{NewClassName.Replace(" ", "")}";
+
 
             var newClass = new Classroom(
                 id,
@@ -178,12 +180,22 @@ namespace Academix.ViewModels
                 return;
 
             string newID = SelectedClassroom.ID.Substring(0, 4) + "_" + NewClassName;
+            if (Classrooms.Any(c => c.ID == newID && c != SelectedClassroom)) return;
+
 
             SelectedClassroom.ID = newID;
             SelectedClassroom.TeacherName = SelectedTeacherName;
 
             var index = FilteredClassrooms.IndexOf(SelectedClassroom);
-            FilteredClassrooms[index] = new Classroom(SelectedClassroom);
+            var original = Classrooms.FirstOrDefault(c => c.ID == SelectedClassroom.ID);
+            if (original != null)
+            {
+                original.ID = newID;
+                original.TeacherName = SelectedTeacherName;
+            }
+            UpdateFiltered();
+
+
         }
 
         private void DeleteSelected()
@@ -193,7 +205,9 @@ namespace Academix.ViewModels
             {
                 Classrooms.Remove(cls);
             }
+            SelectedClassroom = null;
             UpdateFiltered();
+
         }
 
         private void ImportExport()

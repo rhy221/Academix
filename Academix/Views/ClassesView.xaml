@@ -405,8 +405,7 @@ FlowDirection="LeftToRight">
 
                     </TabItem>
                     <TabItem Header="Sửa"
-                             Visibility="{Binding IsModifyTabVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                >
+                                             >
                         <TabItem.Style>
                             <Style TargetType="{x:Type TabItem}"
                     BasedOn="{StaticResource AboveEndTabItem}"/>
@@ -422,7 +421,7 @@ FlowDirection="LeftToRight">
                                 <TextBlock><Run Text="Tên lớp"/></TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal"
-                    Margin="0,0,0,20" Visibility="{Binding IsModifyTabVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                    Margin="0,0,0,20" >
                                 <ComboBox SelectedItem="{Binding SelectedTeacherName}" ItemsSource="{Binding Teachers}"/>
                                 <TextBlock><Run Text="GVCN"/></TextBlock>
                             </StackPanel>

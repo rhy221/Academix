@@ -377,7 +377,7 @@ FlowDirection="LeftToRight">
 
                             <StackPanel Orientation="Horizontal"
                     Margin="0,20,0,20">
-                                <TextBox Text="{Binding NewClassName, Mode=TwoWay}"/>
+                                <TextBox Text="{Binding NewClassName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock><Run Text="Tên lớp"/></TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal"
@@ -417,11 +417,12 @@ FlowDirection="LeftToRight">
 
                             <StackPanel Orientation="Horizontal"
                     Margin="0,20,0,20">
-                                <TextBox Text="{Binding NewClassName, Mode=TwoWay}"/>
+                                <TextBox Text="{Binding NewClassName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock><Run Text="Tên lớp"/></TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal"
-                    Margin="0,0,0,20" >
+                    Margin="0,0,0,20" 
+                                        >
                                 <ComboBox SelectedItem="{Binding SelectedTeacherName}" ItemsSource="{Binding Teachers}"/>
                                 <TextBlock><Run Text="GVCN"/></TextBlock>
                             </StackPanel>

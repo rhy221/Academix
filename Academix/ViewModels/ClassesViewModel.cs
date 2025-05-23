@@ -27,35 +27,19 @@ namespace Academix.ViewModels
         public bool IsModifyTabVisible
         {
             get => _isModifyTabVisible;
-            set
-            {
-                if (_isModifyTabVisible != value)
-                {
-                    _isModifyTabVisible = value;
-                    OnPropertyChanged(nameof(IsModifyTabVisible));
-                }
-            }
+            set => SetProperty(ref _isModifyTabVisible, value);
         }
-
 
         public string SelectedSemester
         {
             get => selectedSemester;
-            set
-            {
-                selectedSemester = value;
-                OnPropertyChanged(nameof(SelectedSemester));
-            }
+            set => SetProperty(ref selectedSemester, value);
         }
 
         public string SelectedSchoolYear
         {
             get => selectedSchoolYear;
-            set
-            {
-                selectedSchoolYear = value;
-                OnPropertyChanged(nameof(SelectedSchoolYear));
-            }
+            set => SetProperty(ref selectedSchoolYear, value);
         }
 
         public Classroom SelectedClassroom
@@ -63,40 +47,34 @@ namespace Academix.ViewModels
             get => selectedClassroom;
             set
             {
-                if (selectedClassroom != value)
+                if (SetProperty(ref selectedClassroom, value))
                 {
-                    selectedClassroom = value;
-                    OnPropertyChanged(nameof(SelectedClassroom));
-
                     if (selectedClassroom != null)
                     {
-                        NewClassName = selectedClassroom.ID.Split('_').Length > 1 ? selectedClassroom.ID.Split('_')[1] : selectedClassroom.ID;
+                        NewClassName = selectedClassroom.Name;
                         SelectedTeacherName = selectedClassroom.TeacherName;
                         IsModifyTabVisible = true;
+                    }
+                    else
+                    {
+                        NewClassName = string.Empty;
+                        SelectedTeacherName = string.Empty;
+                        IsModifyTabVisible = false;
                     }
                 }
             }
         }
 
-
         public string NewClassName
         {
             get => newClassName;
-            set
-            {
-                newClassName = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref newClassName, value);
         }
 
         public string SelectedTeacherName
         {
             get => selectedTeacherName;
-            set
-            {
-                selectedTeacherName = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref selectedTeacherName, value);
         }
 
         public ICommand SearchCommand { get; }
@@ -110,10 +88,9 @@ namespace Academix.ViewModels
             Classrooms = new ObservableCollection<Classroom>();
             FilteredClassrooms = new ObservableCollection<Classroom>();
 
-            // Thêm dữ liệu mẫu
-            Classrooms.Add(new Classroom("2024_10A1", 40, "HK1", "2024-2025", "Thầy A", new List<Student>()));
-            Classrooms.Add(new Classroom("2024_10A2", 38, "HK1", "2024-2025", "Thầy B", new List<Student>()));
-            Classrooms.Add(new Classroom("2024_11B1", 35, "HK2", "2023-2024", "Cô C", new List<Student>()));
+            Classrooms.Add(new Classroom("2024_10A1", "10A1", 40, "HK1", "2024-2025", "Thầy A", new List<Student>()));
+            Classrooms.Add(new Classroom("2024_10A2", "10A2", 38, "HK1", "2024-2025", "Thầy B", new List<Student>()));
+            Classrooms.Add(new Classroom("2024_11B1", "11B1", 35, "HK2", "2023-2024", "Cô C", new List<Student>()));
             UpdateFiltered();
 
             SearchCommand = new RelayCommand(Search);
@@ -160,9 +137,9 @@ namespace Academix.ViewModels
             string yearPrefix = DateTime.Now.Year.ToString();
             string id = $"{yearPrefix}_{NewClassName.Replace(" ", "")}";
 
-
             var newClass = new Classroom(
                 id,
+                NewClassName,
                 0,
                 "HỌC KỲ NÀO",
                 DateTime.Now.Year + "-" + (DateTime.Now.Year + 1),
@@ -179,24 +156,31 @@ namespace Academix.ViewModels
             if (SelectedClassroom == null || string.IsNullOrWhiteSpace(NewClassName) || string.IsNullOrWhiteSpace(SelectedTeacherName))
                 return;
 
-            string newID = SelectedClassroom.ID.Substring(0, 4) + "_" + NewClassName;
-            if (Classrooms.Any(c => c.ID == newID && c != SelectedClassroom)) return;
+            // Tìm index
+            int index = Classrooms.IndexOf(SelectedClassroom);
+            if (index < 0) return;
 
+            // Tạo bản mới với thông tin cập nhật
+            var updatedClassroom = new Classroom(
+                SelectedClassroom.ID,
+                NewClassName,
+                SelectedClassroom.Size,
+                SelectedClassroom.Semester,
+                SelectedClassroom.SchoolYear,
+                SelectedTeacherName,
+                SelectedClassroom.Students
+            );
 
-            SelectedClassroom.ID = newID;
-            SelectedClassroom.TeacherName = SelectedTeacherName;
+            // Thay thế trong collection
+            Classrooms[index] = updatedClassroom;
 
-            var index = FilteredClassrooms.IndexOf(SelectedClassroom);
-            var original = Classrooms.FirstOrDefault(c => c.ID == SelectedClassroom.ID);
-            if (original != null)
-            {
-                original.ID = newID;
-                original.TeacherName = SelectedTeacherName;
-            }
+            // Cập nhật FilteredClassrooms (nếu dùng)
             UpdateFiltered();
 
-
+            // Cập nhật SelectedClassroom trỏ tới bản mới
+            SelectedClassroom = updatedClassroom;
         }
+
 
         private void DeleteSelected()
         {
@@ -207,7 +191,6 @@ namespace Academix.ViewModels
             }
             SelectedClassroom = null;
             UpdateFiltered();
-
         }
 
         private void ImportExport()
@@ -218,5 +201,13 @@ namespace Academix.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(storage, value)) return false;
+            storage = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
     }
 }

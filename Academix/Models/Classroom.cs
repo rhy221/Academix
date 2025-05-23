@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Academix.Models
 {
-    public class Classroom
+    public class Classroom : INotifyPropertyChanged
     {
         public string ID { get; set; } // NamHoc_TenLop
-        public string Name => ID.Substring(4);
+        public string Name { get; set; }
         public int Size { get; set; }
         public string Semester { get; set; }
         public string SchoolYear { get; set; }
@@ -21,9 +23,10 @@ namespace Academix.Models
         public bool IsSelected { get; set; }
 
 
-        public Classroom(string iD, int size, string semester, string schoolYear, string teacherName, List<Student> students)
+        public Classroom(string iD, string name, int size, string semester, string schoolYear, string teacherName, List<Student> students)
         {
             ID = iD;
+            Name = name;
             Size = size;
             Semester = semester;
             SchoolYear = schoolYear;
@@ -34,6 +37,7 @@ namespace Academix.Models
         public Classroom(Classroom other)
         {
             ID = other.ID;
+            Name = other.Name;
             Size = other.Size;
             Semester = other.Semester;
             SchoolYear = other.SchoolYear;
@@ -46,6 +50,13 @@ namespace Academix.Models
         {
             get { return _student[index]; }
             set { _student[index] = value; }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
     }

@@ -1,27 +1,100 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Academix.Models
 {
     public class Classroom : INotifyPropertyChanged
     {
         public string ID { get; set; } // NamHoc_TenLop
-        public string Name { get; set; }
-        public int Size { get; set; }
-        public string Semester { get; set; }
-        public string SchoolYear { get; set; }
-        public string TeacherName { get; set; }
-        public List<Student> Students => new List<Student>(_student);
+
+        private string name;
+        public string Name
+        {
+            get => name;
+            set
+            {
+                if (name != value)
+                {
+                    name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
+
+        private int size;
+        public int Size
+        {
+            get => size;
+            set
+            {
+                if (size != value)
+                {
+                    size = value;
+                    OnPropertyChanged(nameof(Size));
+                }
+            }
+        }
+
+        private string semester;
+        public string Semester
+        {
+            get => semester;
+            set
+            {
+                if (semester != value)
+                {
+                    semester = value;
+                    OnPropertyChanged(nameof(Semester));
+                }
+            }
+        }
+
+        private string schoolYear;
+        public string SchoolYear
+        {
+            get => schoolYear;
+            set
+            {
+                if (schoolYear != value)
+                {
+                    schoolYear = value;
+                    OnPropertyChanged(nameof(SchoolYear));
+                }
+            }
+        }
+
+        private string teacherName;
+        public string TeacherName
+        {
+            get => teacherName;
+            set
+            {
+                if (teacherName != value)
+                {
+                    teacherName = value;
+                    OnPropertyChanged(nameof(TeacherName));
+                }
+            }
+        }
 
         private List<Student> _student;
-        public bool IsSelected { get; set; }
+        public List<Student> Students => new List<Student>(_student);
 
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(IsSelected));
+                }
+            }
+        }
 
         public Classroom(string iD, string name, int size, string semester, string schoolYear, string teacherName, List<Student> students)
         {
@@ -53,11 +126,9 @@ namespace Academix.Models
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propName = null)
+        public void OnPropertyChanged([CallerMemberName] string propName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
-
     }
 }

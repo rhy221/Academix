@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Academix.Views.ClassesView"
+<UserControl x:Class="Academix.Views.ClassesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -215,15 +215,28 @@ FlowDirection="LeftToRight">
                         BasedOn="{StaticResource SearchInfoStack}"/>
                             </UniformGrid.Resources>
                             <StackPanel>
-                                <ComboBox/>
+                                <ComboBox
+                                    ItemsSource="{Binding Grades}"
+                                    SelectedItem="{Binding SelectedSearchGrade, Mode=TwoWay}"
+                                
+                                    IsTextSearchEnabled="True"/>        
                                 <TextBlock><Run Text="Khối"/></TextBlock>
                             </StackPanel>
                             <StackPanel>
-                                <ComboBox/>
+                                <ComboBox
+                                    ItemsSource="{Binding Teachers}"
+                                  
+                                    SelectedItem="{Binding SelectedSearchTeacher, Mode=TwoWay}"
+                                    
+                                    IsTextSearchEnabled="True"/>
                                 <TextBlock><Run Text="GVCN"/></TextBlock>
                             </StackPanel>
                             <StackPanel>
-                                <ComboBox/>
+                                <ComboBox
+                                    ItemsSource="{Binding ClassNames}"
+                                    SelectedItem="{Binding SelectedSearchClass, Mode=TwoWay}"
+                                  
+                                    IsTextSearchEnabled="True"/>
                                 <TextBlock><Run Text="Lớp"/></TextBlock>
                             </StackPanel>
                         </UniformGrid>
@@ -383,7 +396,7 @@ FlowDirection="LeftToRight">
                             <StackPanel Orientation="Horizontal"
                     Margin="0,0,0,20">
                                 <ComboBox 
-                                    SelectedItem="{Binding SelectedTeacherName}" ItemsSource="{Binding Teachers}"
+                                    SelectedItem="{Binding SelectedAddTeacher}" ItemsSource="{Binding Teachers}"
                                     />
                                 <TextBlock><Run Text="GVCN"/></TextBlock>
                             </StackPanel>
@@ -417,13 +430,13 @@ FlowDirection="LeftToRight">
 
                             <StackPanel Orientation="Horizontal"
                     Margin="0,20,0,20">
-                                <TextBox Text="{Binding NewClassName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox Text="{Binding EditClassName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock><Run Text="Tên lớp"/></TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal"
                     Margin="0,0,0,20" 
                                         >
-                                <ComboBox SelectedItem="{Binding SelectedTeacherName}" ItemsSource="{Binding Teachers}"/>
+                                <ComboBox SelectedItem="{Binding SelectedEditTeacher}" ItemsSource="{Binding Teachers}"/>
                                 <TextBlock><Run Text="GVCN"/></TextBlock>
                             </StackPanel>
                             <Button HorizontalAlignment="Right" Margin="0,0,20,20" Command="{Binding EditCommand}"
@@ -455,7 +468,7 @@ FlowDirection="LeftToRight">
         AlternationCount="10000"
         Margin="0,0,20,0"
         HorizontalAlignment="Center"
-        IsReadOnly="True"
+       
         DockPanel.Dock="Right">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
@@ -529,7 +542,8 @@ FlowDirection="LeftToRight">
                         BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridCheckBoxColumn.HeaderStyle>
                             <DataGridCheckBoxColumn.Header>
-                                <CheckBox/>
+                                <CheckBox
+                            />
                             </DataGridCheckBoxColumn.Header>
 
                         </DataGridCheckBoxColumn>

@@ -1,4 +1,5 @@
-﻿using System;
+using Academix.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace Academix.Views
         public SubjectReportView()
         {
             InitializeComponent();
+            DataContext = new SubjectReportViewModel();
         }
     }
 }

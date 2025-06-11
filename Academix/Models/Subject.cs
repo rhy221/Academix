@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,6 +49,12 @@ namespace Academix.Models
         {
             _scores[key] = number;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
 
     }
 }

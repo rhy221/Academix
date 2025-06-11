@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Permissions;
@@ -27,18 +27,28 @@ namespace Academix.Models
 
         public void SetSubject(Subject subject)
         {
-            _subject = new Subject(Subject);
+            _subject = new Subject(subject);
         }
+
 
         public void setTable(string classID, int passedNum)
         {
-            var item = _table.Find(match => match.ClassroomID == classID);
-            item.PassedNum = passedNum;
-            item.Percentage = Convert.ToSingle(Math.Round(passedNum * 1.0d / item.ClassroomSize));
+            int index = _table.FindIndex(match => match.ClassroomID == classID);
+            if (index >= 0)
+            {
+                var oldItem = _table[index];
+                float percentage = (oldItem.ClassroomSize > 0) ? (float)Math.Round((double)passedNum / oldItem.ClassroomSize, 2) : 0f;
+                _table[index] = (oldItem.ClassroomID, oldItem.ClassroomSize, passedNum, percentage);
+            }
+            else
+            {
+                _table.Add((classID, 0, passedNum, 0f));
+            }
         }
-        
 
-       
+
+
+
 
 
     }

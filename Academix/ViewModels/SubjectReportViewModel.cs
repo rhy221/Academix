@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -11,133 +11,219 @@ namespace Academix.ViewModels
 {
     public class SubjectReportViewModel : INotifyPropertyChanged
     {
-        private string selectedSubject;
-        private string selectedYear;
-        private string selectedSemester;
-        private ObservableCollection<ClassroomReportItem> filteredReports;
+        public ObservableCollection<string> SemesterList { get; } = new ObservableCollection<string> { "HK1", "HK2", "HK3" };
+        public ObservableCollection<string> AcademicYearList { get; } = new ObservableCollection<string> { "2022-2023", "2023-2024", "2024-2025" };
+        public ObservableCollection<Subject> SubjectList { get; } = new ObservableCollection<Subject>();
 
-        public ObservableCollection<SubjectReport> AllReports { get; set; }
-
-        public string SelectedSubject
+        private string? _selectedSemester;
+        public string? SelectedSemester
         {
-            get => selectedSubject;
+            get => _selectedSemester;
             set
             {
-                selectedSubject = value;
-                OnPropertyChanged();
-                FilterData();
+                if (_selectedSemester != value)
+                {
+                    _selectedSemester = value;
+                    OnPropertyChanged(nameof(SelectedSemester));
+                }
             }
         }
 
-        public string SelectedYear
+        private Subject? _selectedSubject;
+        public Subject? SelectedSubject
         {
-            get => selectedYear;
+            get => _selectedSubject;
             set
             {
-                selectedYear = value;
-                OnPropertyChanged();
-                FilterData();
+                if (_selectedSubject != value)
+                {
+                    _selectedSubject = value;
+                    OnPropertyChanged(nameof(SelectedSubject));
+                }
             }
         }
 
-        public string SelectedSemester
+        private string? _selectedAcademicYear;
+        public string? SelectedAcademicYear
         {
-            get => selectedSemester;
+            get => _selectedAcademicYear;
             set
             {
-                selectedSemester = value;
-                OnPropertyChanged();
-                FilterData();
+                if (_selectedAcademicYear != value)
+                {
+                    _selectedAcademicYear = value;
+                    OnPropertyChanged(nameof(SelectedAcademicYear));
+                }
             }
         }
 
-        public ObservableCollection<ClassroomReportItem> FilteredReports
+        private string _subject = "";
+        public string Subject
         {
-            get => filteredReports;
-            set
-            {
-                filteredReports = value;
-                OnPropertyChanged();
-            }
+            get => _subject;
+            set { _subject = value; OnPropertyChanged(nameof(Subject)); }
         }
 
-        public ICommand ExportCommand { get; }
+        private string _semester = "";
+        public string Semester
+        {
+            get => _semester;
+            set { _semester = value; OnPropertyChanged(nameof(Semester)); }
+        }
+
+        private string _academicYear = "";
+        public string AcademicYear
+        {
+            get => _academicYear;
+            set { _academicYear = value; OnPropertyChanged(nameof(AcademicYear)); }
+        }
+
+        private ObservableCollection<ClassroomReportItem> _classReportList = new ObservableCollection<ClassroomReportItem>();
+        public ObservableCollection<ClassroomReportItem> ClassReportList
+        {
+            get => _classReportList;
+            set { _classReportList = value; OnPropertyChanged(nameof(ClassReportList)); }
+        }
+
+        public ObservableCollection<SubjectReport> AllReports { get; set; } = new ObservableCollection<SubjectReport>();
+
+        public ICommand ExportReportCommand { get; }
+        public ICommand ExportPdfCommand { get; }
+        public ICommand ExportExcelCommand { get; }
 
         public SubjectReportViewModel()
         {
-            AllReports = new ObservableCollection<SubjectReport>();
-            FilteredReports = new ObservableCollection<ClassroomReportItem>();
-            ExportCommand = new RelayCommand(ExecuteExport);
+            SubjectList.Add(new Subject("Math", "Toán học"));
+            SubjectList.Add(new Subject("Phys", "Vật lý"));
+            SubjectList.Add(new Subject("Chem", "Hóa học"));
 
-            LoadData();
-            FilterData();
+            UpdateLabels();
+
+            ExportReportCommand = new RelayCommand(() => ExportReport());
+            ExportPdfCommand = new RelayCommand(() => ExportPdf());
+            ExportExcelCommand = new RelayCommand(() => ExportExcel());
+
+            LoadFakeReports();
+
+            // Không gọi FilterData() ở đây, dữ liệu chỉ load khi bấm ExportReport
         }
 
-        private void LoadData()
+        private void UpdateLabels()
         {
-
+            Subject = SelectedSubject?.Name ?? "";
+            Semester = SelectedSemester ?? "";
+            AcademicYear = SelectedAcademicYear ?? "";
         }
+
+        private void LoadFakeReports()
+        {
+            var math = SubjectList.First(s => s.ID == "Math");
+
+            var report = new SubjectReport("R001", "HK1", "2024-2025", math);
+            report.setTable("10A1", 25);
+            report.setTable("10A2", 20);
+            AllReports.Add(report);
+
+            var report2 = new SubjectReport("R002", "HK2", "2024-2025", math);
+            report2.setTable("10A1", 22);
+            report2.setTable("10A3", 23);
+            AllReports.Add(report2);
+        }
+
 
         private void FilterData()
         {
-            var matchedReports = AllReports
-                .Where(r =>
-                    (string.IsNullOrEmpty(SelectedSubject) || r.Subject.Name.Contains(SelectedSubject, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrEmpty(SelectedYear) || r.SchoolYear.Contains(SelectedYear, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrEmpty(SelectedSemester) || r.Semester.Contains(SelectedSemester, StringComparison.OrdinalIgnoreCase))
-                )
-                .ToList();
-
-            var result = new ObservableCollection<ClassroomReportItem>();
-
-            foreach (var report in matchedReports)
+            if (SelectedSubject == null || SelectedSemester == null || SelectedAcademicYear == null)
             {
-                foreach (var row in report.Table)
+                ClassReportList.Clear();
+                return;
+            }
+
+            var report = AllReports.FirstOrDefault(r =>
+                r.Subject.ID == SelectedSubject.ID &&
+                r.Semester == SelectedSemester &&
+                r.SchoolYear == SelectedAcademicYear);
+
+            ClassReportList.Clear();
+
+            if (report == null)
+                return;
+
+            int stt = 1;
+            foreach (var item in report.Table)
+            {
+                var tiLe = item.ClassroomSize > 0
+                    ? (item.PassedNum * 100f / item.ClassroomSize).ToString("0.##") + "%"
+                    : "0%";
+
+                ClassReportList.Add(new ClassroomReportItem
                 {
-                    result.Add(new ClassroomReportItem
-                    {
-                        SubjectName = report.Subject.Name,
-                        Semester = report.Semester,
-                        SchoolYear = report.SchoolYear,
-                        ClassroomID = row.ClassroomID,
-                        ClassroomSize = row.ClassroomSize,
-                        PassedNum = row.PassedNum,
-                        Percentage = row.Percentage
-                    });
-                }
-            }
-
-            FilteredReports = result;
-        }
-
-        private void ExecuteExport()
-        {
-            // TODO: Viết logic xuất file hoặc xử lý dữ liệu
-            // Ví dụ:
-            Console.WriteLine("Exporting subject report...");
-            foreach (var item in FilteredReports)
-            {
-                Console.WriteLine($"{item.SubjectName} - {item.ClassroomID} - {item.Percentage}%");
+                    STT = stt++,
+                    Lop = item.ClassroomID,
+                    SiSo = item.ClassroomSize,
+                    SoLuongDat = item.PassedNum,
+                    TiLe = tiLe
+                });
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propName = null)
+        private void ExportReport()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+            UpdateLabels();
+            FilterData();
         }
+
+        private void ExportPdf()
+        {
+            // TODO: Thêm code xuất PDF nếu cần
+        }
+
+        private void ExportExcel()
+        {
+            // TODO: Thêm code xuất Excel nếu cần
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    public class ClassroomReportItem
+    public class ClassroomReportItem : INotifyPropertyChanged
     {
-        public string SubjectName { get; set; }
-        public string Semester { get; set; }
-        public string SchoolYear { get; set; }
-        public string ClassroomID { get; set; }
-        public int ClassroomSize { get; set; }
-        public int PassedNum { get; set; }
-        public float Percentage { get; set; }
-    }
+        private int _stt;
+        private string _lop;
+        private int _siSo;
+        private int _soLuongDat;
+        private string _tiLe;
 
-    
+        public int STT
+        {
+            get => _stt;
+            set { _stt = value; OnPropertyChanged(nameof(STT)); }
+        }
+        public string Lop
+        {
+            get => _lop;
+            set { _lop = value; OnPropertyChanged(nameof(Lop)); }
+        }
+        public int SiSo
+        {
+            get => _siSo;
+            set { _siSo = value; OnPropertyChanged(nameof(SiSo)); }
+        }
+        public int SoLuongDat
+        {
+            get => _soLuongDat;
+            set { _soLuongDat = value; OnPropertyChanged(nameof(SoLuongDat)); }
+        }
+        public string TiLe
+        {
+            get => _tiLe;
+            set { _tiLe = value; OnPropertyChanged(nameof(TiLe)); }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? name = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
 }

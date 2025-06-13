@@ -54,7 +54,5 @@ namespace Academix.Models
         {
             return Name;
         }
-
-
     }
 }

@@ -1,19 +1,20 @@
+using Academix.Models;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
-using Academix.Models;
-using CommunityToolkit.Mvvm.Input;
 
 namespace Academix.ViewModels
 {
     public class SubjectReportViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<string> SemesterList { get; } = new ObservableCollection<string> { "HK1", "HK2", "HK3" };
-        public ObservableCollection<string> AcademicYearList { get; } = new ObservableCollection<string> { "2022-2023", "2023-2024", "2024-2025" };
-        public ObservableCollection<Subject> SubjectList { get; } = new ObservableCollection<Subject>();
+        public ObservableCollection<string> SemesterList { get; set; }
+        public ObservableCollection<string> AcademicYearList { get; }
+        public ObservableCollection<Subject> SubjectList { get; }
 
         private string? _selectedSemester;
         public string? SelectedSemester
@@ -93,49 +94,89 @@ namespace Academix.ViewModels
 
         public SubjectReportViewModel()
         {
-            SubjectList.Add(new Subject("Math", "Toán học"));
-            SubjectList.Add(new Subject("Phys", "Vật lý"));
-            SubjectList.Add(new Subject("Chem", "Hóa học"));
+            SubjectList = new ObservableCollection<Subject>
+            {
+                new Subject("Math", "Toán học"),
+                new Subject("Phys", "Vật lý"),
+                new Subject("Chem", "Hóa học")
+            };
 
-            UpdateLabels();
+            SemesterList = new ObservableCollection<string>
+            {
+                "HK1",
+                "HK2",
+                "HK3"
+            };
 
-            ExportReportCommand = new RelayCommand(() => ExportReport());
-            ExportPdfCommand = new RelayCommand(() => ExportPdf());
-            ExportExcelCommand = new RelayCommand(() => ExportExcel());
+            AcademicYearList = new ObservableCollection<string>
+            {
+                "2022-2023",
+                "2023-2024",
+                "2024-2025"
+            };
 
-            LoadFakeReports();
-
-            // Không gọi FilterData() ở đây, dữ liệu chỉ load khi bấm ExportReport
-        }
-
-        private void UpdateLabels()
-        {
             Subject = SelectedSubject?.Name ?? "";
             Semester = SelectedSemester ?? "";
             AcademicYear = SelectedAcademicYear ?? "";
+
+            ExportReportCommand = new RelayCommand(ExportReport);
+            ExportPdfCommand = new RelayCommand(ExportPdf);
+            ExportExcelCommand = new RelayCommand(ExportExcel);
+
+            LoadFakeReports();
         }
 
         private void LoadFakeReports()
         {
             var math = SubjectList.First(s => s.ID == "Math");
+            var phys = SubjectList.First(s => s.ID == "Phys");
+            var chem = SubjectList.First(s => s.ID == "Chem");
 
-            var report = new SubjectReport("R001", "HK1", "2024-2025", math);
-            report.setTable("10A1", 25);
-            report.setTable("10A2", 20);
-            AllReports.Add(report);
+            var mathReport1 = new SubjectReport("M001", "HK1", "2024-2025", math);
+            mathReport1.setTable("10A1", 30, 25);
+            mathReport1.setTable("10A2", 28, 21);
+            AllReports.Add(mathReport1);
 
-            var report2 = new SubjectReport("R002", "HK2", "2024-2025", math);
-            report2.setTable("10A1", 22);
-            report2.setTable("10A3", 23);
-            AllReports.Add(report2);
+            var mathReport2 = new SubjectReport("M002", "HK2", "2024-2025", math);
+            mathReport2.setTable("10A1", 29, 24);
+            mathReport2.setTable("10A3", 27, 23);
+            AllReports.Add(mathReport2);
+
+            var physReport1 = new SubjectReport("P001", "HK1", "2024-2025", phys);
+            physReport1.setTable("10A1", 30, 20);
+            physReport1.setTable("10A2", 28, 18);
+            AllReports.Add(physReport1);
+
+            var physReport2 = new SubjectReport("P002", "HK2", "2024-2025", phys);
+            physReport2.setTable("10A3", 27, 19);
+            physReport2.setTable("10A4", 26, 20);
+            AllReports.Add(physReport2);
+
+            var chemReport1 = new SubjectReport("C001", "HK1", "2024-2025", chem);
+            chemReport1.setTable("10A2", 28, 22);
+            chemReport1.setTable("10A4", 26, 21);
+            AllReports.Add(chemReport1);
+
+            var chemReport2 = new SubjectReport("C002", "HK2", "2024-2025", chem);
+            chemReport2.setTable("10A1", 30, 27);
+            chemReport2.setTable("10A3", 27, 25);
+            AllReports.Add(chemReport2);
         }
 
 
         private void FilterData()
         {
-            if (SelectedSubject == null || SelectedSemester == null || SelectedAcademicYear == null)
+            ClassReportList.Clear();
+
+            if (string.IsNullOrEmpty(SelectedAcademicYear))
             {
-                ClassReportList.Clear();
+                SelectedAcademicYear = "2024-2025";
+                OnPropertyChanged(nameof(SelectedAcademicYear));
+            }
+
+            if (SelectedSubject == null || SelectedSemester == null)
+            {
+                MessageBox.Show("Vui lòng chọn đầy đủ Môn học và Học kỳ.", "Thiếu thông tin", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -143,8 +184,6 @@ namespace Academix.ViewModels
                 r.Subject.ID == SelectedSubject.ID &&
                 r.Semester == SelectedSemester &&
                 r.SchoolYear == SelectedAcademicYear);
-
-            ClassReportList.Clear();
 
             if (report == null)
                 return;
@@ -167,21 +206,18 @@ namespace Academix.ViewModels
             }
         }
 
+
         private void ExportReport()
         {
-            UpdateLabels();
+            Subject = SelectedSubject?.Name ?? "";
+            Semester = SelectedSemester ?? "";
+            AcademicYear = "2024-2025";
             FilterData();
         }
 
-        private void ExportPdf()
-        {
-            // TODO: Thêm code xuất PDF nếu cần
-        }
+        private void ExportPdf() { /* TODO: Export PDF */ }
 
-        private void ExportExcel()
-        {
-            // TODO: Thêm code xuất Excel nếu cần
-        }
+        private void ExportExcel() { /* TODO: Export Excel */ }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
@@ -191,31 +227,35 @@ namespace Academix.ViewModels
     public class ClassroomReportItem : INotifyPropertyChanged
     {
         private int _stt;
-        private string _lop;
+        private string _lop = "";
         private int _siSo;
         private int _soLuongDat;
-        private string _tiLe;
+        private string _tiLe = "";
 
         public int STT
         {
             get => _stt;
             set { _stt = value; OnPropertyChanged(nameof(STT)); }
         }
+
         public string Lop
         {
             get => _lop;
             set { _lop = value; OnPropertyChanged(nameof(Lop)); }
         }
+
         public int SiSo
         {
             get => _siSo;
             set { _siSo = value; OnPropertyChanged(nameof(SiSo)); }
         }
+
         public int SoLuongDat
         {
             get => _soLuongDat;
             set { _soLuongDat = value; OnPropertyChanged(nameof(SoLuongDat)); }
         }
+
         public string TiLe
         {
             get => _tiLe;

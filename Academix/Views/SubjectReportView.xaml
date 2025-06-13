@@ -104,7 +104,7 @@
                                 x:Name="cbSemester"
                                 ItemsSource="{Binding SemesterList}"
                                 SelectedItem="{Binding SelectedSemester, Mode=TwoWay}"
-                                DisplayMemberPath="Name"/>
+                                />
                             <TextBlock><Run Text="Học kỳ"/></TextBlock>
                         </StackPanel>
                     </StackPanel>
@@ -215,7 +215,7 @@
 
         </UniformGrid>
         <DataGrid DockPanel.Dock="Top"
-                  Foreground="White"
+                  Foreground="Black"
                   FontSize="20"
                   FontWeight="Bold"
                   ItemsSource="{Binding ClassReportList}"

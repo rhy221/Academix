@@ -31,20 +31,21 @@ namespace Academix.Models
         }
 
 
-        public void setTable(string classID, int passedNum)
+        public void setTable(string classID, int classSize, int passedNum)
         {
             int index = _table.FindIndex(match => match.ClassroomID == classID);
+            float percentage = (classSize > 0) ? (float)Math.Round((double)passedNum / classSize, 2) : 0f;
+
             if (index >= 0)
             {
-                var oldItem = _table[index];
-                float percentage = (oldItem.ClassroomSize > 0) ? (float)Math.Round((double)passedNum / oldItem.ClassroomSize, 2) : 0f;
-                _table[index] = (oldItem.ClassroomID, oldItem.ClassroomSize, passedNum, percentage);
+                _table[index] = (classID, classSize, passedNum, percentage);
             }
             else
             {
-                _table.Add((classID, 0, passedNum, 0f));
+                _table.Add((classID, classSize, passedNum, percentage));
             }
         }
+
 
 
 

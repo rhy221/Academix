@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Academix.Views"
                  xmlns:viewModels="clr-namespace:Academix.ViewModels"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" x:Class="Academix.Views.SearchStudentView"
+             xmlns:conv="clr-namespace:Academix.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1340">
 
@@ -38,6 +39,7 @@
 
         <Style TargetType="Expander"
               BasedOn="{StaticResource LightBlueExpander}"/>
+        <conv:NullToBoolConverter x:Key="NullToBoolConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -183,7 +185,6 @@
                         BorderBrush="#FF615F5F">
                             <StackPanel Orientation="Horizontal"
                             FlowDirection="RightToLeft">
-
                                 <Button Command="{Binding SearchCommand}"                              
                                 Margin="20,10,0,10"
                                 >
@@ -198,6 +199,21 @@
                                         <TextBlock VerticalAlignment="Center"><Run Text="Tìm kiếm"/></TextBlock>
                                     </StackPanel>
                                 </Button>
+                                
+                                <Button Command="{Binding CancelSearchCommand}"                              
+                                Margin="20,10,0,10"
+                                >
+                                    <StackPanel Orientation="Horizontal"
+                                    FlowDirection="LeftToRight">
+                                        <iconPacks:PackIconMaterial
+                                        Height="15"
+                                        Width="15"
+                                        Kind="CloseCircle"
+                                        Foreground="White"
+                                        VerticalAlignment="Center"/>
+                                        <TextBlock VerticalAlignment="Center"><Run Text="Hủy tìm kiếm"/></TextBlock>
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -206,7 +222,7 @@
                 FlowDirection="RightToLeft"
                 DockPanel.Dock="Top"
                 Margin="20,0,20,10">
-                    <Button 
+                    <Button Command="{Binding DeleteCommand}"
                     Margin="0,0,10,0">
                         <StackPanel Orientation="Horizontal"
                         FlowDirection="LeftToRight">
@@ -253,6 +269,7 @@
                     </Button>
                 </StackPanel>
                 <DataGrid ItemsSource="{Binding Students}" 
+                          SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"
                         AutoGenerateColumns="False"
                         Background="White" 
                         DockPanel.Dock="Top"
@@ -261,19 +278,21 @@
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem x:Name="ViewMenuItem" Click="ViewMenuItem_Click">
+
                                 <MenuItem.Header>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xem"/></TextBlock>
                                         <iconPacks:PackIconMaterial
-                                                Height="15"
-                                                Width="15"
-                                                Foreground="{StaticResource DeepBlueForeground}"
-                                                Kind="Eye"
-                                                VerticalAlignment="Center"
-                                                Margin="5,0,0,0"/>
+                                                    Height="15"
+                                                    Width="15"
+                                                    Foreground="{StaticResource DeepBlueForeground}"
+                                                    Kind="Eye"
+                                                    VerticalAlignment="Center"
+                                                    Margin="5,0,0,0"/>
                                     </StackPanel>
                                 </MenuItem.Header>
                             </MenuItem>
+
                             <MenuItem x:Name="ModifyMenuItem" Click="ModifyMenuItem_Click">
                                 <MenuItem.Header>
                                     <StackPanel Orientation="Horizontal">
@@ -315,15 +334,16 @@
                                         BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
-                        <DataGridCheckBoxColumn Width="80">
+                        <DataGridCheckBoxColumn Width="80" Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <DataGridCheckBoxColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"
-                                        BasedOn="{StaticResource LightBlueHeader}"/>
+                                       BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridCheckBoxColumn.HeaderStyle>
                             <DataGridCheckBoxColumn.Header>
-                                <CheckBox/>
+                                <CheckBox IsChecked="{Binding DataContext.IsAllSelected, RelativeSource={RelativeSource AncestorType=DataGrid}, Mode=TwoWay}"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"/>
                             </DataGridCheckBoxColumn.Header>
-
                         </DataGridCheckBoxColumn>
                         <DataGridTextColumn Header="Mã học sinh"
                                                     Binding="{Binding ID}"

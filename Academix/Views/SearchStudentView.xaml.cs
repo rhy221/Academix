@@ -28,7 +28,7 @@ namespace Academix.Views
         }
 
 
-        private void ModifyMenuItem_Click(object sender, RoutedEventArgs e)
+  private void ModifyMenuItem_Click(object sender, RoutedEventArgs e)
         {
             MainView.Visibility = Visibility.Collapsed;
             ExtendView.Visibility = Visibility.Visible;

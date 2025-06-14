@@ -16,6 +16,9 @@ namespace Academix.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        
+
+
+
+
     }
 }

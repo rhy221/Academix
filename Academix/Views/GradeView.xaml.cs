@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Academix.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +17,14 @@ using System.Windows.Shapes;
 namespace Academix.Views
 {
     /// <summary>
-    /// Interaction logic for GradeView.xaml
+    /// Interaction logic for SearchStudentView.xaml
     /// </summary>
     public partial class GradeView : UserControl
     {
         public GradeView()
         {
             InitializeComponent();
+            this.DataContext = new GradeViewModel();
         }
     }
 }

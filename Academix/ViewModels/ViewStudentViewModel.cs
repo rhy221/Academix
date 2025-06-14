@@ -28,6 +28,7 @@ namespace Academix.ViewModels
             _container = container;
             _mainView = mainView;
             BackCommand = new RelayCommand(Back);
+        //    Student = SelectedStudent;
         }
 
         private void Back()
@@ -38,6 +39,7 @@ namespace Academix.ViewModels
             _container.Content = null;
             _mainView.Visibility = Visibility.Visible;
         }
+
 
 
     }

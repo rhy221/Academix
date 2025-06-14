@@ -107,6 +107,22 @@ namespace Academix.ViewModels
             }
         }
 
+        private byte[] BitmapImageToByteArray(BitmapImage bitmapImage)
+        {
+            if (bitmapImage == null) return null;
+
+            byte[] data;
+            JpegBitmapEncoder encoder = new JpegBitmapEncoder(); 
+            encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+            using (MemoryStream ms = new MemoryStream())
+            {
+                encoder.Save(ms);
+                data = ms.ToArray();
+            }
+            return data;
+        }
+
+
         private void SaveStudent()
         {
             if (string.IsNullOrWhiteSpace(FullName) || string.IsNullOrWhiteSpace(StudentID))
@@ -117,8 +133,9 @@ namespace Academix.ViewModels
 
             var genderBool = SelectedGender == "Nam";
             string address = $"{SelectedWard?.name}, {SelectedDistrict?.name}, {SelectedProvince?.name}";
+            byte[] avatarBytes = BitmapImageToByteArray(ProfileImage);
 
-            var newStudent = new Student(StudentID, FullName, genderBool, DateOfBirth ?? DateTime.Now, address, "");
+            var newStudent = new Student(StudentID, FullName, genderBool, DateOfBirth ?? DateTime.Now, address, "", avatarBytes);
             StudentSaved?.Invoke(newStudent);
             Back();
         }

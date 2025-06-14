@@ -238,6 +238,7 @@
                 </ToggleButton.Style>
             </ToggleButton>
         </Grid>
+        <ContentControl Content="{Binding CurrentView}" />
         <Grid DockPanel.Dock="Top"
                   Height="50"
                   Background="White"

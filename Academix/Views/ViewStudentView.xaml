@@ -140,7 +140,7 @@
                 </StackPanel>
                 <StackPanel>
                     <TextBlock
-     Width="280"/>
+                            Width="280"/>
                     <TextBlock>
                         <Run Text="Lớp học:"/>
                     </TextBlock>
@@ -156,8 +156,8 @@
                 </StackPanel>
                 <StackPanel />
                 <StackPanel>
-                    <TextBlock
-     Width="280"/>
+                    <TextBlock  Text="{Binding Name}" 
+                                Width="280"/>
                     <TextBlock>
                         <Run Text="Họ tên:"/>
                     </TextBlock>

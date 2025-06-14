@@ -86,12 +86,16 @@
             </TreeView>
 
         </StackPanel>
-        <DataGrid DockPanel.Dock="Left"
+        <DataGrid ItemsSource="{Binding Students}" 
+                  SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"
+                  AutoGenerateColumns="False"
+                  DockPanel.Dock="Left"
                   FontSize="20"
                   HorizontalAlignment="Center"
                   >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="STT"
+                                    Binding="{Binding Index}"
                                     Width="80">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader"
@@ -99,6 +103,7 @@
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Họ và tên" 
+                                    Binding="{Binding Name}"
                                     Width="300">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
@@ -106,6 +111,7 @@
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Mã học sinh" 
+                                    Binding="{Binding ID}"
                                     Width="200">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
@@ -113,6 +119,7 @@
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Giới tính" 
+                                    Binding="{Binding Gender}"
                                     Width="150">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
@@ -120,21 +127,23 @@
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Ngày sinh" 
+                                    Binding="{Binding DateOfBirth}"
                                     Width="150">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridCheckBoxColumn Width="80">
+                <DataGridCheckBoxColumn Width="80" Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGridCheckBoxColumn.HeaderStyle>
-                        <Style TargetType="DataGridColumnHeader"
-                BasedOn="{StaticResource LightBlueHeader}"/>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                                       BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridCheckBoxColumn.HeaderStyle>
                     <DataGridCheckBoxColumn.Header>
-                        <CheckBox/>
+                        <CheckBox IsChecked="{Binding DataContext.IsAllSelected, RelativeSource={RelativeSource AncestorType=DataGrid}, Mode=TwoWay}"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"/>
                     </DataGridCheckBoxColumn.Header>
-
                 </DataGridCheckBoxColumn>
             </DataGrid.Columns>
         </DataGrid>

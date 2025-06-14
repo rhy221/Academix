@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:local="clr-namespace:Academix.Views"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1340">
@@ -188,10 +189,68 @@
                         Margin="10,0,0,0"><Run Text="Lớp"/></TextBlock>
                 </StackPanel>
 
+                <StackPanel Orientation="Horizontal"
+                    FlowDirection="RightToLeft"/>
+
             </StackPanel>
+
         </Grid>
 
+        <Grid DockPanel.Dock="Top"
+       Margin="0,0,0,20">
+            <StackPanel
+             Orientation="Horizontal"
+             FlowDirection="RightToLeft"
+             HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource DeepBlueButton}">
+                        <Setter Property="Margin"
+     Value="5,0,5,0"/>
+                    </Style>
+                </StackPanel.Resources>
 
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                 HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal"
+             FlowDirection="RightToLeft"
+                     Margin="20,0,0,0">
+                    <ComboBox Height="30"
+                 Width="120"
+                 FlowDirection="LeftToRight"
+                 VerticalAlignment="Center" 
+                 Margin="10,0,0,0"/>
+                    <TextBlock FontSize="20"
+                 Height="30"
+                 Foreground="{StaticResource GrayForeground}"
+                 FlowDirection="LeftToRight"
+                 FontWeight="Bold"
+                 VerticalAlignment="Center"
+                 Margin="10,0,0,0" Text="Loại điểm"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+             FlowDirection="RightToLeft">
+                    <Controls:NumericUpDown Height="30"
+                 Width="120"
+                 FlowDirection="LeftToRight"
+                 VerticalAlignment="Center" 
+                 Margin="10,0,0,0"
+                 Value="1"
+                 FontSize="15"
+                      FontWeight="Bold"
+                    HorizontalContentAlignment="Center"/>
+                    <TextBlock FontSize="20"
+                 Height="30"
+                 Foreground="{StaticResource GrayForeground}"
+                 FlowDirection="LeftToRight"
+                 FontWeight="Bold"
+                 VerticalAlignment="Center"
+                 Margin="10,0,0,0" Text="Số lần"/>
+                </StackPanel>
+
+            </StackPanel>
+
+        </Grid>
         <DataGrid x:Name="dataGrid" 
                       SnapsToDevicePixels="True"
                       UseLayoutRounding="True"
@@ -221,7 +280,7 @@
 
             <DataGrid.Columns>
 
-                <DataGridTextColumn Width="50">
+                <DataGridTextColumn Width="100">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
@@ -230,16 +289,7 @@
                     </DataGridTextColumn.Header>
 
                 </DataGridTextColumn>
-
-                <DataGridTextColumn Width="200">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Họ và tên"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="130">
+                <DataGridTextColumn Width="250">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
@@ -248,114 +298,12 @@
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
-
-
-                <DataGridTemplateColumn Width="SizeToHeader">
-                    <DataGridTemplateColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTemplateColumn.HeaderStyle>
-                    <DataGridTemplateColumn.Header>
-                        <DockPanel LastChildFill="True">
-                            <TextBlock DockPanel.Dock="Top" 
-                                       TextAlignment="Center"  
-                                       Text="Điểm miệng"/>
-                            <UniformGrid DockPanel.Dock="Top" Rows="1">
-                                <TextBlock Text="M1" TextAlignment="Center" Width="60"/>
-                                <TextBlock Text="M2" TextAlignment="Center" Width="60"/>
-                                <TextBlock Text="M3" TextAlignment="Center" Width="60"/>
-                            </UniformGrid>
-                        </DockPanel>
-                    </DataGridTemplateColumn.Header>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DataGrid HeadersVisibility="None">
-                                <DataGrid.Columns >
-                                    <DataGridTextColumn Width="60"/>
-                                    <DataGridTextColumn Width="60"/>
-                                    <DataGridTextColumn Width="60"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <DataGridTemplateColumn Width="SizeToHeader">
-                    <DataGridTemplateColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTemplateColumn.HeaderStyle>
-                    <DataGridTemplateColumn.Header>
-                        <DockPanel LastChildFill="True">
-                            <TextBlock DockPanel.Dock="Top" 
-                                TextAlignment="Center"  
-                                Text="Điểm 15P"/>
-                            <UniformGrid DockPanel.Dock="Top" Rows="1">
-                                <TextBlock Text="P1" TextAlignment="Center" Width="60"/>
-                                <TextBlock Text="P2" TextAlignment="Center" Width="60"/>
-                                <TextBlock Text="P3" TextAlignment="Center" Width="60"/>
-                            </UniformGrid>
-                        </DockPanel>
-                    </DataGridTemplateColumn.Header>
-
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DataGrid HeadersVisibility="None">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Width="60"/>
-                                    <DataGridTextColumn Width="60"/>
-                                    <DataGridTextColumn Width="60"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="SizeToHeader">
-                    <DataGridTemplateColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTemplateColumn.HeaderStyle>
-                    <DataGridTemplateColumn.Header>
-                        <DockPanel LastChildFill="True">
-                            <TextBlock DockPanel.Dock="Top" 
-                                TextAlignment="Center"  
-                                Text="Điểm 1 tiết"/>
-                            <UniformGrid DockPanel.Dock="Top" Rows="1">
-                                <TextBlock Text="V1" TextAlignment="Center" Width="60"/>
-                                <TextBlock Text="V2" TextAlignment="Center" Width="60"/>
-                                <TextBlock Text="V3" TextAlignment="Center" Width="60"/>
-                                <TextBlock Text="V4" TextAlignment="Center" Width="60"/>
-                            </UniformGrid>
-                        </DockPanel>
-                    </DataGridTemplateColumn.Header>
-
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DataGrid HeadersVisibility="None">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Width="60"/>
-                                    <DataGridTextColumn Width="60"/>
-                                    <DataGridTextColumn Width="60"/>
-                                    <DataGridTextColumn Width="60"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-
-                </DataGridTemplateColumn>
-
-                <DataGridTextColumn Width="80" >
+                <DataGridTextColumn Width="350">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Text="Thi HK"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="80">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="ĐTB"/>
+                        <TextBlock Text="Họ và tên"/>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn Width="100">
@@ -363,7 +311,7 @@
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Text="Xếp loại"/>
+                        <TextBlock Text="Điểm"/>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
             </DataGrid.Columns>

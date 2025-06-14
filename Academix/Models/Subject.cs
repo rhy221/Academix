@@ -8,46 +8,30 @@ namespace Academix.Models
 {
     public class Subject
     {
-        public static string Oral = "M";
-        public static string Short = "15P";
-        public static string Period = "1T";
-        public static string Final = "HK";
+        public string Id { get; set; } = null!;
 
-        public string ID { get; }
-        public string Name { get; set; }
-        public IReadOnlyDictionary<string, int> Scores => _scores.AsReadOnly();
+        public string Name { get; set; } = null!;
 
-        private Dictionary<string, int> _scores;
+        public int Multiplier { get; set; }
 
-        public Subject(string iD, string name)
+        public virtual ICollection<Bangdiemmonhoc> Bangdiemmonhocs { get; set; } = new List<Bangdiemmonhoc>();
+
+        public virtual ICollection<Bctongketmon> Bctongketmons { get; set; } = new List<Bctongketmon>();
+
+        public virtual ICollection<ScoreType> ScoreTypes { get; set; } = new List<ScoreType>();
+
+        public Subject(string id, string name, int multiplier)
         {
-            ID = iD;
+            Id = id;
             Name = name;
-            _scores = new Dictionary<string, int>() { [Oral] = 3, [Short] = 3, [Period] = 4, [Final] = 1 };
-        }
-
-        public Subject(string iD, string name, Dictionary<string, int> score)
-        {
-            ID = iD;
-            Name = name;
-            _scores = score;
+            Multiplier = multiplier;
         }
 
         public Subject(Subject other)
         {
-            ID = other.ID;
+            Id = other.Id;
             Name = other.Name;
-            _scores = new Dictionary<string, int>(other.Scores);
-        }
-
-        public int GetNumberOfScore(string key)
-        {
-            return _scores[key];
-        }
-
-        public void SetNumberOfScore(string key, int number)
-        {
-            _scores[key] = number;
+            Multiplier = other.Multiplier;
         }
 
     }

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Academix.Views"
              xmlns:views="clr-namespace:Academix.Views"
+             xmlns:viewModels="clr-namespace:Academix.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="770" d:DesignWidth="1380">
     <UserControl.Resources>
@@ -17,7 +18,10 @@
         <TabControl
                 TabStripPlacement="Left"
                 BorderThickness="0"
-                Background="Transparent">
+                Background="Transparent"
+                ItemsSource="{Binding TabItems}"
+                SelectedItem="{Binding SelectedTabItem, Mode=TwoWay}"
+               >
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}"
                         BasedOn="{StaticResource LeftTabItem}">
@@ -26,15 +30,35 @@
                     <Setter Property="Padding"
                             Value="18,8,50,8"/>
                 </Style>
+                <DataTemplate DataType="{x:Type viewModels:SystemParametersViewModel}">
+                    <views:SystemParametersView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModels:SubjectSystemViewModel}">
+                    <views:SubjectSystemView/>
+                </DataTemplate>
             </TabControl.Resources>
-            <TabItem Header="Thông số hệ thống"
+
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Header}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ContentControl Content="{Binding ViewModel}">
+                        
+                    </ContentControl>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+            
+            <!--<TabItem Header="Thông số hệ thống"
                      >
                 <views:SystemParametersView/>
             </TabItem>
             <TabItem Header="Danh sách môn học">
                 <views:SubjectSystemView/>
 
-            </TabItem>
+            </TabItem>-->
         </TabControl>
     </DockPanel>
 </UserControl>

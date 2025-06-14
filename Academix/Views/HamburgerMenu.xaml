@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:viewModels="clr-namespace:Academix.ViewModels"
              xmlns:converters="clr-namespace:MahApps.Metro.Converters;assembly=MahApps.Metro"
              xmlns:local="clr-namespace:Academix.Views"
              mc:Ignorable="d" 
              d:DesignHeight="840" d:DesignWidth="{Binding OpenPaneLength, ElementName=HamburgerMenuControl}"
-            
              >
+  
     <UserControl.Resources>
         <ResourceDictionary>
 
@@ -237,7 +238,19 @@
             <Controls:HamburgerMenu.ItemsSource>
                 <Controls:HamburgerMenuItemCollection>
 
-                    <Controls:HamburgerMenuIconItem Label="Học sinh">
+                    <Controls:HamburgerMenuIconItem Label="Hệ thống"
+                                                    Command="{Binding DataSystemNavigateCommand}">
+                        <Controls:HamburgerMenuIconItem.Icon>
+                            <iconPacks:PackIconMaterial Width="22"
+                                    Height="22"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Kind="Cog"/>
+                        </Controls:HamburgerMenuIconItem.Icon>
+                    </Controls:HamburgerMenuIconItem>
+
+                    <Controls:HamburgerMenuIconItem Label="Học sinh"
+                                                    Command="{Binding StudentNavigateCommand}">
                         <Controls:HamburgerMenuIconItem.Icon>
                             <iconPacks:PackIconMaterial Width="22"
                                 Height="22"
@@ -247,7 +260,8 @@
                         </Controls:HamburgerMenuIconItem.Icon>
 
                     </Controls:HamburgerMenuIconItem>
-                    <Controls:HamburgerMenuIconItem Label="Lớp">
+                    <Controls:HamburgerMenuIconItem Label="Lớp"
+                                                    Command="{Binding ClassNavigateCommand}">
                         <Controls:HamburgerMenuIconItem.Icon>
                             <iconPacks:PackIconMaterial Width="22"
                                 Height="22"
@@ -257,7 +271,7 @@
                         </Controls:HamburgerMenuIconItem.Icon>
                     </Controls:HamburgerMenuIconItem>
 
-                    <Controls:HamburgerMenuIconItem Label="Môn học">
+                    <!--<Controls:HamburgerMenuIconItem Label="Môn học">
                         <Controls:HamburgerMenuIconItem.Icon>
                             <iconPacks:PackIconMaterial Width="22"
                                 Height="22"
@@ -265,9 +279,10 @@
                                 VerticalAlignment="Center"
                                 Kind="Book"/>
                         </Controls:HamburgerMenuIconItem.Icon>
-                    </Controls:HamburgerMenuIconItem>
+                    </Controls:HamburgerMenuIconItem>-->
 
-                    <Controls:HamburgerMenuIconItem Label="Điểm">
+                    <Controls:HamburgerMenuIconItem Label="Điểm"
+                                                    Command="{Binding GradeNavigateCommand}">
                         <Controls:HamburgerMenuIconItem.Icon>
                             <iconPacks:PackIconMaterial Width="22"
                                 Height="22"
@@ -278,7 +293,8 @@
                     </Controls:HamburgerMenuIconItem>
 
 
-                    <Controls:HamburgerMenuIconItem Label="Báo cáo">
+                    <Controls:HamburgerMenuIconItem Label="Báo cáo"
+                                                    Command="{Binding ReportNavigateCommand}">
                         <Controls:HamburgerMenuIconItem.Icon>
                             <iconPacks:PackIconMaterial
                                 Width="22"

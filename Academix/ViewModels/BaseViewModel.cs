@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace Academix.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : INotifyPropertyChanged, IAsyncInitialization
     {
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        public virtual async void Initialize()
+        {
+            throw new NotImplementedException();
+        }
 
         protected void OnPropertyChanged(string propertyName)
         {

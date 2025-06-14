@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -7,27 +9,28 @@ using System.Threading.Tasks;
 
 namespace Academix.Models
 {
+    [Table("LOP")]
     public class Classroom
     {
+        [Key]
         public string ID { get; set; } // NamHoc_TenLop
         public string Name => ID.Substring(4);
+        [Column("SISO")]
         public int Size { get; set; }
-        public string Semester { get; set; }
-        public string SchoolYear { get; set; }
-        public string TeacherName { get; set; }
-        public List<Student> Students => new List<Student>(_student);
-
+        [ForeignKey("MAKHOI")]
+        public string GradeId { get; set; }
+        [ForeignKey("MANAMHOC")]
+        public string SchoolYearId { get; set; }
         private List<Student> _student;
-        public bool IsSelected { get; set; }
+        public List<Student> Students => _student;
 
 
-        public Classroom(string iD, int size, string semester, string schoolYear, string teacherName, List<Student> students)
+        public Classroom(string iD, int size, string gradeId, string schoolYearId, List<Student> students)
         {
             ID = iD;
             Size = size;
-            Semester = semester;
-            SchoolYear = schoolYear;
-            TeacherName = teacherName;
+            GradeId = gradeId;
+            SchoolYearId = schoolYearId;
             _student = (students != null) ? new List<Student>(students) : new List<Student>();
         }
 
@@ -35,11 +38,9 @@ namespace Academix.Models
         {
             ID = other.ID;
             Size = other.Size;
-            Semester = other.Semester;
-            SchoolYear = other.SchoolYear;
-            TeacherName = other.TeacherName;
+            GradeId = other.GradeId;
+            SchoolYearId = other.SchoolYearId;
             _student = new List<Student>(other.Students);
-            IsSelected = other.IsSelected;
         }
 
         public Student this[int index]

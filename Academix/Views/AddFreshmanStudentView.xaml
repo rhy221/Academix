@@ -282,6 +282,11 @@
                     </TextBlock>
 
                 </StackPanel>
+                <StackPanel>
+                    <TextBox/>
+                    <TextBlock><Run Text=" "/><Run Text="Email"/></TextBlock>
+
+                </StackPanel>
 
             </UniformGrid>
         </Grid>

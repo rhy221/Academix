@@ -1,76 +1,99 @@
 ﻿using Academix.Models;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Academix.ViewModels
 {
     public class SubjectViewModel: BaseViewModel
     {
-        private readonly Subject _subject;
+        private readonly Monhoc _subject;
        
-        public string ID => _subject.ID;
+        public string Id => _subject.Mamh;
         public string Name
         {
             get
             {
-                return _subject.Name;
+                return _subject.Tenmh;
             }
             set
             {
-                _subject.Name = value;
+                _subject.Tenmh = value;
                 OnPropertyChanged(nameof(Name));
             }
         }
-        public int OralNum
-        {
+        public int Multiplier {
             get
             {
-                return _subject.Scores[Subject.Oral];
+                return _subject.Heso;
             }
             set
             {
-                _subject.SetNumberOfScore(Subject.Oral, value);
-                OnPropertyChanged(nameof(OralNum));
+                _subject.Heso = value;
+                OnPropertyChanged(nameof(Multiplier));
             }
         }
-        public int ShortNum
+
+        private ObservableCollection<Loaidiem> _scoreTypes;
+        private String _scoreTypesString;
+        public ObservableCollection<Loaidiem> ScoreTypes
         {
             get
             {
-                return _subject.Scores[Subject.Short];
+                return _scoreTypes;
             }
             set
             {
-                _subject.SetNumberOfScore(Subject.Short, value);
-                OnPropertyChanged(nameof(ShortNum));
+                _scoreTypes = value;
 
+                String scoreTypesString = "";
+                if(!_scoreTypes.IsNullOrEmpty())
+                    scoreTypesString += _scoreTypes[0].Tenloaidiem;
+                for (int i = 1; i < _scoreTypes.Count; i++)
+                {
+
+                    scoreTypesString += ", " + _scoreTypes[i].Tenloaidiem;
+                }
+                ScoreTypesString = scoreTypesString;
+                OnPropertyChanged(nameof(ScoreTypes));
             }
         }
-        public int PeriodNum
+
+        public String ScoreTypesString
         {
             get
             {
-                return _subject.Scores[Subject.Period];
+                return _scoreTypesString;
             }
             set
             {
-                _subject.SetNumberOfScore(Subject.Period, value);
-                OnPropertyChanged(nameof(PeriodNum));
-
+                _scoreTypesString = value;
+                OnPropertyChanged(nameof(ScoreTypesString));
             }
         }
 
-        public SubjectViewModel(Subject subject)
+        public SubjectViewModel(Monhoc subject)
         {
             _subject = subject;
+            _scoreTypes = new ObservableCollection<Loaidiem>();
         }
 
         public SubjectViewModel(SubjectViewModel other)
         {
-            _subject = new Subject(other.ID, other.Name);
+            _subject = new Monhoc();
+            _subject.Mamh = other._subject.Mamh;
+            _subject.Tenmh = other._subject.Tenmh;
+            _subject.Heso = other._subject.Heso;
+            _subject.Maloaidiems = other._subject.Maloaidiems;
+            _subject.Bangdiemmonhocs = other._subject.Bangdiemmonhocs;
+            _subject.Bctongketmons = other._subject.Bctongketmons;
+            _scoreTypes = new ObservableCollection<Loaidiem>(other.ScoreTypes);
         }
+
     }
 }

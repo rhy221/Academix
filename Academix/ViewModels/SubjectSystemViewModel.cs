@@ -9,115 +9,56 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows;
+using Microsoft.EntityFrameworkCore;
+using Academix.Services;
 namespace Academix.ViewModels
 {
     public class SubjectSystemViewModel: BaseViewModel
     {
-        private readonly ObservableCollection<SubjectViewModel> _subjects;
-        public IEnumerable<SubjectViewModel> Subjects => _subjects;
+        private bool _isProcessing = true;
+        public bool IsProcessing
+        {
+            get
+            {
+                return _isProcessing;
+            }
+            set
+            {
+                _isProcessing = value;
+                OnPropertyChanged(nameof(IsProcessing));
+            }
+        }
+        private ObservableCollection<SubjectViewModel> _subjects;
+        public ObservableCollection<SubjectViewModel> Subjects
+        {
+            get
+            {
+                return _subjects;
+            }
+            set
+            {
+                _subjects = value;
+                OnPropertyChanged(nameof(Subjects));
+            }
+        }
+        private ObservableCollection<ScoreTypeViewModel> _scoreTypes;
+        public ObservableCollection<ScoreTypeViewModel> ScoreTypes
+        {
+            get
+            {
+                return _scoreTypes;
+            }
+            set
+            {
+                _scoreTypes = value;
+                OnPropertyChanged(nameof(ScoreTypes));
+            }
+        }
+
         public int Size => _subjects.Count;
-        private SubjectViewModel _currentModifyingSubject;
-        public string ModifyID => _currentModifyingSubject.ID;
-        public string ModifyName
-        {
-            get
-            {
-                return _currentModifyingSubject.Name;
-            }
-            set
-            {
-                _currentModifyingSubject.Name = value;
-                OnPropertyChanged(nameof(ModifyName));
-            }
-        }
-        public int ModifyOralNum
-        {
-            get
-            {
-                return _currentModifyingSubject.OralNum;
-
-            }
-            set
-            {
-                _currentModifyingSubject.OralNum = value;
-                OnPropertyChanged(nameof(ModifyOralNum));
-
-            }
-        }
-        public int ModifyShortNum
-        {
-            get
-            {
-                return _currentModifyingSubject.ShortNum;
-            }
-            set
-            {
-                _currentModifyingSubject.ShortNum = value;
-                OnPropertyChanged(nameof(ModifyShortNum));
-
-            }
-        }
-        public int ModifyPeriodNum
-        {
-            get
-            {
-                return _currentModifyingSubject.PeriodNum;
-            }
-            set
-            {
-                _currentModifyingSubject.PeriodNum = value;
-                OnPropertyChanged(nameof(ModifyPeriodNum));
-
-            }
-        }
-        private SubjectViewModel _addNewSubject;
-        public string NewName
-        {
-            get
-            {
-                return _addNewSubject.Name;
-            }
-            set
-            {
-                _addNewSubject.Name = value;
-            }
-        }
-        public int NewOralNum
-        {
-            get
-            {
-                return _addNewSubject.OralNum;
-            }
-            set
-            {
-                _addNewSubject.OralNum = value;
-            }
-        }
-        public int NewShortNum
-        {
-            get
-            {
-                return _addNewSubject.ShortNum;
-            }
-            set
-            {
-                _addNewSubject.ShortNum = value;
-            }
-        }
-        public int NewPeriodNum
-        {
-            get
-            {
-                return _addNewSubject.PeriodNum;
-            }
-            set
-            {
-                _addNewSubject.PeriodNum = value;
-            }
-        }
 
         private SubjectViewModel _selectedSubject;
-        public SubjectViewModel SelectedSubject
+        public SubjectViewModel  SelectedSubject
         {
             get
             {
@@ -126,68 +67,292 @@ namespace Academix.ViewModels
             set
             {
                 _selectedSubject = value;
+                SelectedSubjectName = value.Name;
+                SelectedSubjectMultiplier = value.Multiplier;
                 OnPropertyChanged(nameof(SelectedSubject));
-
-                if(_selectedSubject != null)
+                OnPropertyChanged(nameof(SelectedSubjectName));
+                OnPropertyChanged(nameof(SelectedSubjectMultiplier));
+                foreach(ScoreTypeViewModel scoreTypeViewModel in _selectedSubjectScoreTypes)
                 {
-                    ShowSelectedSubject(_selectedSubject);
+                    bool isFound = false;
+                    foreach(Loaidiem scoreType in value.ScoreTypes)
+                    {
+                        if(scoreType.Maloaidiem == scoreTypeViewModel.Id)
+                        {
+                            isFound = true;
+                            break;
+                        }
+
+                    }
+                    scoreTypeViewModel.IsChecked = isFound;
                 }
+                OnPropertyChanged(nameof(SelectedSubjectScoreTypes));
+            }
+        }
+        public string SelectedSubjectName { get; set; }
+        public int SelectedSubjectMultiplier { get; set; }
+        private ObservableCollection<ScoreTypeViewModel> _selectedSubjectScoreTypes;
+        public ObservableCollection<ScoreTypeViewModel> SelectedSubjectScoreTypes
+        {
+            get
+            {
+                if(_selectedSubjectScoreTypes != null)
+                    return _selectedSubjectScoreTypes;
+                else
+                    return new ObservableCollection<ScoreTypeViewModel>();
+                 
+            }
+            set
+            {
+                _selectedSubjectScoreTypes = value;
+                OnPropertyChanged(nameof(SelectedSubjectScoreTypes));
             }
         }
 
+      
+        public string NewSubjectName { get; set; }
+        public int NewSubjectMultiplier { get; set; }
+   
+
+        //public string ModifyName
+        //{
+        //    get
+        //    {
+        //        return _currentModifyingSubject.Name;
+        //    }
+        //    set
+        //    {
+        //        _currentModifyingSubject.Name = value;
+        //        OnPropertyChanged(nameof(ModifyName));
+        //    }
+        //}
+
+        //private SubjectViewModel _selectedSubject;
+        //public SubjectViewModel SelectedSubject
+        //{
+        //    get
+        //    {
+        //        return _selectedSubject;
+        //    }
+        //    set
+        //    {
+        //        _selectedSubject = value;
+        //        OnPropertyChanged(nameof(SelectedSubject));
+
+        //        if(_selectedSubject != null)
+        //        {
+        //            ShowSelectedSubject(_selectedSubject);
+        //        }
+        //    }
+        //}
+
         public ICommand ModifyCommand { get; }
         public ICommand AddNewCommand { get; }
-        //public ICommand RestoreCommand { get; }
-        public ICommand SaveCommand { get; }
+        public ICommand DeleteCommand { get; }
 
         public SubjectSystemViewModel()
         {
+            ModifyCommand = new AsyncRelayCommand(ModifySubject);
+            AddNewCommand = new AsyncRelayCommand(AddNewSubject);
+            DeleteCommand = new AsyncRelayCommand(DeleteSubject);
             _subjects = new ObservableCollection<SubjectViewModel>();
-            _addNewSubject = new SubjectViewModel(new Subject("*", ""));
-            _currentModifyingSubject = new SubjectViewModel(new Subject("",""));
-            _selectedSubject = null;
-            AddNewCommand = new RelayCommand(AddNewSubject);
-            ModifyCommand = new RelayCommand(ModifySubject);
-            SaveCommand = new RelayCommand(SaveData);
-            _subjects.Add(new SubjectViewModel(new Subject("fdf", "toan")));
-            _subjects.Add(new SubjectViewModel(new Subject("fdf", "toan")));
-            _subjects.Add(new SubjectViewModel(new Subject("fdf", "toan")));
-            _subjects.Add(new SubjectViewModel(new Subject("fdf", "toan")));
-
+            NewSubjectMultiplier = 1;
+            Task.Run(LoadDataAsync).ConfigureAwait(false);
         }
 
-        private void AddNewSubject()
+        private async Task AddNewSubject()
         {
-            if(!string.IsNullOrWhiteSpace(_addNewSubject.Name))
-                _subjects.Add(new SubjectViewModel(new Subject(Guid.NewGuid().ToString(), _addNewSubject.Name, new Dictionary<string, int>() { [Subject.Oral] = NewOralNum, [Subject.Short] = NewShortNum, [Subject.Period] = NewPeriodNum})));
-        }
-
-        private void ModifySubject()
-        {
-            if(!string.IsNullOrWhiteSpace(_selectedSubject.Name))
+            IsProcessing = true;
+            using(var context = new QuanlyhocsinhContext())
             {
-                _selectedSubject.Name = _currentModifyingSubject.Name;
-                _selectedSubject.OralNum = _currentModifyingSubject.OralNum;
-                _selectedSubject.ShortNum = _currentModifyingSubject.ShortNum;
-                _selectedSubject.PeriodNum = _currentModifyingSubject.PeriodNum;
+                try
+                {
+                    Monhoc subject = new Monhoc();
+
+                    if (String.IsNullOrWhiteSpace(NewSubjectName))
+                        throw new Exception("Tên không được trống");
+
+                    bool isAllUnchecked = true;
+                    foreach (ScoreTypeViewModel scoreTypeViewModel in ScoreTypes)
+                    {
+                        if (scoreTypeViewModel.IsChecked)
+                        {
+                            isAllUnchecked = false;
+                            Loaidiem scoreType = await context.Loaidiems.FirstOrDefaultAsync(st => st.Maloaidiem == scoreTypeViewModel.Id);
+                            subject.Maloaidiems.Add(scoreType);
+                        }
+                    }
+                    if (isAllUnchecked)
+                        throw new Exception("Phải chọn ít nhât một cột điểm");
+
+                    subject.Mamh = GenerateIdService.GenerateId();
+                    subject.Tenmh = NewSubjectName;
+                    subject.Heso = NewSubjectMultiplier;
+                    
+                    context.Monhocs.Add(subject);
+                    await context.SaveChangesAsync();
+                    SubjectViewModel subjectViewModel = new SubjectViewModel(subject);
+                    subjectViewModel.ScoreTypes = new ObservableCollection<Loaidiem>(subject.Maloaidiems);
+                    _subjects.Add(subjectViewModel);
+                    
+                    MessageBox.Show("Thêm thành công");
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                finally
+                {
+                    IsProcessing = false;
+
+                }
+
+            }
+        }
+
+        private async Task ModifySubject()
+        {
+            IsProcessing = true;
+            using(var context = new QuanlyhocsinhContext())
+            {
+                try
+                {
+                    if (_selectedSubject == null)
+                        throw new Exception("Xin hãy chọn môn học muốn sửa");
+
+                    Monhoc subject = await context.Monhocs
+                        .Include(s => s.Maloaidiems)
+                        .FirstOrDefaultAsync(s => s.Mamh == _selectedSubject.Id);
+
+                    if (string.IsNullOrWhiteSpace(SelectedSubjectName))
+                        throw new Exception("Tên không được trống");
+                    
+                    bool isAllUnchecked = true;
+                    foreach (ScoreTypeViewModel scoreTypeViewModel in SelectedSubjectScoreTypes)
+                    {
+                        if (scoreTypeViewModel.IsChecked)
+                        {
+                            isAllUnchecked = false;
+                            if (!subject.Maloaidiems.Any(st => st.Maloaidiem == scoreTypeViewModel.Id))
+                            {
+                                Loaidiem scoreType = await context.Loaidiems.FirstOrDefaultAsync(st => st.Maloaidiem == scoreTypeViewModel.Id);
+                                subject.Maloaidiems.Add(scoreType);
+                            }
+                           
+                        }
+                        else
+                        {
+                            if (subject.Maloaidiems.Any(st => st.Maloaidiem == scoreTypeViewModel.Id))
+                            {
+                                Loaidiem scoreType = await context.Loaidiems.FirstOrDefaultAsync(st => st.Maloaidiem == scoreTypeViewModel.Id);
+                                subject.Maloaidiems.Remove(scoreType);
+                            }
+                                
+                        }
+                    }
+                    if (isAllUnchecked)
+                        throw new Exception("Phải chọn ít nhât một cột điểm");
+
+                    subject.Tenmh = SelectedSubjectName;
+                    subject.Heso = SelectedSubjectMultiplier;
+
+                    await context.SaveChangesAsync();
+
+                    _selectedSubject.Name = subject.Tenmh;
+                    _selectedSubject.Multiplier = subject.Heso;
+                    _selectedSubject.ScoreTypes = new ObservableCollection<Loaidiem>(subject.Maloaidiems);
+
+                    OnPropertyChanged(nameof(Subjects));
+                    MessageBox.Show("Sửa đổi thành công");
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.InnerException.ToString());
+
+                }
+                finally
+                {
+                    IsProcessing = false;
+
+                }
+
+
+            }
+            
+
+        }
+        private async Task DeleteSubject()
+        {
+            try
+            {
+                IsProcessing = true;
+                if (_selectedSubject == null)
+                    throw new Exception("Xin hãy chọn môn học muốn sửa");
+                using(var context = new QuanlyhocsinhContext())
+                {
+                    Monhoc subject = await context.Monhocs
+                                                    .Include(s => s.Maloaidiems)
+                                                    .FirstOrDefaultAsync(s => s.Mamh == _selectedSubject.Id);
+                    subject.Maloaidiems.Clear();
+                    context.Monhocs.Remove(subject);
+                    await context.SaveChangesAsync();
+                }
+                _subjects.Remove(_selectedSubject);
+                SelectedSubjectName = "";
+                MessageBox.Show("Xóa môn học thành công");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.InnerException.Message);
+            }
+            finally
+            {
+                IsProcessing = false;
             }
            
         }
 
-        private void ShowSelectedSubject(SubjectViewModel subject)
+        private async Task LoadDataAsync()
         {
-            _currentModifyingSubject = new SubjectViewModel(new Subject(subject.ID, subject.Name, new Dictionary<string, int>() { [Subject.Oral] = subject.OralNum, [Subject.Short] = subject.ShortNum, [Subject.Period] = subject.PeriodNum}));
-            OnPropertyChanged(nameof(ModifyID));
-            OnPropertyChanged(nameof(ModifyName));
-            OnPropertyChanged(nameof(ModifyOralNum));
-            OnPropertyChanged(nameof(ModifyShortNum));
-            OnPropertyChanged(nameof(ModifyPeriodNum));
+            IsProcessing = true;
+            using(var context = new QuanlyhocsinhContext())
+            {
+                List<Monhoc> subjects = await context.Monhocs
+                                            .Include(s => s.Maloaidiems)
+                                            .ToListAsync();
+                List<SubjectViewModel> subjectViewModels = new List<SubjectViewModel>();
+                foreach (Monhoc subject in subjects)
+                {
+                    SubjectViewModel subjectViewModel = new SubjectViewModel(subject);
+                    subjectViewModel.ScoreTypes = new ObservableCollection<Loaidiem>(subject.Maloaidiems);
+                    subjectViewModels.Add(subjectViewModel);
+                }
+
+                Subjects = new ObservableCollection<SubjectViewModel>(subjectViewModels);
+
+                List<Loaidiem> scoreTypes = await context.Loaidiems.ToListAsync();
+                List<ScoreTypeViewModel> scoreTypeViewModels = new List<ScoreTypeViewModel>();
+                List<ScoreTypeViewModel> selectedScoreTypeViewModels = new List<ScoreTypeViewModel>();
+                List<ScoreTypeViewModel> newScoreTypeViewModels = new List<ScoreTypeViewModel>();
+
+                foreach (Loaidiem scoreType in scoreTypes)
+                {
+                    scoreTypeViewModels.Add(new ScoreTypeViewModel(scoreType));
+                    selectedScoreTypeViewModels.Add(new ScoreTypeViewModel(scoreType));
+                    newScoreTypeViewModels.Add(new ScoreTypeViewModel(scoreType));
+                }
+                ScoreTypes = new ObservableCollection<ScoreTypeViewModel>(scoreTypeViewModels);
+                SelectedSubjectScoreTypes = new ObservableCollection<ScoreTypeViewModel>(selectedScoreTypeViewModels);
+                
+            }
+            IsProcessing = false;
         }
 
-        private void SaveData()
-        {
-
-        }
+       
 
     }
 }

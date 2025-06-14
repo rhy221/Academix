@@ -143,20 +143,6 @@
                                         Value="10,0,0,0"/>
                             </Style>
                         </StackPanel.Resources>
-
-                        <Button>
-                            <StackPanel Orientation="Horizontal"
-                                FlowDirection="LeftToRight">
-                                <iconPacks:PackIconMaterial
-                                    Kind="FilePdfBox"
-                                    Foreground="White"
-                                    Height="15"
-                                    Width="15"
-                                    VerticalAlignment="Center"
-                                    Margin="0,0,5,0"/>
-                                <TextBlock VerticalAlignment="Center"><Run Text="Xuất PDF"/></TextBlock>
-                            </StackPanel>
-                        </Button>
                         <Button>
                             <StackPanel Orientation="Horizontal"
                                 FlowDirection="LeftToRight">

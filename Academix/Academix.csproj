@@ -18,14 +18,28 @@
 
   <ItemGroup>
     <Folder Include="DbContexts\" />
-    <Folder Include="Stores\" />
-    <Folder Include="Services\" />
+    <Folder Include="ViewModels\Class\" />
+    <Folder Include="ViewModels\Grade\" />
+    <Folder Include="ViewModels\Report\" />
+    <Folder Include="ViewModels\Student\" />
+    <Folder Include="ViewModels\System\" />
+    <Folder Include="Views\Class\" />
+    <Folder Include="Views\Grade\" />
+    <Folder Include="Views\Report\" />
+    <Folder Include="Views\Student\" />
+    <Folder Include="Views\System\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.10" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

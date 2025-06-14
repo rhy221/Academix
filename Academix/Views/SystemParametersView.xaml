@@ -5,266 +5,284 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Academix.Views"
              xmlns:viewModels="clr-namespace:Academix.ViewModels"
-             
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" x:Class="Academix.Views.SystemParametersView"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+             xmlns:converters="clr-namespace:Academix.Converters"
+            x:Class="Academix.Views.SystemParametersView"
              mc:Ignorable="d"  d:DesignHeight="770" d:DesignWidth="1380"
                 >
-    <UserControl.DataContext>
-        <viewModels:SystemParametersViewModel/>
-    </UserControl.DataContext>
+   
     <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource DeepBlueButton}">
             <Setter Property="Margin"
                     Value="10,0,0,0"/>
         </Style>
     </UserControl.Resources>
-    <StackPanel>
-        <StackPanel
-            Orientation="Horizontal"
-            FlowDirection="RightToLeft">
-            <Button>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock><Run Text="Lưu"/></TextBlock>
-                    <iconPacks:PackIconMaterial
-                        Height="15"
-                        Width="15"
-                        Kind="ContentSave"
-                        VerticalAlignment="Center"
-                        Margin="5,0,0,0"/>
-                </StackPanel>
-            </Button>
-            <!--<Button>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock><Run Text="Khôi phục"/></TextBlock>
-                    <iconPacks:PackIconMaterial
-                        Height="15"
-                        Width="15"
-                        Kind="Restore"
-                        VerticalAlignment="Center"
-                        Margin="5,0,0,0"/>
-                </StackPanel>
-            </Button>-->
-        </StackPanel>
-        <Border BorderBrush="{StaticResource GrayBorder}"
-            BorderThickness="2"
-            Margin="0,20,0,0"
-                Background="White">
+    <Grid VerticalAlignment="Top">
+        <StackPanel>
             <StackPanel
-                Margin="0,20,0,20">
-                <StackPanel.Resources>
-                    
-                    <Style TargetType="{x:Type Label}">
-                        <Setter Property="FontSize"
-                                Value="35"/>
-                        <Setter Property="BorderThickness"
-                                Value="0,0,0,10"/>
-                        <Setter Property='BorderBrush'
-                                Value="{StaticResource LightBlueBackground}"/>
-                        <Setter Property="HorizontalAlignment"
-                                Value="Left"/>
-                        <Setter Property="FontWeight"
-                                Value="Bold"/>
-                        <Setter Property="Foreground"
-                                Value="{StaticResource DeepBlueBackground}"/>
-                        <Setter Property="Padding"
-                                Value="100,0,0,0"/>
-                    </Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Setter Property="BorderThickness"
-                                Value="2"/>
-                        <Setter Property="BorderBrush"
-                                Value="{StaticResource GrayBorder}"/>
-                        <Setter Property="Height"
-                                Value="30"/>
-                        <Setter Property="Width"
-                                Value="130"/>
-                        <Setter Property="VerticalAlignment"
-                                Value="Center"/>
-                        <Setter Property="Margin"
-                                Value="100,20,0,10"/>
-                        <Setter Property="TextAlignment"
-                                Value="Center"/>
-                        <Setter Property="FontSize"
-                                Value="20"/>
-                        <Setter Property="FontWeight"
-                                Value="Bold"/>
-                        <Setter Property="Foreground"
-                                Value="{StaticResource GrayForeground}"/>
-
-                    </Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="FontSize"
-                                Value="25"/>
-                        <Setter Property="FontWeight"
-                                Value="Bold"/>
-                        <Setter Property="Foreground"
-                                Value="{StaticResource GrayForeground}"/>
-                        <Setter Property="VerticalAlignment"
-                                Value="Center"/>
-                        <Setter Property="Margin"
-                                Value="30,0,0,0"/>
-                    </Style>
-                </StackPanel.Resources>
-                <Label Content="Học sinh"/>
-                <UniformGrid Columns="2">
-                    <StackPanel Orientation="Horizontal"
-                                FlowDirection="RightToLeft">
-                        <TextBox Text="{Binding MaximumAge}"/>
-                        <TextBlock><Run Text="Tuổi tối đa"/></TextBlock>
+        Orientation="Horizontal"
+        FlowDirection="RightToLeft">
+                <Button
+                    Command="{Binding SaveCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock><Run Text="Lưu"/></TextBlock>
+                        <iconPacks:PackIconMaterial
+                    Height="15"
+                    Width="15"
+                    Kind="ContentSave"
+                    VerticalAlignment="Center"
+                    Margin="5,0,0,0"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal"
-                                FlowDirection="RightToLeft">
-                        <TextBox Text="{Binding MinimumAge}"/>
-                        <TextBlock><Run Text="Tuổi tối thiểu"/></TextBlock>
-                    </StackPanel>
-                </UniformGrid>
-                <Label Content="Lớp"/>
-                <UniformGrid Columns="2">
-                    <StackPanel Orientation="Horizontal"
-                        FlowDirection="RightToLeft">
-                        <TextBox Text="{Binding MaximumClassize}"/>
-                        <TextBlock><Run Text="Sĩ số tối đa"/></TextBlock>
-                    </StackPanel>
-                    
-                </UniformGrid>
-                <Label Content="Điểm"/>
-                <UniformGrid Columns="2">
-                    <StackPanel Orientation="Horizontal"
-                        FlowDirection="RightToLeft">
-                        <TextBox Text="{Binding MinimumScore}"/>
-                        <TextBlock><Run Text="Điểm tối thiểu"/></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal"
-                        FlowDirection="RightToLeft">
-                        <TextBox Text="{Binding MaximumScore}"/>
-                        <TextBlock><Run Text="Điểm tối đa"/></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal"
-                        FlowDirection="RightToLeft">
-                        <TextBox Text="{Binding PassingGrade}"/>
-                        <TextBlock><Run Text="Điểm đạt"/></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal"
-                        FlowDirection="RightToLeft">
-                        <TextBox Text="{Binding SubjectPassingGrade}"/>
-                        <TextBlock><Run Text="Điểm đạt môn"/></TextBlock>
-                    </StackPanel>
-                </UniformGrid>
+                </Button>
+                <!--<Button>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock><Run Text="Khôi phục"/></TextBlock>
+                <iconPacks:PackIconMaterial
+                    Height="15"
+                    Width="15"
+                    Kind="Restore"
+                    VerticalAlignment="Center"
+                    Margin="5,0,0,0"/>
             </StackPanel>
-            <!--<Grid Background="White">
-                <Grid.Resources>
-                    <Style TargetType="{x:Type Label}">
-                        <Setter Property="FontSize"
-                            Value="30"/>
-                        <Setter Property="BorderThickness"
+        </Button>-->
+            </StackPanel>
+            <Border BorderBrush="{StaticResource GrayBorder}"
+        BorderThickness="2"
+        Margin="0,20,0,0"
+            Background="White">
+                <StackPanel
+            Margin="0,20,0,20">
+                    <StackPanel.Resources>
+
+                        <Style TargetType="{x:Type Label}">
+                            <Setter Property="FontSize"
+                            Value="35"/>
+                            <Setter Property="BorderThickness"
                             Value="0,0,0,10"/>
-                        <Setter Property='BorderBrush'
+                            <Setter Property='BorderBrush'
                             Value="{StaticResource LightBlueBackground}"/>
-                        <Setter Property="HorizontalAlignment"
+                            <Setter Property="HorizontalAlignment"
                             Value="Left"/>
-                        <Setter Property="FontWeight"
+                            <Setter Property="FontWeight"
                             Value="Bold"/>
-                        <Setter Property="Foreground"
+                            <Setter Property="Foreground"
                             Value="{StaticResource DeepBlueBackground}"/>
-                        <Setter Property="Margin"
-                            Value="0,0,0,20"/>
-                        <Setter Property="Padding"
+                            <Setter Property="Padding"
                             Value="100,0,0,0"/>
-                    </Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Setter Property="BorderThickness"
+                        </Style>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="BorderThickness"
                             Value="2"/>
-                        <Setter Property="BorderBrush"
+                            <Setter Property="BorderBrush"
                             Value="{StaticResource GrayBorder}"/>
-                        <Setter Property="Height"
+                            <Setter Property="Height"
                             Value="30"/>
-                        <Setter Property="Width"
+                            <Setter Property="Width"
                             Value="130"/>
-                        <Setter Property="VerticalAlignment"
+                            <Setter Property="VerticalAlignment"
                             Value="Center"/>
-                    </Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="FontSize"
+                            <Setter Property="Margin"
+                            Value="100,20,0,10"/>
+                            <Setter Property="TextAlignment"
+                            Value="Center"/>
+                            <Setter Property="FontSize"
                             Value="20"/>
-                        <Setter Property="FontWeight"
+                            <Setter Property="FontWeight"
                             Value="Bold"/>
-                        <Setter Property="Foreground"
+                            <Setter Property="Foreground"
                             Value="{StaticResource GrayForeground}"/>
-                        <Setter Property="VerticalAlignment"
+
+                        </Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="FontSize"
+                            Value="25"/>
+                            <Setter Property="FontWeight"
+                            Value="Bold"/>
+                            <Setter Property="Foreground"
+                            Value="{StaticResource GrayForeground}"/>
+                            <Setter Property="VerticalAlignment"
                             Value="Center"/>
-                        <Setter Property="Margin"
+                            <Setter Property="Margin"
                             Value="30,0,0,0"/>
-                    </Style>
-                </Grid.Resources>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0"
-                            Margin="0,0,20,0">
+                        </Style>
+                    </StackPanel.Resources>
+       
+                    <Label Content="Học sinh"/>
+                    <UniformGrid Columns="2">
+                        <StackPanel Orientation="Horizontal"
+                            FlowDirection="RightToLeft">
+                            <TextBox Text="{Binding MaximumAge}"/>
+                            <TextBlock><Run Text="Tuổi tối đa"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                            FlowDirection="RightToLeft">
+                            <TextBox Text="{Binding MinimumAge}"/>
+                            <TextBlock><Run Text="Tuổi tối thiểu"/></TextBlock>
+                        </StackPanel>
+                    </UniformGrid>
+                    <Label Content="Lớp"/>
+                    <UniformGrid Columns="2">
+                        <StackPanel Orientation="Horizontal"
+                    FlowDirection="RightToLeft">
+                            <TextBox Text="{Binding MaximumClassize}"/>
+                            <TextBlock><Run Text="Sĩ số tối đa"/></TextBlock>
+                        </StackPanel>
 
-                    <StackPanel Margin="0,30,0,30">
-                        <Label Content="Học sinh"/>
-                        <Grid>
-                            <StackPanel HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal"
-                                    FlowDirection="RightToLeft"
-                                    Margin="0,0,0,30">
-                                    <TextBox/>
-                                    <TextBlock><Run Text="Tuổi tối đa"/></TextBlock>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"
-                                    FlowDirection="RightToLeft">
-                                    <TextBox/>
-                                    <TextBlock><Run Text="Tuổi tối thiểu"/></TextBlock>
-                                </StackPanel>
-                            </StackPanel>
-                        </Grid>
-                    </StackPanel>
-                    <StackPanel Margin="0,0,0,30">
-                        <Label Content="Điểm"/>
-                        <Grid>
-                            <StackPanel HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal"
-                                    FlowDirection="RightToLeft"
-                                    Margin="0,0,0,30">
-                                    <TextBox/>
-                                    <TextBlock><Run Text="Điểm đạt môn"/></TextBlock>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"
-                                    FlowDirection="RightToLeft">
-                                    <TextBox/>
-                                    <TextBlock><Run Text="Điểm đạt"/></TextBlock>
-                                </StackPanel>
-                            </StackPanel>
-                        </Grid>
-                    </StackPanel>
+                    </UniformGrid>
+                    <Label Content="Điểm"/>
+                    <UniformGrid Columns="2">
+                        <StackPanel Orientation="Horizontal"
+                    FlowDirection="RightToLeft">
+                            <TextBox Text="{Binding MinimumScore}"/>
+                            <TextBlock><Run Text="Điểm tối thiểu"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                    FlowDirection="RightToLeft">
+                            <TextBox Text="{Binding MaximumScore}"/>
+                            <TextBlock><Run Text="Điểm tối đa"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                    FlowDirection="RightToLeft">
+                            <TextBox Text="{Binding PassingGrade}"/>
+                            <TextBlock><Run Text="Điểm đạt"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                    FlowDirection="RightToLeft">
+                            <TextBox Text="{Binding SubjectPassingGrade}"/>
+                            <TextBlock><Run Text="Điểm đạt môn"/></TextBlock>
+                        </StackPanel>
+                    </UniformGrid>
                 </StackPanel>
-                <StackPanel Grid.Column="1"
-                            Margin="0,0,20,0">
+                <!--<Grid Background="White">
+            <Grid.Resources>
+                <Style TargetType="{x:Type Label}">
+                    <Setter Property="FontSize"
+                        Value="30"/>
+                    <Setter Property="BorderThickness"
+                        Value="0,0,0,10"/>
+                    <Setter Property='BorderBrush'
+                        Value="{StaticResource LightBlueBackground}"/>
+                    <Setter Property="HorizontalAlignment"
+                        Value="Left"/>
+                    <Setter Property="FontWeight"
+                        Value="Bold"/>
+                    <Setter Property="Foreground"
+                        Value="{StaticResource DeepBlueBackground}"/>
+                    <Setter Property="Margin"
+                        Value="0,0,0,20"/>
+                    <Setter Property="Padding"
+                        Value="100,0,0,0"/>
+                </Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="BorderThickness"
+                        Value="2"/>
+                    <Setter Property="BorderBrush"
+                        Value="{StaticResource GrayBorder}"/>
+                    <Setter Property="Height"
+                        Value="30"/>
+                    <Setter Property="Width"
+                        Value="130"/>
+                    <Setter Property="VerticalAlignment"
+                        Value="Center"/>
+                </Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="FontSize"
+                        Value="20"/>
+                    <Setter Property="FontWeight"
+                        Value="Bold"/>
+                    <Setter Property="Foreground"
+                        Value="{StaticResource GrayForeground}"/>
+                    <Setter Property="VerticalAlignment"
+                        Value="Center"/>
+                    <Setter Property="Margin"
+                        Value="30,0,0,0"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0"
+                        Margin="0,0,20,0">
 
-                    <StackPanel Margin="0,30,0,30">
-                        <Label Content="Lớp"/>
-                        <Grid>
-                            <StackPanel HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal"
-                                    FlowDirection="RightToLeft"
-                                    Margin="0,0,0,30">
-                                    <TextBox/>
-                                    <TextBlock><Run Text="Sĩ số tối thiểu"/></TextBlock>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"
-                                    FlowDirection="RightToLeft"
-                                    Visibility="Hidden">
-                                    <TextBox/>
-
-                                </StackPanel>
+                <StackPanel Margin="0,30,0,30">
+                    <Label Content="Học sinh"/>
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal"
+                                FlowDirection="RightToLeft"
+                                Margin="0,0,0,30">
+                                <TextBox/>
+                                <TextBlock><Run Text="Tuổi tối đa"/></TextBlock>
                             </StackPanel>
-                        </Grid>
-                    </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                FlowDirection="RightToLeft">
+                                <TextBox/>
+                                <TextBlock><Run Text="Tuổi tối thiểu"/></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
-            </Grid>-->
+                <StackPanel Margin="0,0,0,30">
+                    <Label Content="Điểm"/>
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal"
+                                FlowDirection="RightToLeft"
+                                Margin="0,0,0,30">
+                                <TextBox/>
+                                <TextBlock><Run Text="Điểm đạt môn"/></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                FlowDirection="RightToLeft">
+                                <TextBox/>
+                                <TextBlock><Run Text="Điểm đạt"/></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Column="1"
+                        Margin="0,0,20,0">
 
-        </Border>
-    </StackPanel>
+                <StackPanel Margin="0,30,0,30">
+                    <Label Content="Lớp"/>
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal"
+                                FlowDirection="RightToLeft"
+                                Margin="0,0,0,30">
+                                <TextBox/>
+                                <TextBlock><Run Text="Sĩ số tối thiểu"/></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                FlowDirection="RightToLeft"
+                                Visibility="Hidden">
+                                <TextBox/>
+
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+        </Grid>-->
+
+            </Border>
+        </StackPanel>
+
+        <Grid 
+            Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Background="Transparent">
+            <Controls:ProgressRing 
+Width="60"
+Height="60"
+IsActive="{Binding IsProcessing}" 
+Visibility="{Binding IsProcessing, Converter={StaticResource BoolToVisibilityConverter}}"
+HorizontalAlignment="Center"
+VerticalAlignment="Center" />
+        </Grid>
+    </Grid>
+    
 </UserControl>

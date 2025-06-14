@@ -260,6 +260,11 @@
                     </TextBlock>
 
                 </StackPanel>
+                <StackPanel Margin="0,0,0,15">
+                    <TextBox/>
+                    <TextBlock><Run Text=" "/><Run Text="Email"/></TextBlock>
+
+                </StackPanel>
 
             </UniformGrid>
         </Grid>

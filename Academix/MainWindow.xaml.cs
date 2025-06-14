@@ -37,25 +37,30 @@ public partial class MainWindow: Window
 
     private void HamburgerMenuControl_ItemInvoked(object sender, HamburgerMenuItemInvokedEventArgs e)
     {
-        HamburgerMenuIconItem item = (HamburgerMenuIconItem)e.InvokedItem;
+        //HamburgerMenuIconItem item = (HamburgerMenuIconItem)e.InvokedItem;
 
-        switch (item.Label)
-        {
-            case "Hệ thống":
-                ContentSite.Content = new DataSystemView();
-                break;
-            case "Học sinh":
-                ContentSite.Content = new StudentView();
-                break;
-            case "Lớp":
-                ContentSite.Content = new ClassesView();
-                break;
-            case "Điểm":
-                ContentSite.Content = new GradeView();
-                break;
-            case "Báo cáo":
-                ContentSite.Content = new ReportView();
-                break;
-        }
+        //switch (item.Label)
+        //{
+        //    case "Hệ thống":
+        //        ContentSite.Content = new DataSystemView();
+        //        ViewNameTB.Text = "Hệ thống";
+        //        break;
+        //    case "Học sinh":
+        //        ContentSite.Content = new StudentView();
+        //        ViewNameTB.Text = "Học sinh";
+        //        break;
+        //    case "Lớp":
+        //        ContentSite.Content = new ClassesView();
+        //        ViewNameTB.Text = "Lớp";
+        //        break;
+        //    case "Điểm":
+        //        ContentSite.Content = new GradeView();
+        //        ViewNameTB.Text = "Điểm";
+        //        break;
+        //    case "Báo cáo":
+        //        ContentSite.Content = new ReportView();
+        //        ViewNameTB.Text = "Báo cáo";
+        //        break;
+        //}
     }
     }

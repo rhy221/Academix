@@ -8,6 +8,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Academix"
         xmlns:views="clr-namespace:Academix.Views"
+        xmlns:viewModels="clr-namespace:Academix.ViewModels"
         mc:Ignorable="d"
         Title="LoginWindowView" Height="840" Width="1530"
         WindowState="Maximized"
@@ -15,8 +16,8 @@
         
         >
     <Window.Resources>
+       
         <ResourceDictionary>
-
 
             <!--  This is the template for all menu items. In this sample we use the glyph items.  -->
             <DataTemplate x:Key="HamburgerMenuItem" DataType="{x:Type Controls:HamburgerMenuIconItem}">
@@ -98,7 +99,28 @@
 
 
     <DockPanel LastChildFill="True" Background="{StaticResource LightGrayBackground}">
-        <Grid x:Name="HamGrid" HorizontalAlignment="Left">
+        <DockPanel.Resources>
+            <DataTemplate DataType="{x:Type viewModels:StudentViewModel}">
+                <views:StudentView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ClassesViewModel}">
+                <views:ClassesView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:GradeViewModel}">
+                <views:GradeView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ReportViewModel}">
+                <views:ReportView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:DataSystemViewModel}">
+                <views:DataSystemView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:HamburgerMenuViewModel}">
+                <views:HamburgerMenu/>
+            </DataTemplate>
+            
+        </DockPanel.Resources>
+        <!--<Grid x:Name="HamGrid" HorizontalAlignment="Left">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Style.Triggers>
@@ -142,7 +164,7 @@
                     <ImageBrush ImageSource="/Assets/HamBarBG.png" Stretch="UniformToFill"/>
                 </Controls:HamburgerMenu.PaneBackground>
                
-                <!--  Items  -->
+                --><!--  Items  --><!--
                 <Controls:HamburgerMenu.ItemsSource>
                     <Controls:HamburgerMenuItemCollection>
                         <Controls:HamburgerMenuIconItem Label="Hệ thống">
@@ -200,7 +222,7 @@
                     </Controls:HamburgerMenuItemCollection>
                 </Controls:HamburgerMenu.ItemsSource>
 
-                <!--Options  -->
+                --><!--Options  --><!--
                 <Controls:HamburgerMenu.OptionsItemsSource>
                     <Controls:HamburgerMenuItemCollection>
 
@@ -237,16 +259,22 @@
                     </Style>
                 </ToggleButton.Style>
             </ToggleButton>
-        </Grid>
+        </Grid>-->
+        <ContentControl Content="{Binding SideBarViewModel}">
+            
+        </ContentControl>
+      
         <Grid DockPanel.Dock="Top"
                   Height="50"
                   Background="White"
               >
-            <TextBlock HorizontalAlignment="Left"
+            <TextBlock x:Name="ViewNameTB"
+                HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Margin="20,0,0,0"
                            FontSize="20"
-                           Foreground="{StaticResource GrayForeground}"><Run Text="Học sinh"/></TextBlock>
+                           Foreground="{StaticResource GrayForeground}"
+                       Text="{Binding CurrentViewModelName}"/>
             <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Center"
                             FlowDirection="RightToLeft"
@@ -257,13 +285,11 @@
                               FlowDirection="LeftToRight"
                               VerticalAlignment="Center" 
                               Margin="10,0,0,0"
+                              ItemsSource="{Binding SchoolYears}"
+                              SelectedItem="{Binding SelectedSchoolYear, Mode=TwoWay}"/>
 
-         >
-                    <ComboBoxItem Content="lala"/>
-                    <ComboBoxItem Content="lla"/>
-                    <ComboBoxItem Content="lal"/>
 
-                </ComboBox>
+
                 <TextBlock FontSize="20"
                                Height="30"
                                Foreground="{StaticResource GrayForeground}"
@@ -275,8 +301,9 @@
         </Grid>
         <ContentControl x:Name="ContentSite" 
                         DockPanel.Dock="Top"
-                        Margin="20">
-            <views:StudentView/>
+                        Margin="20"
+                        Content="{Binding CurrentViewModel}">
+            
         </ContentControl>
 
         <!-- DockPanel chứa thanh top -->

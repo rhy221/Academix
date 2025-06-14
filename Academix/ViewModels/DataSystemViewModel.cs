@@ -15,6 +15,7 @@ namespace Academix.ViewModels
         {
             new TabItemViewModel("Thông số hệ thống", new SystemParametersViewModel()),
             new TabItemViewModel("Danh sách môn học", new SubjectSystemViewModel()),
+            new TabItemViewModel("Danh sách loại điểm", new SystemScoreTypeViewModel()),
         };
         public IEnumerable<TabItemViewModel> TabItems => _tabItems;
         private TabItemViewModel _selectedTabItem;

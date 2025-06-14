@@ -166,12 +166,18 @@ namespace Academix.ViewModels
             using(var context = new QuanlyhocsinhContext())
             {
                 try
-                {
-                    Monhoc subject = new Monhoc();
+                {                  
 
                     if (String.IsNullOrWhiteSpace(NewSubjectName))
-                        throw new Exception("Tên không được trống");
+                        throw new Exception("Tên không được trống!");
 
+                    foreach (SubjectViewModel subjectVM in _subjects)
+                    {
+                        if (subjectVM.Name == NewSubjectName)
+                            throw new Exception("Tên môn học đã tồn tại. Hãy đặt tên khác!");
+                    }
+
+                    Monhoc subject = new Monhoc();
                     bool isAllUnchecked = true;
                     foreach (ScoreTypeViewModel scoreTypeViewModel in ScoreTypes)
                     {
@@ -183,19 +189,19 @@ namespace Academix.ViewModels
                         }
                     }
                     if (isAllUnchecked)
-                        throw new Exception("Phải chọn ít nhât một cột điểm");
+                        throw new Exception("Phải chọn ít nhât một cột điểm!");
 
                     subject.Mamh = GenerateIdService.GenerateId();
                     subject.Tenmh = NewSubjectName;
                     subject.Heso = NewSubjectMultiplier;
                     
-                    context.Monhocs.Add(subject);
+                    await context.Monhocs.AddAsync(subject);
                     await context.SaveChangesAsync();
                     SubjectViewModel subjectViewModel = new SubjectViewModel(subject);
                     subjectViewModel.ScoreTypes = new ObservableCollection<Loaidiem>(subject.Maloaidiems);
                     _subjects.Add(subjectViewModel);
                     
-                    MessageBox.Show("Thêm thành công");
+                    MessageBox.Show("Thêm môn học thành công!");
 
                 }
                 catch (Exception ex)
@@ -219,14 +225,20 @@ namespace Academix.ViewModels
                 try
                 {
                     if (_selectedSubject == null)
-                        throw new Exception("Xin hãy chọn môn học muốn sửa");
+                        throw new Exception("Xin hãy chọn môn học muốn sửa!");
 
+                    if (string.IsNullOrWhiteSpace(SelectedSubjectName))
+                        throw new Exception("Tên không được trống!");
+
+                    if(SelectedSubjectName != _selectedSubject.Name)
+                        foreach(SubjectViewModel subjectViewModel in _subjects)
+                        {
+                            if (subjectViewModel.Name == SelectedSubjectName)
+                                throw new Exception("Tên môn học đã tồn tại. Hãy đặt tên khác!");
+                        }
                     Monhoc subject = await context.Monhocs
                         .Include(s => s.Maloaidiems)
                         .FirstOrDefaultAsync(s => s.Mamh == _selectedSubject.Id);
-
-                    if (string.IsNullOrWhiteSpace(SelectedSubjectName))
-                        throw new Exception("Tên không được trống");
                     
                     bool isAllUnchecked = true;
                     foreach (ScoreTypeViewModel scoreTypeViewModel in SelectedSubjectScoreTypes)
@@ -252,7 +264,7 @@ namespace Academix.ViewModels
                         }
                     }
                     if (isAllUnchecked)
-                        throw new Exception("Phải chọn ít nhât một cột điểm");
+                        throw new Exception("Phải chọn ít nhất một cột điểm!");
 
                     subject.Tenmh = SelectedSubjectName;
                     subject.Heso = SelectedSubjectMultiplier;
@@ -264,13 +276,12 @@ namespace Academix.ViewModels
                     _selectedSubject.ScoreTypes = new ObservableCollection<Loaidiem>(subject.Maloaidiems);
 
                     OnPropertyChanged(nameof(Subjects));
-                    MessageBox.Show("Sửa đổi thành công");
+                    MessageBox.Show("Sửa môn học đổi thành công!");
 
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-                    MessageBox.Show(ex.InnerException.ToString());
 
                 }
                 finally
@@ -290,7 +301,7 @@ namespace Academix.ViewModels
             {
                 IsProcessing = true;
                 if (_selectedSubject == null)
-                    throw new Exception("Xin hãy chọn môn học muốn sửa");
+                    throw new Exception("Xin hãy chọn môn học muốn xóa!");
                 using(var context = new QuanlyhocsinhContext())
                 {
                     Monhoc subject = await context.Monhocs
@@ -301,13 +312,16 @@ namespace Academix.ViewModels
                     await context.SaveChangesAsync();
                 }
                 _subjects.Remove(_selectedSubject);
+                _selectedSubject = null;
                 SelectedSubjectName = "";
-                MessageBox.Show("Xóa môn học thành công");
+                SelectedSubjectMultiplier = 1;
+                OnPropertyChanged(nameof(SelectedSubjectName));
+                OnPropertyChanged(nameof(SelectedSubjectMultiplier));
+                MessageBox.Show("Xóa môn học thành công!");
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                MessageBox.Show(ex.InnerException.Message);
             }
             finally
             {

@@ -1,0 +1,387 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Academix.Views"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" 
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+                 xmlns:viewModels="clr-namespace:Academix.ViewModels"
+xmlns:converters="clr-namespace:Academix.Converters"
+    x:Class="Academix.Views.SystemScoreTypeView"
+             mc:Ignorable="d" 
+              d:DesignHeight="770" d:DesignWidth="1380">
+
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>
+    </UserControl.Resources>
+    <Grid >
+        <DockPanel LastChildFill="True"
+           >
+            <TabControl DockPanel.Dock="Right"
+                VerticalAlignment="Top"
+                Visibility="Visible"
+                   
+                BorderThickness="0">
+                <TabControl.Resources>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Setter Property="Width"
+                            Value="150"/>
+                        <Setter Property="Height" 
+                            Value="35"/>
+                        <Setter Property="FontSize"
+                            Value="20"/>
+                        <Setter Property="Foreground"
+                            Value="{StaticResource GrayForeground}"/>
+                        <Setter Property="Background"
+                            Value="White"/>
+                        <Setter Property="BorderBrush"
+                            Value="{StaticResource GrayBorder}"/>
+                        <Setter Property="BorderThickness"
+                            Value="2"/>
+                        <Setter Property="Padding"
+                            Value="10,0,0,0"/>
+                        <Setter Property="FlowDirection"
+                            Value="LeftToRight"/>
+                    </Style>
+
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="FontSize"
+                            Value="20"/>
+                        <Setter Property="Foreground"
+                            Value="#FF615F5F"/>
+                        <Setter Property="VerticalAlignment"
+                            Value="Center"/>
+                        <Setter Property="Padding"
+                            Value="10,0,10,0"/>
+                        <Setter  Property="FontWeight"
+                            Value="Bold"/>
+                        <Setter Property="FlowDirection"
+                            Value="LeftToRight"/>
+                    </Style>
+                    <Style TargetType="{x:Type Button}"
+                        BasedOn="{StaticResource DeepBlueButton}">
+                        <Setter Property="FlowDirection"
+                            Value="LeftToRight"/>
+
+
+                    </Style>
+
+                    <Style TargetType="{x:Type mah:NumericUpDown}">
+
+                        <Setter Property="Minimum"
+                            Value="1"/>
+                        <Setter Property="Foreground"
+                            Value="{StaticResource GrayForeground}"/>
+                        <Setter Property="FontSize"
+                            Value="20"/>
+                        <Setter Property="FontWeight"
+                            Value="Bold"/>
+                        <Setter Property="BorderBrush"
+                            Value="{StaticResource GrayBorder}"/>
+                        <Setter Property="BorderThickness"
+                            Value="2"/>
+                        <Setter Property="FlowDirection"
+                            Value="LeftToRight"/>
+                        <Setter Property="Width"
+                            Value="150"/>
+                        <Setter Property="Padding"
+                            Value="0,0,80,0"/>
+
+                    </Style>
+
+                </TabControl.Resources>
+                <!--<TabControl.Style>
+                <Style TargetType="TabControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=ModifyToggleButton}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                     Value="{x:Static Visibility.Collapsed}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TabControl.Style>-->
+                <TabItem Header="Thêm mới">
+                    <TabItem.Style>
+                        <Style TargetType="{x:Type TabItem}"
+                            BasedOn="{StaticResource AboveStartTabItem}"/>
+                    </TabItem.Style>
+                    <StackPanel
+                        VerticalAlignment="Top"
+                        Visibility="Visible"
+                        Margin="10"
+                        FlowDirection="RightToLeft">
+                        <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,20">
+                            <TextBox Text="{Binding NewScoreTypeName, Mode=TwoWay}"/>
+                            <TextBlock><Run Text="Tên loại điểm"/></TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,20">
+                            <mah:NumericUpDown 
+                                Value="{Binding NewScoreTypeMultiplier, Mode=TwoWay}" 
+                                PreviewTextInput="NumericUpDown_PreviewTextInput" 
+                                PreviewKeyDown="NumericUpDown_PreviewKeyDown"
+                                DataObject.Pasting="NumericUpDown_Pasting"/>
+
+                            <TextBlock><Run Text="Hệ số"/></TextBlock>
+                        </StackPanel>
+
+                        <!--<StackPanel
+                        Orientation="Vertical"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Right"
+                        >
+                        <StackPanel.Resources>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Margin"
+                                        Value="0,0,0,20"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        -->
+                        <!--<StackPanel Orientation="Horizontal" >
+                            <Controls:NumericUpDown Value="{Binding NewOralNum, Mode=TwoWay}"/>
+
+                            <TextBlock><Run Text="Miệng"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Controls:NumericUpDown Value="{Binding NewShortNum, Mode=TwoWay}"/>
+                            <TextBlock><Run Text="15 Phút"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Controls:NumericUpDown  Value="{Binding NewPeriodNum, Mode=TwoWay}"/>
+                            <TextBlock><Run Text="1 Tiết"/></TextBlock>
+                        </StackPanel>-->
+                        <!--
+                    </StackPanel>-->
+                        <Button HorizontalAlignment="Left" 
+                            Command="{Binding AddScoreTypeCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconMaterial
+                                    Height="15"
+                                    Width="15"
+                                    Kind="PlusCircle"
+                                    VerticalAlignment="Center"
+                                    Margin="5,0,0,0"/>
+                                <TextBlock Foreground="White" 
+                                    FontSize="18"><Run Text="Thêm mới"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                </TabItem>
+                <TabItem Header="Sửa"
+                        >
+                    <TabItem.Style>
+                        <Style TargetType="{x:Type TabItem}"
+                            BasedOn="{StaticResource AboveMiddleTabItem}"/>
+                    </TabItem.Style>
+                    <StackPanel 
+                        VerticalAlignment="Top"
+                        Margin="10"
+                        FlowDirection="RightToLeft">
+                        <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,20">
+                            <TextBox Text="{Binding SelectedScoreTypeName, Mode=TwoWay}"/>
+                            <TextBlock><Run Text="Tên loại điểm"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,20">
+                            <mah:NumericUpDown 
+                                PreviewTextInput="NumericUpDown_PreviewTextInput" 
+                                PreviewKeyDown="NumericUpDown_PreviewKeyDown"
+                                DataObject.Pasting="NumericUpDown_Pasting"
+                                Value="{Binding SelectedScoreTypeMultiplier, Mode=TwoWay}"/>
+
+                            <TextBlock><Run Text="Hệ số"/></TextBlock>
+                        </StackPanel>
+                        <!--<StackPanel
+                        Orientation="Vertical"
+                        HorizontalAlignment="Right"
+                        >
+                        -->
+                        <!--<StackPanel.Resources>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Margin"
+                                    Value="0,0,0,20"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <StackPanel Orientation="Horizontal" >
+                            <Controls:NumericUpDown Value="{Binding ModifyOralNum, Mode=TwoWay}"/>
+
+                            <TextBlock><Run Text="Miệng"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Controls:NumericUpDown Value="{Binding ModifyShortNum, Mode=TwoWay}"/>
+                            <TextBlock><Run Text="15 Phút"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Controls:NumericUpDown  Value="{Binding ModifyPeriodNum, Mode=TwoWay}"/>
+                            <TextBlock><Run Text="1 Tiết"/></TextBlock>
+                        </StackPanel>-->
+                        <!--
+                    </StackPanel>-->
+                        <Button HorizontalAlignment="Left"
+                            Command="{Binding ModifyScoreTypeCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconMaterial
+                                    Height="15"
+                                    Width="15"
+                                    Kind="Pencil"
+                                    VerticalAlignment="Center"
+                                    Margin="5,0,0,0"/>
+                                <TextBlock Foreground="White" 
+                                    FontSize="18"><Run Text="Sửa"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                </TabItem>
+                <TabItem Header="Xóa"
+                        >
+                    <TabItem.Style>
+                        <Style TargetType="{x:Type TabItem}"
+                            BasedOn="{StaticResource AboveEndTabItem}"/>
+                    </TabItem.Style>
+                    <StackPanel 
+                        VerticalAlignment="Top"
+                        Margin="10"
+                        FlowDirection="RightToLeft">
+                        <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,20">
+                            <TextBox IsReadOnly="True" Text="{Binding SelectedScoreTypeName, Mode=OneWay}"/>
+                            <TextBlock><Run Text="Tên loại điểm"/></TextBlock>
+                        </StackPanel>
+                        <StackPanel
+                            Orientation="Vertical"
+                            HorizontalAlignment="Right"
+                        >
+                          
+                        </StackPanel>
+                        <Button HorizontalAlignment="Left"
+                            Command="{Binding DeleteScoreTypeCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconMaterial
+                                    Height="15"
+                                    Width="15"
+                                    Kind="Close"
+                                    VerticalAlignment="Center"
+                                    Margin="5,0,0,0"/>
+                                <TextBlock Foreground="White" 
+                                    FontSize="18"><Run Text="Xóa"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                </TabItem>
+            </TabControl>
+            <DataGrid DockPanel.Dock="Right"
+                HorizontalAlignment="Center"
+                ItemsSource="{Binding ScoreTypes}"
+                AutoGenerateColumns="False"
+                FontSize="20"
+                SelectionUnit="FullRow"
+                SelectionMode="Single"
+                AlternationCount="10000"
+                Margin="0,0,20,0"
+                SelectedItem="{Binding SelectedScoreType, Mode=TwoWay}"
+                IsReadOnly="True">
+                <DataGrid.Resources>
+                    <Style x:Key="CustomHeader" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background"
+                            Value="{StaticResource LightBlueBackground}"/>
+                        <Setter Property="BorderThickness"
+                            Value="1"/>
+                        <Setter Property="HorizontalContentAlignment"
+                            Value="Center"/>
+                        <Setter Property="VerticalContentAlignment"
+                            Value="Center"/>
+                        <Setter Property="Foreground"
+                            Value="White"/>
+                        <Setter Property="FontWeight"
+                            Value="Bold"/>
+                        <Setter Property="FontSize"
+                            Value="18"/>
+                    </Style>
+
+                </DataGrid.Resources>
+
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Setter Property="TextBlock.TextAlignment" 
+                            Value="Center"/>
+                        <Setter Property="BorderThickness"
+                            Value="1,0,0,1"/>
+                        <Setter Property="BorderBrush"
+                            Value="{StaticResource GrayBorder}"/>
+                        <Setter Property="TextElement.FontSize"
+                            Value="18"/>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="STT" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding AlternationIndex, Converter={StaticResource IndexToOneBasedConverter}, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"
+                                    HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}" />
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Tên Loại điểm"
+                        Width="350"
+                        Binding="{Binding Name}"
+                        IsReadOnly="True">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                        </DataGridTextColumn.HeaderStyle>
+
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Hệ số"
+                        Width="130"
+                        Binding="{Binding Multiplier}"
+                        IsReadOnly="True">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}"/>
+                        </DataGridTextColumn.HeaderStyle>
+
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </DockPanel>
+        <Grid 
+            Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Background="Transparent" d:IsHidden="True">
+            <mah:ProgressRing 
+                Width="60"
+                Height="60"
+                IsActive="{Binding IsProcessing}" 
+                Visibility="{Binding IsProcessing, Converter={StaticResource BoolToVisibilityConverter}}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
+        </Grid>
+    </Grid>
+</UserControl>

@@ -334,6 +334,7 @@
                                         BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
+                        
                         <DataGridCheckBoxColumn Width="80" Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <DataGridCheckBoxColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}"

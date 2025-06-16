@@ -14,9 +14,15 @@ namespace Academix.ViewModels
     public class ClassPlacementViewModel : BaseViewModel
     {
         public ObservableCollection<StudentDisplayModel> Students { get; set; } = new();
+        public ObservableCollection<GradeGroup> Grades { get; set; } = new();
+        public ObservableCollection<ClassGroup> Classes { get; set; } = new();
+        public IRelayCommand<ClassGroup> SelectClassCommand { get;  }
         public ClassPlacementViewModel()
         {
+
             Students = new ObservableCollection<StudentDisplayModel>();
+            Grades = new ObservableCollection<GradeGroup>();
+            Classes = new ObservableCollection<ClassGroup>();
 
             Students.CollectionChanged += (s, e) => UpdateIndexes();
 
@@ -82,6 +88,33 @@ namespace Academix.ViewModels
                     new Student("HS015", "Nguyễn Văn P", true, new DateTime(2005, 8, 7), "333 Đường P", "p@example.com", null),
                     "12/3", 7.0, 7.4, "Đang học", 15, false)
             };
+
+            // Bước 2: Nhóm học sinh theo lớp
+            var ClassGroups = Students
+                .GroupBy(s => s.ClassName)
+                .Select(g => new ClassGroup
+                {
+                    ClassName = g.Key,
+                    Students = new ObservableCollection<StudentDisplayModel>(g)
+                })
+                .ToList();
+
+            // Bước 3: Nhóm các lớp theo khối (dựa trên phần đầu của tên lớp)
+            var GradeGroups = ClassGroups
+                .GroupBy(cg => $"Khối {cg.ClassName.Split('/')[0]}")
+                .Select(g => new GradeGroup
+                {
+                    GradeName = g.Key,
+                    Classes = new ObservableCollection<ClassGroup>(g)
+                });
+
+            // Bước 4: Gán vào ViewModel
+            Grades = new ObservableCollection<GradeGroup>(GradeGroups);
+            SelectClassCommand = new RelayCommand<ClassGroup>(ClassGroup =>
+            {
+                SelectedClass = ClassGroup;
+            });
+
 
             foreach (var student in Students)
             {
@@ -151,5 +184,25 @@ namespace Academix.ViewModels
 
             _isUpdatingFromStudents = false;
         }
+
+        private ClassGroup _selectedClass;
+        public ClassGroup SelectedClass
+        {
+            get => _selectedClass;
+            set
+            {
+                if (_selectedClass != value)
+                {
+                    _selectedClass = value;
+                    OnPropertyChanged(nameof(SelectedClass));
+                    Students = _selectedClass?.Students ?? new ObservableCollection<StudentDisplayModel>();
+                    OnPropertyChanged(nameof(Students));
+                    UpdateIndexes();
+                }
+            }
+        }
+
+
+
     }
 }

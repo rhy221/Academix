@@ -11,6 +11,7 @@ namespace Academix.Models
     public class StudentDisplayModel : BaseViewModel
     {
         public Student Student { get; set; }
+        public string GradeName { get; set;  }
         public string ClassName { get; set; }
         public double GPA1 { get; set; }
         public double GPA2 { get; set; }
@@ -45,6 +46,7 @@ namespace Academix.Models
         public string Name => Student?.Name;
         public string Gender => (Student != null && Student.Gender) ? "Nam" : "Nữ";
         public byte[] Images => Student?.Images;
-        public DateTime DateOfBirth => (DateTime)(Student?.DateOfBirth);
+        public DateTime? DateOfBirth => Student?.DateOfBirth;
+
     }
 }

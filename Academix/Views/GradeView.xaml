@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:local="clr-namespace:Academix.Views"
              mc:Ignorable="d" 
@@ -26,9 +27,11 @@
                     </VisualBrush.Visual>
                 </VisualBrush>
             </Border.OpacityMask>
-            <ListView  Background="Transparent"
-                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-        SelectionMode="Single">
+            <ListView  ItemsSource="{Binding SemesterList}"
+                       SelectedItem="{Binding SelectedSemester, Mode=TwoWay}"
+                       Background="Transparent"
+                       ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                       SelectionMode="Single">
 
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
@@ -53,8 +56,6 @@
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
 
-                <ListViewItem Content="Học kỳ 1"/>
-                <ListViewItem Content="Học kỳ 2"/>
             </ListView>
         </Border>
         <TextBlock DockPanel.Dock="Top"
@@ -65,7 +66,9 @@
             HorizontalAlignment="Left"
             Margin="20,0,0,10"><Run Text="Danh sách môn học"/></TextBlock>
 
-        <ListView DockPanel.Dock="Top" 
+        <ListView ItemsSource="{Binding SubjectList}"
+                  SelectedItem="{Binding SelectedSubject, Mode=TwoWay}"
+                  DockPanel.Dock="Top" 
           ScrollViewer.HorizontalScrollBarVisibility="Auto"
           Background="{StaticResource DeepBlueBackground}"
           SelectionMode="Single"
@@ -94,15 +97,6 @@
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
 
-            <ListViewItem Content="Toán"/>
-            <ListViewItem Content="Lý"/>
-            <ListViewItem Content="Hóa"/>
-            <ListViewItem Content="Sinh"/>
-            <ListViewItem Content="Sử"/>
-            <ListViewItem Content="Địa"/>
-            <ListViewItem Content="Văn"/>
-            <ListViewItem Content="Tiếng Anh"/>
-            <ListViewItem Content="Giáo dục công dân"/>
 
         </ListView>
         <Grid DockPanel.Dock="Top"
@@ -117,7 +111,13 @@
             Value="5,0,5,0"/>
                     </Style>
                 </StackPanel.Resources>
-                <Button>
+                <Button FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:InvokeCommandAction Command="{Binding SaveChangesCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+
                     <StackPanel Orientation="Horizontal">
                         <TextBlock>Lưu</TextBlock>
                         <iconPacks:PackIconMaterial
@@ -159,7 +159,10 @@
                 <StackPanel Orientation="Horizontal"
                     FlowDirection="RightToLeft"
                             Margin="20,0,0,0">
-                    <ComboBox Height="30"
+                    <ComboBox                     
+                        ItemsSource="{Binding GradeList}"
+                        SelectedItem="{Binding SelectedGrade, Mode=TwoWay}"
+                        Height="30"
                         Width="120"
                         FlowDirection="LeftToRight"
                         VerticalAlignment="Center" 
@@ -176,7 +179,10 @@
                 <StackPanel Orientation="Horizontal"
                     FlowDirection="RightToLeft"
                             Margin="20,0,0,0">
-                    <ComboBox Height="30"
+                    <ComboBox                    
+                        ItemsSource="{Binding FilteredClassList}"
+                        SelectedItem="{Binding SelectedClass, Mode=TwoWay}"
+                        Height="30"
                         Width="120"
                         FlowDirection="LeftToRight"
                         VerticalAlignment="Center" 
@@ -216,11 +222,14 @@
                 <StackPanel Orientation="Horizontal"
              FlowDirection="RightToLeft"
                      Margin="20,0,0,0">
-                    <ComboBox Height="30"
-                 Width="120"
-                 FlowDirection="LeftToRight"
-                 VerticalAlignment="Center" 
-                 Margin="10,0,0,0"/>
+                    <ComboBox 
+                        ItemsSource="{Binding LoaiDiemList}"
+                        SelectedItem="{Binding SelectedLoaiDiem, Mode=TwoWay}"
+                        Height="30"
+                         Width="120"
+                         FlowDirection="LeftToRight"
+                         VerticalAlignment="Center" 
+                         Margin="10,0,0,0"/>
                     <TextBlock FontSize="20"
                  Height="30"
                  Foreground="{StaticResource GrayForeground}"
@@ -231,12 +240,14 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
              FlowDirection="RightToLeft">
-                    <Controls:NumericUpDown Height="30"
+                    <Controls:NumericUpDown 
+                        Height="30"
+                        Value="{Binding NumberOfScoreColumns}"
+                        IsEnabled="{Binding IsNumericUpDownEnabled}"
                  Width="120"
                  FlowDirection="LeftToRight"
                  VerticalAlignment="Center" 
                  Margin="10,0,0,0"
-                 Value="1"
                  FontSize="15"
                       FontWeight="Bold"
                     HorizontalContentAlignment="Center"/>
@@ -255,6 +266,7 @@
         <DataGrid x:Name="dataGrid" 
                       SnapsToDevicePixels="True"
                       UseLayoutRounding="True"
+                      ItemsSource="{Binding FilteredStudents}"
                       AutoGenerateColumns="False"
                         HorizontalAlignment="Center"
           ColumnHeaderHeight="50" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
@@ -281,46 +293,95 @@
 
             <DataGrid.Columns>
 
-                <DataGridTextColumn Width="100">
+                <DataGridTextColumn Width="100"
+                                    Binding="{Binding Index}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Text="STT"/>
+                        <TextBlock Text="STT"
+                                   FontSize="16"/>
                     </DataGridTextColumn.Header>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="TextAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
 
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="250">
+                <DataGridTextColumn Width="250"
+                                    Binding="{Binding ID}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Text="Mã học sinh"/>
+                        <TextBlock Text="Mã học sinh"
+                                   FontSize="16"/>
+                    </DataGridTextColumn.Header>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="TextAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Width="350"
+                                    Binding="{Binding Name}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Họ và tên"
+                                   FontSize="16"/>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Width="350">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Họ và tên"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="100">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Điểm"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Điểm" Width="Auto">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}">
+                            <Setter Property="FontSize" Value="16"/>
+                        </Style>
+
+                    </DataGridTemplateColumn.HeaderStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding Scores}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding ., Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  
+                                 Width="50"
+                                 TextAlignment="Center"
+                                 Margin="2"
+                                 VerticalContentAlignment="Center"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+
+
+
             </DataGrid.Columns>
+
 
         </DataGrid>
 
 
-        <!--<ListView DockPanel.Dock="Top"
+
+    </DockPanel>
+</UserControl>
+<!--<ListView DockPanel.Dock="Top"
                   FontSize="20" ScrollViewer.HorizontalScrollBarVisibility="Visible"
                   HorizontalAlignment="Center">
             <ListView.Resources>
@@ -345,5 +406,3 @@
                 </GridView>
             </ListView.View>
         </ListView>-->
-    </DockPanel>
-</UserControl>

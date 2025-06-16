@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:Academix.Views"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1340">
@@ -52,38 +53,36 @@
                 FontWeight="Bold"
                 Text="Danh sách lớp"
                 Padding="40,0,40,0"/>
-            
+
             <TreeView
-                Background="Transparent"
-                Margin="20">
-                <TreeView.Resources>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="FontSize"
-                            Value="20"/>
-                        <Setter Property="FontWeight"
-                            Value="Bold"/>
-                        <Setter Property="Foreground"
-                            Value="{StaticResource DeepBlueBackground}"/>
-                        <Setter Property="Margin"
-                            Value="0,0,0,10"/>
-                    </Style>
-                </TreeView.Resources>
-                <TreeViewItem Header="Khối 10">
-                    <TreeViewItem Header="Lớp 10a1"/>
-                    <TreeViewItem Header="Lớp 10a2"/>
-                    <TreeViewItem Header="Lớp 10a3"/>
-                    <TreeViewItem Header="Lớp 10a4"/>
-                </TreeViewItem>
-                <TreeViewItem Header="Khối 11">
-                    <TreeViewItem Header="Lớp 11a1"/>
-                    <TreeViewItem Header="Lớp 11a2"/>
-                    <TreeViewItem Header="Lớp 11a3"/>
-                </TreeViewItem>
-                <TreeViewItem Header="Khối 12">
-                    <TreeViewItem Header="Lớp 12a1"/>
-                    <TreeViewItem Header="Lớp 12a2"/>
-                </TreeViewItem>
+    ItemsSource="{Binding Grades}"
+    Background="Transparent"
+    Margin="20"
+   >
+
+
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Classes}">
+                        <TextBlock Text="{Binding GradeName}" />
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ClassName}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonUp">
+                                <i:InvokeCommandAction 
+                                    Command="{Binding DataContext.SelectClassCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                                </TextBlock>
+                            </DataTemplate>
+                        </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
             </TreeView>
+
+
+
 
         </StackPanel>
         <DataGrid ItemsSource="{Binding Students}" 
@@ -91,8 +90,7 @@
                   AutoGenerateColumns="False"
                   DockPanel.Dock="Left"
                   FontSize="20"
-                  HorizontalAlignment="Center"
-                  >
+                  HorizontalAlignment="Center">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="STT"
                                     Binding="{Binding Index}"
@@ -127,14 +125,15 @@
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Ngày sinh" 
-                                    Binding="{Binding DateOfBirth}"
+                                    Binding="{Binding DateOfBirth, StringFormat=dd/MM/yyyy}"
                                     Width="150">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridCheckBoxColumn Width="80" Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <DataGridCheckBoxColumn Width="80" 
+                                        Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGridCheckBoxColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                                        BasedOn="{StaticResource LightBlueHeader}"/>
@@ -147,6 +146,6 @@
                 </DataGridCheckBoxColumn>
             </DataGrid.Columns>
         </DataGrid>
-        
     </DockPanel>
+ 
 </UserControl>

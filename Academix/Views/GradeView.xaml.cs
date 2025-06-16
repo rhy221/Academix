@@ -26,5 +26,26 @@ namespace Academix.Views
             InitializeComponent();
             this.DataContext = new GradeViewModel();
         }
+
+        // THÊM MỚI: Hàm xử lý lưu
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Tìm DataGrid trong view (ví dụ bạn đặt tên trong XAML là MyDataGrid)
+
+            var dataGrid = this.FindName("MyDataGrid") as DataGrid;
+            if (dataGrid != null)
+            {
+                FocusManager.SetFocusedElement(FocusManager.GetFocusScope(dataGrid), dataGrid);
+                dataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
+                dataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+            }
+
+            // Gọi SaveChanges trong ViewModel
+            if (this.DataContext is GradeViewModel vm)
+            {
+                vm.SaveChangesCommand.Execute(null);
+
+            }
+        }
     }
 }

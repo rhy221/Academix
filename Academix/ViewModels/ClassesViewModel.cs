@@ -1,200 +1,429 @@
-﻿using Academix.Models;
+using Academix.Models;
+using Academix.Services;
+using Academix.Stores;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Academix.ViewModels
 {
     public class ClassesViewModel : BaseViewModel
     {
-        //private string selectedSemester;
-        //private string selectedSchoolYear;
-        //private string selectedTeacher;
-        //private Classroom selectedClassroom;
+        private NavigationService _navigationService;
+        private SchoolYearStore _schoolYearStore;
 
-        //private string newClassName;
-        //private string newTeacher;
 
-        //public ObservableCollection<Classroom> Classrooms { get; set; }
-        //public ObservableCollection<Classroom> FilteredClassrooms { get; set; }
+        public ClassesViewModel(NavigationService navigationService, SchoolYearStore schoolYearStore)
+        {
+            _schoolYearStore = schoolYearStore;
+            _navigationService = navigationService;
+            Grades = new ObservableCollection<Khoi>();
+            Classes = new ObservableCollection<ClassViewModel>();
+            SelectedClasses = new List<ClassViewModel>();
 
-        //public string SelectedSemester
-        //{
-        //    get => selectedSemester;
-        //    set
-        //    {
-        //        selectedSemester = value;
-        //        OnPropertyChanged(nameof(SelectedSemester));
-        //    }
-        //}
+            SearchCommand = new AsyncRelayCommand(Search);
+            AddCommand = new AsyncRelayCommand(AddClass);
+            EditCommand = new AsyncRelayCommand(EditClass);
+            DeleteCommand = new AsyncRelayCommand(DeleteSelected);
+            ViewClassCommand = new RelayCommand(ViewClass);
+            Task.Run(LoadDataAsync).ConfigureAwait(false);
+        }
 
-        //public string SelectedSchoolYear
-        //{
-        //    get => selectedSchoolYear;
-        //    set
-        //    {
-        //        selectedSchoolYear = value;
-        //        OnPropertyChanged(nameof(SelectedSchoolYear));
-        //    }
-        //}
+        private async Task LoadDataAsync()
+        {
+            using(var context = new QuanlyhocsinhContext())
+            {
+                List<Lop> classes = await context.Lops
+                                                 .Include(l => l.MakhoiNavigation)
+                                                 .Include(l => l.ManamhocNavigation)
+                                                .ToListAsync();
+                List<Khoi> grades = await context.Khois.ToListAsync();
 
-        //public string SelectedTeacher
-        //{
-        //    get => selectedTeacher;
-        //    set
-        //    {
-        //        selectedTeacher = value;
-        //        OnPropertyChanged(nameof(SelectedTeacher));
-        //    }
-        //}
+                Khoi AllGrade = new Khoi();
+                AllGrade.IsAll = true;
+                
+                ObservableCollection<Khoi> allGrades = new ObservableCollection<Khoi>(grades);
+                allGrades.Insert(0, AllGrade);
+                SearchSelectedGrade = AllGrade;
 
-        //public Classroom SelectedClassroom
-        //{
-        //    get => selectedClassroom;
-        //    set
-        //    {
-        //        selectedClassroom = value;
-        //        OnPropertyChanged(nameof(SelectedClassroom));
-        //        if (selectedClassroom != null)
-        //        {
-        //            NewClassName = selectedClassroom.Name;
-        //            NewTeacher = selectedClassroom.TeacherName;
-        //        }
-        //    }
-        //}
+                AllGrades = allGrades;
+                Grades = new ObservableCollection<Khoi>(grades);
 
-        //public string NewClassName
-        //{
-        //    get => newClassName;
-        //    set
-        //    {
-        //        newClassName = value;
-        //        OnPropertyChanged(nameof(NewClassName));
-        //    }
-        //}
+                SchoolYears = new ObservableCollection<Namhoc>(_schoolYearStore.SchoolYears);
+                SchoolYears.RemoveAt(0);
+                
+                ObservableCollection<ClassViewModel> classViewModels = new ObservableCollection<ClassViewModel>();
+                foreach(Lop @class in classes)
+                {
+                    classViewModels.Add(new ClassViewModel(@class, @class.MakhoiNavigation.Tenkhoi, @class.ManamhocNavigation.ToString()));
+                }
+                Classes = classViewModels;
+            }
+        }
 
-        //public string NewTeacher
-        //{
-        //    get => newTeacher;
-        //    set
-        //    {
-        //        newTeacher = value;
-        //        OnPropertyChanged(nameof(NewTeacher));
-        //    }
-        //}
+        private ObservableCollection<Khoi> _allGrade;
+        public ObservableCollection<Khoi> AllGrades
+        {
+            get => _allGrade;
+            set
+            {
+                _allGrade = value;
+                OnPropertyChanged(nameof(AllGrades));
+                   
+            }
+        }
 
-        //public ICommand SearchCommand { get; }
-        //public ICommand AddCommand { get; }
-        //public ICommand EditCommand { get; }
-        //public ICommand DeleteCommand { get; }
-        //public ICommand ImportExportCommand { get; }
+        private ObservableCollection<Khoi> _grade;
+        public ObservableCollection<Khoi> Grades
+        {
+            get => _grade;
+            set
+            {
+                _grade = value;
+                OnPropertyChanged(nameof(Grades));
 
-        //public ClassesViewModel()
-        //{
-        //    Classrooms = new ObservableCollection<Classroom>();
-        //    FilteredClassrooms = new ObservableCollection<Classroom>();
+            }
+        }
 
-        //    // Thêm dữ liệu mẫu
-        //    //Classrooms.Add(new Classroom("2024_10A1", 40, "HK1", "2024-2025", "Thầy A", new List<Student>()));
-        //    //Classrooms.Add(new Classroom("2024_10A2", 38, "HK1", "2024-2025", "Thầy B", new List<Student>()));
-        //    //Classrooms.Add(new Classroom("2024_11B1", 35, "HK2", "2023-2024", "Cô C", new List<Student>()));
-        //    UpdateFiltered();
+        private ObservableCollection<Namhoc> _schoolYears;
+        public ObservableCollection<Namhoc> SchoolYears
+        {
+            get => _schoolYears;
+            set
+            {
+                _schoolYears = value;
+                OnPropertyChanged(nameof(SchoolYears));
 
-        //    SearchCommand = new RelayCommand(Search);
-        //    AddCommand = new RelayCommand(AddClass);
-        //    EditCommand = new RelayCommand(EditClass);
-        //    DeleteCommand = new RelayCommand(DeleteSelected);
-        //    ImportExportCommand = new RelayCommand(ImportExport);
+            }
+        }
 
-        //}
+        private ObservableCollection<ClassViewModel> _classes;
+        public ObservableCollection<ClassViewModel> Classes 
+        {
+            get => _classes;
+            set
+            {
+                _classes = value;
+                OnPropertyChanged(nameof(Classes));
+            }
 
-        //private void UpdateFiltered()
-        //{
-        //    FilteredClassrooms.Clear();
-        //    foreach (var cls in Classrooms)
-        //        FilteredClassrooms.Add(cls);
-        //}
+        }
 
-        //private void Search()
-        //{
-        //    var result = Classrooms.Where(c =>
-        //        (string.IsNullOrEmpty(SelectedSemester) || c.Semester == SelectedSemester) &&
-        //        (string.IsNullOrEmpty(SelectedSchoolYear) || c.SchoolYear == SelectedSchoolYear) &&
-        //        (string.IsNullOrEmpty(SelectedTeacher) || c.TeacherName == SelectedTeacher)
-        //    ).ToList();
+        private Khoi _searchSelectedGrade;
+        public Khoi SearchSelectedGrade {
+            get => _searchSelectedGrade; 
+            set
+            {
+                _searchSelectedGrade = value;
+                OnPropertyChanged(nameof(SearchSelectedGrade));
+            }
+        }
+        public string SearchClassName { get; set; }
 
-        //    FilteredClassrooms.Clear();
-        //    foreach (var cls in result)
-        //        FilteredClassrooms.Add(cls);
-        //}
 
-        //private void AddClass()
-        //{
-        //    if (string.IsNullOrWhiteSpace(NewClassName) || string.IsNullOrWhiteSpace(NewTeacher))
-        //        return;
+        private ClassViewModel _selectedClass;
+        public ClassViewModel SelectedClass
+        {
+            get
+            {
 
-        //    string id = "TỰ THÊM";
-        //    if (Classrooms.Any(c => c.ID == id))
-        //        return;
+                return _selectedClass;
+            }
+            set
+            {
 
-        //    var newClass = new Classroom(
-        //        id,
-        //        0,
-        //        "HỌC KỲ NÀO",
-        //        DateTime.Now.Year + "-" + (DateTime.Now.Year + 1), // Năm học
-        //        NewTeacher,
-        //        new List<Student>()
-        //    );
+                _selectedClass = value;
+                EditClassName = _selectedClass.ClassName;
+                EditClassGrade = _grade.FirstOrDefault(g => g.Makhoi == _selectedClass.Class.Makhoi);
+                EditClassSchoolYear = _schoolYears.FirstOrDefault(sy => sy.Manamhoc == _selectedClass.Class.Manamhoc);
+                OnPropertyChanged(nameof(SelectedClass));
+            }
+        }
 
-        //    Classrooms.Add(newClass);
-        //    UpdateFiltered();
-        //}
+        private IList _selectedClasses;
+        public IList SelectedClasses {
+            get
+            {
 
-        //private void EditClass()
-        //{
-        //    if (SelectedClassroom == null || string.IsNullOrWhiteSpace(NewTeacher))
-        //        return;
+                return _selectedClasses;
+            }
+                set
+            {
+                if (value == null)
+                    MessageBox.Show("null");
+                _selectedClasses = value;
+                OnPropertyChanged(nameof(SelectedClasses));
+            } }
 
-        //    string id = SelectedClassroom.ID;
-        //    var newClassroom = new Classroom(
-        //        id,
-        //        SelectedClassroom.Size,
-        //        SelectedClassroom.Semester,
-        //        SelectedClassroom.SchoolYear,
-        //        NewTeacher,
-        //        SelectedClassroom.Students);
+        private string _newClassName;
+        public string NewClassName
+        {
+            get => _newClassName;
+            set
+            {
+                _newClassName = value;
+                OnPropertyChanged(nameof(NewClassName));
+            }
+        }
 
-        //    int index = Classrooms.IndexOf(SelectedClassroom);
-        //    if (index >= 0)
-        //    {
-        //        Classrooms[index] = newClassroom;
-        //        UpdateFiltered();
-        //    }
-        //}
+        private Khoi _newClassGrade;
+        public Khoi NewClassGrade {
+            get => _newClassGrade;
+                
+            set 
+            {
+                _newClassGrade = value;
+                OnPropertyChanged(nameof(NewClassGrade));
+            } 
+        }
 
-        //private void DeleteSelected()
-        //{
-        //    var classesToDelete = FilteredClassrooms.Where(c => c.IsSelected).ToList();
-        //    foreach (var cls in classesToDelete)
-        //    {
-        //        Classrooms.Remove(cls);
-        //    }
-        //    UpdateFiltered();
-        //}
+        private Namhoc _newClassSchoolYear;
+        public Namhoc NewClassSchoolYear
+        {
+            get => _newClassSchoolYear;
 
-        //private void ImportExport()
-        //{
-        //    // Nhập/xuất file CSV hoặc Excel (chưa triển khai)
-        //}
+            set
+            {
+                _newClassSchoolYear = value;
+                OnPropertyChanged(nameof(NewClassSchoolYear));
+            }
+        }
 
-        //public override string ToString()
-        //{
-        //    return "Lớp";
-        //}
+        private string _editClassName;
+        public string EditClassName {
+            get => _editClassName; 
+            set
+            {
+                _editClassName = value;
+                OnPropertyChanged(nameof(EditClassName));
+            }
+        }
+
+        private Khoi _editClassGrade;
+        public Khoi EditClassGrade 
+        {
+            get => _editClassGrade; 
+            set
+            {
+                _editClassGrade = value;
+                OnPropertyChanged(nameof(EditClassGrade));
+            }
+
+        }
+
+        private Namhoc _editClassSchoolYear;
+        public Namhoc EditClassSchoolYear
+        {
+            get => _editClassSchoolYear;
+
+            set
+            {
+                _editClassSchoolYear = value;
+                OnPropertyChanged(nameof(EditClassSchoolYear));
+            }
+        }
+
+
+
+
+
+        public ICommand SearchCommand { get; }
+        public ICommand AddCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand ViewClassCommand { get; }
+       
+       
+
+        private async Task Search()
+        {
+            try
+            {
+                using(var context = new QuanlyhocsinhContext())
+                {
+
+                    IQueryable<Lop> query = context.Lops
+                .Include(l => l.MakhoiNavigation)
+                .Include(l => l.ManamhocNavigation);
+
+                    if (!_schoolYearStore.SelectedSchoolYear.IsAll)
+                        query = query.Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc);
+
+                    if (!SearchSelectedGrade.IsAll)
+                        query = query.Where(l => l.Makhoi == SearchSelectedGrade.Makhoi);
+
+                    if (!string.IsNullOrWhiteSpace(SearchClassName))
+                        query = query.Where(l => l.Tenlop.Contains(SearchClassName));
+
+                    List<Lop> classes = await query.ToListAsync();
+                    //MessageBox.Show("" + classes.Count + _selectedSchoolYear.Manamhoc);
+
+                    ObservableCollection<ClassViewModel> classViewModels = new ObservableCollection<ClassViewModel>();
+
+                    foreach (Lop @class in classes)
+                    {
+                        classViewModels.Add(new ClassViewModel(@class, @class.MakhoiNavigation.Tenkhoi, @class.ManamhocNavigation.ToString()));
+                    }
+                    Classes = classViewModels;
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+
+            }
+           
+        }
+
+        private async Task AddClass()
+        {
+            try
+            {
+                if (String.IsNullOrWhiteSpace(NewClassName) || NewClassGrade == null || NewClassSchoolYear == null)
+                    throw new Exception("Xin hãy nhập thông tin đầy đủ!");
+
+               
+
+                using (var context = new QuanlyhocsinhContext())
+                {
+                    bool isExist = await context.Lops.AnyAsync(l => l.Tenlop == NewClassName && l.Makhoi == NewClassGrade.Makhoi && l.Manamhoc == NewClassSchoolYear.Manamhoc);
+                    if (isExist)
+                        throw new Exception("Tên lớp đã tồn tại. Xin hãy chọn tên khác");
+
+                    string id = GenerateIdService.GenerateId();
+                    Lop @class = new Lop(id, NewClassName, 0, NewClassGrade.Makhoi, NewClassSchoolYear.Manamhoc);
+                    await context.Lops.AddAsync(@class);
+                    await context.SaveChangesAsync();
+                    @class = await context.Lops
+                                    .Include(l => l.MakhoiNavigation)
+                                    .Include(l => l.ManamhocNavigation)
+                                    .FirstOrDefaultAsync(l => l.Malop == id);
+                    Classes.Add(new ClassViewModel(@class, NewClassGrade.Tenkhoi, NewClassSchoolYear.ToString()));
+
+                    MessageBox.Show("Thêm lớp thành công");
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+
+            }
+          
+        }
+
+        private async Task EditClass()
+        {
+            try
+            {
+                if (String.IsNullOrWhiteSpace(EditClassName) || EditClassGrade == null || EditClassSchoolYear == null)
+                    throw new Exception("Xin hãy nhập thông tin đầy đủ!");
+
+                    
+
+                using (var context = new QuanlyhocsinhContext())
+                {
+
+                    if (_selectedClass.ClassName != EditClassName)
+                    {
+                        bool isExist = await context.Lops.AnyAsync(l => l.Tenlop == EditClassName && l.Makhoi == EditClassGrade.Makhoi && l.Manamhoc == EditClassSchoolYear.Manamhoc);
+                        if(isExist)
+                            throw new Exception("Tên lớp đã tồn tại. Xin hãy chọn tên khác");
+
+                    }
+
+                    Lop @class = await context.Lops.FirstOrDefaultAsync(l => l.Malop == _selectedClass.Id);
+                    @class.Tenlop = EditClassName;
+                    @class.Makhoi = EditClassGrade.Makhoi;
+                    @class.Manamhoc = EditClassSchoolYear.Manamhoc;
+                    await context.SaveChangesAsync();
+                    @class = await context.Lops
+                                   .Include(l => l.MakhoiNavigation)
+                                   .Include(l => l.ManamhocNavigation)
+                                   .FirstOrDefaultAsync(l => l.Malop == _selectedClass.Id);
+                    
+                    int position = Classes.IndexOf(_selectedClass);
+                    _selectedClass = new ClassViewModel(@class, @class.MakhoiNavigation.Tenkhoi, @class.ManamhocNavigation.ToString());
+                    Classes[position] = _selectedClass;
+                    OnPropertyChanged(nameof(Classes)); 
+                    MessageBox.Show("Thay đổi lớp thành công");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+
+            }
+        }
+
+        private async Task DeleteSelected()
+        {
+            try
+            {
+                using(var context = new QuanlyhocsinhContext())
+                {
+                    List<ClassViewModel> classViewModels = _selectedClasses.Cast<ClassViewModel>().ToList();
+                    foreach(ClassViewModel classViewModel in classViewModels)
+                    {
+                        context.Lops.Remove(classViewModel.Class);
+                    }
+
+                    await context.SaveChangesAsync();
+                    foreach (ClassViewModel classViewModel in classViewModels)
+                    {
+                       _classes.Remove(classViewModel);
+                    }
+                    OnPropertyChanged(nameof(Classes));
+
+                    MessageBox.Show("Xoá lớp thành công!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+
+            }
+            finally
+            {
+
+            }
+        }
+
+       
+
+        private void ViewClass()
+        {
+            if(_selectedClass != null)
+            {
+                _navigationService.PushStack(this);
+                _navigationService.Navigate(new ViewClassViewModel(_navigationService, _selectedClass.Class));
+
+            }
+        }
+
+       
+
+        public override string ToString()
+        {
+            return "Lớp";
+        }
+
     }
 }

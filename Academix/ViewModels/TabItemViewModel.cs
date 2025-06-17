@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace Academix.ViewModels
 {
-    class TabItemViewModel:BaseViewModel
+    public class TabItemViewModel:BaseViewModel
     {
         public string Header { get; set; }
         public BaseViewModel ViewModel { get; set; }  

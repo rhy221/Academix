@@ -6,24 +6,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Academix.ViewModels
 {
-    public class GradeViewModel : BaseViewModel
+    public class StudentsViewModel: BaseViewModel
     {
         private SchoolYearStore _schoolYearStore;
         private NavigationService _navigationService;
 
-
-        public GradeViewModel(NavigationService navigationService, SchoolYearStore schoolYearStore)
+        public StudentsViewModel(NavigationService navigationService, SchoolYearStore schoolYearStore)
         {
             _navigationService = navigationService;
             _schoolYearStore = schoolYearStore;
         }
 
+       
+
         public override string ToString()
         {
-            return "Điểm";
+            return "Học sinh";
         }
     }
 }

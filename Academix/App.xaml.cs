@@ -1,5 +1,7 @@
-﻿using Academix.Stores;
+﻿using Academix.Models;
+using Academix.Stores;
 using Academix.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 using System.Data;
 using System.Windows;
@@ -12,17 +14,31 @@ namespace Academix;
 public partial class App : Application
 {
     private NavigationStore _navigationStore;
+    private SchoolYearStore _schoolYearStore;
 
     public App()
     {
         _navigationStore = new NavigationStore();
+        _schoolYearStore = new SchoolYearStore();
     }
 
-    protected override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
-        _navigationStore.CurrentViewModel = new StudentViewModel();
+        List<Namhoc> schoolYears;
+        
+        using (var context = new QuanlyhocsinhContext())
+        {
+            schoolYears = await context.Namhocs.ToListAsync();
+        }
 
-        MainWindow = new MainWindow() { DataContext = new MainViewModel(_navigationStore) };
+        Namhoc allSchoolYear = new Namhoc();
+        allSchoolYear.IsAll = true;
+        schoolYears.Insert(0, allSchoolYear);
+        _schoolYearStore.SchoolYears = schoolYears;
+        _schoolYearStore.SelectedSchoolYear = allSchoolYear;
+
+
+        MainWindow = new MainWindow() { DataContext = new MainViewModel(_navigationStore, _schoolYearStore) };
 
         MainWindow.Show();
 

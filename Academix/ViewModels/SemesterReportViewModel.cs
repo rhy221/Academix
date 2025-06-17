@@ -1,121 +1,188 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Input; 
+using System.Windows;
+using System.Windows.Input;
 using Academix.Models;
+using Academix.Services;
+using Academix.Stores;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Academix.ViewModels
 {
-    public class SemesterReportViewModel : INotifyPropertyChanged
+    public class SemesterReportViewModel : BaseViewModel
     {
-        private string selectedYear;
-        private string selectedSemester;
-        private ObservableCollection<ClassDisplayData> filteredClasses;
-
-        public string SelectedYear
+        private ObservableCollection<Hocky> _semesters;
+        public ObservableCollection<Hocky> Semesters
         {
-            get => selectedYear;
+            get
+            {
+                return _semesters;
+            }
             set
             {
-                selectedYear = value;
-                OnPropertyChanged();
+                _semesters = value;
+                OnPropertyChanged(nameof(Semesters));
             }
         }
+       
 
-        public string SelectedSemester
+        public ICommand ExportReportCommand { get; }
+       
+
+        private Hocky _selectedSemester;
+        public Hocky SelectedSemester
         {
-            get => selectedSemester;
+            get => _selectedSemester;
             set
             {
-                selectedSemester = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<SemesterReport> AllReports { get; set; }
-
-        public ObservableCollection<string> AllYears { get; set; }
-        public ObservableCollection<string> AllSemesters { get; set; }
-
-        public ObservableCollection<ClassDisplayData> FilteredClasses
-        {
-            get => filteredClasses;
-            set
-            {
-                filteredClasses = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ICommand ExportDataCommand { get; private set; }
-
-        public SemesterReportViewModel()
-        {
-            AllReports = new ObservableCollection<SemesterReport>();
-            LoadDataFromDatabase(); 
-
-            AllYears = new ObservableCollection<string>
-            {
-                
-            };
-
-            AllSemesters = new ObservableCollection<string>
-            {
-                
-            };
-
-            ExportDataCommand = new RelayCommand(ExportData);  
-        }
-
-        private void LoadDataFromDatabase()
-        {
-            
-        }
-
-        public void ExportData()
-        {
-            if (!string.IsNullOrEmpty(SelectedYear) && !string.IsNullOrEmpty(SelectedSemester))
-            {
-                FilterData(); 
-            }
-            else
-            {
-                
-            }
-        }
-
-        private void FilterData()
-        {
-            var filtered = AllReports
-                .Where(r => r.SchoolYear == SelectedYear && r.Semester == SelectedSemester)
-                .SelectMany(r => r.Table.Select(row => new ClassDisplayData
+                if (_selectedSemester != value)
                 {
-                    ClassName = row.ClassroomID,
-                    TotalStudents = row.ClassroomSize,
-                    PassedStudents = row.PassedNum,
-                    PassRate = row.ClassroomSize > 0 ? (double)row.PassedNum / row.ClassroomSize * 100 : 0
-                }));
-
-           
-            FilteredClasses = new ObservableCollection<ClassDisplayData>(filtered);
+                    _selectedSemester = value;
+                    OnPropertyChanged(nameof(SelectedSemester));
+                }
+            }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
+
+        private SchoolYearStore _schoolYearStore;
+
+
+        public string SelectedSemesterName
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            get => _selectedSemester.Tenhocky;
+            set
+            {
+                _selectedSemester.Tenhocky = value;
+                OnPropertyChanged(nameof(SelectedSemesterName));
+            }
+        }
+
+        public string SelectedSchoolYearName
+        {
+            get
+            {
+                if (!_schoolYearStore.SelectedSchoolYear.IsAll)
+                    return _schoolYearStore.SelectedSchoolYear.ToString();
+                return "";
+            }
+
+            set
+            {
+                OnPropertyChanged(nameof(SelectedSchoolYearName));
+            }
+        }
+
+        private async Task LoadDataAsync()
+        {
+            using (var context = new QuanlyhocsinhContext())
+            {
+                List<Hocky> semesters = await context.Hockies.ToListAsync();
+                Semesters = new ObservableCollection<Hocky>(semesters);
+            }
+        }
+
+        private ObservableCollection<SemesterReportItemViewModel> _reportItems;
+        public ObservableCollection<SemesterReportItemViewModel> ReportItems
+        {
+            get
+            {
+                return _reportItems;
+            }
+            set
+            {
+                _reportItems = value;
+                OnPropertyChanged(nameof(ReportItems));
+            }
+        }
+        public SemesterReportViewModel(SchoolYearStore schoolYearStore)
+        {
+            Task.Run(LoadDataAsync).ConfigureAwait(false);
+            _schoolYearStore = schoolYearStore;
+            _reportItems = new ObservableCollection<SemesterReportItemViewModel>();
+            ExportReportCommand = new AsyncRelayCommand(CreateReport);
+        }
+
+
+        private async Task FilterData()
+        {
+            try
+            {
+
+
+                using (var context = new QuanlyhocsinhContext())
+                {
+                    Thamso passingGrade = await context.Thamsos.FirstOrDefaultAsync(ts => ts.Tenthamso == "DiemDat");
+
+                    List<Lop> classes = await context.Lops
+                                                    .Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc)
+                                                    .Include(l => l.CtLops.Where(ct => ct.Mahocky == _selectedSemester.Mahocky && ct.Dtbhk >= passingGrade.Giatri))
+                                                    .ToListAsync();
+
+                    List<SemesterReportItemViewModel> semesterReportItemViewModels = new List<SemesterReportItemViewModel>();
+                    foreach (Lop classr in classes)
+                    {
+                        int count = 0;
+                        float passingRate = 0;
+                        if (!classr.CtLops.IsNullOrEmpty() && classr.Siso > 0)
+                        {
+                            count = classr.CtLops.Count;
+                            passingRate = Convert.ToSingle(Math.Round(1f * count / classr.Siso, 2));
+
+                        }
+                        SemesterReportItemViewModel semesterReportItemViewModel = new SemesterReportItemViewModel(classr, count, passingRate);
+                        semesterReportItemViewModels.Add(semesterReportItemViewModel);
+                    }
+
+                    ReportItems = new ObservableCollection<SemesterReportItemViewModel>(semesterReportItemViewModels);
+
+                    Bctongkethocky semesterReport = new Bctongkethocky(GenerateIdService.GenerateId(), _selectedSemester.Mahocky, _schoolYearStore.SelectedSchoolYear.Manamhoc);
+                    foreach (SemesterReportItemViewModel semesterReportItemVM in semesterReportItemViewModels)
+                    {
+                        CtBctongkethocky ctBctongkethocky = new CtBctongkethocky(GenerateIdService.GenerateId(), semesterReportItemVM.ClassId, semesterReportItemVM.ClassSize, semesterReportItemVM.Count, Convert.ToDouble(semesterReportItemVM.PassingRate));
+                        semesterReport.CtBctongkethockies.Add(ctBctongkethocky);
+                    }
+                    await context.Bctongkethockies.AddAsync(semesterReport);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+
+            }
+
+
+
+        }
+
+
+        private async Task CreateReport()
+        {
+
+            if (_schoolYearStore.SelectedSchoolYear == null || _schoolYearStore.SelectedSchoolYear.IsAll || _selectedSemester == null )
+            {
+                MessageBox.Show("Vui lòng chọn thông tin năm học và học  kỳ!");
+                return;
+
+            }
+
+            SelectedSemesterName = _selectedSemester.Tenhocky;
+            SelectedSchoolYearName = _schoolYearStore.SelectedSchoolYear.ToString();
+            await FilterData();
         }
     }
+
+
+}
 
     
-    public class ClassDisplayData
-    {
-        public string ClassName { get; set; }
-        public int TotalStudents { get; set; }
-        public int PassedStudents { get; set; }
-        public double PassRate { get; set; }
-    }
-}
+

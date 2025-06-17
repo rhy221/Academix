@@ -1,4 +1,7 @@
-﻿using Microsoft.Identity.Client;
+﻿using Academix.Models;
+using Academix.Services;
+using Academix.Stores;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +13,14 @@ namespace Academix.ViewModels
 {
     class DataSystemViewModel:BaseViewModel
     {
+        private SchoolYearStore _schoolYearStore;
+        private NavigationService _navigationService;
+
+        public DataSystemViewModel( NavigationService navigationService, SchoolYearStore schoolYearStore)
+        {
+            _navigationService = navigationService;
+            _schoolYearStore = schoolYearStore;
+        }
 
         private ObservableCollection<TabItemViewModel> _tabItems = new ObservableCollection<TabItemViewModel>()
         {
@@ -31,10 +42,7 @@ namespace Academix.ViewModels
                 _selectedTabItem = value;
             }
         }
-        public DataSystemViewModel()
-        {
-
-        }
+       
         public override string ToString()
         {
             SelectedTabItem = _tabItems[0];

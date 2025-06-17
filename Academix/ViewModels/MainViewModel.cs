@@ -1,35 +1,61 @@
 ﻿using Academix.Models;
+using Academix.Services;
 using Academix.Stores;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Academix.ViewModels
 {
     class MainViewModel:BaseViewModel
     {
         private NavigationStore _navigationStore;
+        private SchoolYearStore _schoolYearStore;
         public BaseViewModel CurrentViewModel => _navigationStore.CurrentViewModel;
         private BaseViewModel _sideBarViewModel;
         public BaseViewModel SideBarViewModel => _sideBarViewModel;
         public String CurrentViewModelName => _navigationStore.CurrentViewModel.ToString();
-        private ObservableCollection<SchoolYear> _schoolYears;
-        public IEnumerable<SchoolYear> SchoolYears => _schoolYears;
-        public SchoolYear SelectedShoolYear { get; set; }
+        private ObservableCollection<Namhoc> _schoolYears;
+        public ObservableCollection<Namhoc> SchoolYears
+        {
+            get
+            {
+                return _schoolYears;
+            }
+            set
+            {
+                _schoolYears = value;
+                OnPropertyChanged(nameof(SchoolYears));
 
-        public MainViewModel(NavigationStore navigationStore)
+            }
+        }
+        public Namhoc SelectedSchoolYear
+        {
+            get
+            {
+                return _schoolYearStore.SelectedSchoolYear;
+            }
+            set
+            {
+                _schoolYearStore.SelectedSchoolYear = value;
+                OnPropertyChanged(nameof(SelectedSchoolYear));
+            }
+        }
+        
+        public MainViewModel(NavigationStore navigationStore, SchoolYearStore schoolYearStore )
         {
             _navigationStore = navigationStore;
-            _sideBarViewModel = new HamburgerMenuViewModel(new Services.NavigationService(navigationStore));
+            _schoolYearStore = schoolYearStore;
+            _sideBarViewModel = new HamburgerMenuViewModel(new NavigationService(navigationStore), _schoolYearStore);
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
-            _schoolYears = new ObservableCollection<SchoolYear>();
-            _schoolYears.Add(new SchoolYear("111", 2022, 2023));
-            _schoolYears.Add(new SchoolYear("111", 2023, 2024));
-            _schoolYears.Add(new SchoolYear("111", 2024, 2025));
-
+            _schoolYears = new ObservableCollection<Namhoc>(_schoolYearStore.SchoolYears);
+            
+           
         }
 
         private void OnCurrentViewModelChanged()
@@ -37,5 +63,7 @@ namespace Academix.ViewModels
             OnPropertyChanged(nameof(CurrentViewModel));
             OnPropertyChanged(nameof(CurrentViewModelName));
         }
+
+        
     }
 }

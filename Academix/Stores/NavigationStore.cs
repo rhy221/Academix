@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Academix.Stores
 {
@@ -21,13 +22,15 @@ namespace Academix.Stores
             {
                 _currentViewModel = value;
                 OnCurrentViewModelChanged();
+
             }
         }
 
+       
+
         public event Action CurrentViewModelChanged;
 
-        
-
+       
         private void OnCurrentViewModelChanged()
         {
             CurrentViewModelChanged?.Invoke();

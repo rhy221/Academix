@@ -1,143 +1,230 @@
-﻿using System;
+using Academix.Models;
+using Academix.Services;
+using Academix.Stores;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
-using Academix.Models;
-using CommunityToolkit.Mvvm.Input;
 
 namespace Academix.ViewModels
 {
-    public class SubjectReportViewModel : INotifyPropertyChanged
+    public class SubjectReportViewModel : BaseViewModel
     {
-        private string selectedSubject;
-        private string selectedYear;
-        private string selectedSemester;
-        private ObservableCollection<ClassroomReportItem> filteredReports;
-
-        public ObservableCollection<SubjectReport> AllReports { get; set; }
-
-        public string SelectedSubject
+        private ObservableCollection<Hocky> _semesters;
+        private ObservableCollection<Monhoc> _subjects;
+        public ObservableCollection<Hocky> Semesters
         {
-            get => selectedSubject;
+            get
+            {
+                return _semesters;
+            }
             set
             {
-                selectedSubject = value;
-                OnPropertyChanged();
-                FilterData();
+                _semesters = value;
+                OnPropertyChanged(nameof(Semesters));
+            }
+        }
+        public ObservableCollection<Monhoc> Subjects
+        {
+            get
+            {
+                return _subjects;
+            }
+            set
+            {
+                _subjects = value;
+                OnPropertyChanged(nameof(Subjects));
             }
         }
 
-        public string SelectedYear
+        public ICommand ExportReportCommand { get; }
+
+        private Hocky _selectedSemester;
+        public Hocky SelectedSemester
         {
-            get => selectedYear;
+            get => _selectedSemester;
             set
             {
-                selectedYear = value;
-                OnPropertyChanged();
-                FilterData();
-            }
-        }
-
-        public string SelectedSemester
-        {
-            get => selectedSemester;
-            set
-            {
-                selectedSemester = value;
-                OnPropertyChanged();
-                FilterData();
-            }
-        }
-
-        public ObservableCollection<ClassroomReportItem> FilteredReports
-        {
-            get => filteredReports;
-            set
-            {
-                filteredReports = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ICommand ExportCommand { get; }
-
-        public SubjectReportViewModel()
-        {
-            AllReports = new ObservableCollection<SubjectReport>();
-            FilteredReports = new ObservableCollection<ClassroomReportItem>();
-            ExportCommand = new RelayCommand(ExecuteExport);
-
-            LoadData();
-            FilterData();
-        }
-
-        private void LoadData()
-        {
-
-        }
-
-        private void FilterData()
-        {
-            var matchedReports = AllReports
-                .Where(r =>
-                    (string.IsNullOrEmpty(SelectedSubject) || r.Subject.Name.Contains(SelectedSubject, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrEmpty(SelectedYear) || r.SchoolYear.Contains(SelectedYear, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrEmpty(SelectedSemester) || r.Semester.Contains(SelectedSemester, StringComparison.OrdinalIgnoreCase))
-                )
-                .ToList();
-
-            var result = new ObservableCollection<ClassroomReportItem>();
-
-            foreach (var report in matchedReports)
-            {
-                foreach (var row in report.Table)
+                if (_selectedSemester != value)
                 {
-                    result.Add(new ClassroomReportItem
-                    {
-                        SubjectName = report.Subject.Name,
-                        Semester = report.Semester,
-                        SchoolYear = report.SchoolYear,
-                        ClassroomID = row.ClassroomID,
-                        ClassroomSize = row.ClassroomSize,
-                        PassedNum = row.PassedNum,
-                        Percentage = row.Percentage
-                    });
+                    _selectedSemester = value;
+                    OnPropertyChanged(nameof(SelectedSemester));
                 }
             }
-
-            FilteredReports = result;
         }
 
-        private void ExecuteExport()
+        private Monhoc _selectedSubject;
+        public Monhoc SelectedSubject
         {
-            // TODO: Viết logic xuất file hoặc xử lý dữ liệu
-            // Ví dụ:
-            Console.WriteLine("Exporting subject report...");
-            foreach (var item in FilteredReports)
+            get => _selectedSubject;
+            set
             {
-                Console.WriteLine($"{item.SubjectName} - {item.ClassroomID} - {item.Percentage}%");
+                if (_selectedSubject != value)
+                {
+                    _selectedSubject = value;
+                    OnPropertyChanged(nameof(SelectedSubject));
+                }
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propName = null)
+        private SchoolYearStore _schoolYearStore;
+
+
+        public string SelectedSubjectName
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+            get => _selectedSubject.Tenmh;
+            set
+            {
+                _selectedSubject.Tenmh = value;
+                OnPropertyChanged(nameof(SelectedSubjectName));
+            }
+        }
+
+        public string SelectedSemesterName
+        {
+            get => _selectedSemester.Tenhocky;
+            set
+            {
+                _selectedSemester.Tenhocky = value;
+                OnPropertyChanged(nameof(SelectedSemesterName));
+            }
+        }
+
+        public string SelectedSchoolYearName
+        {
+            get
+            {
+                if(!_schoolYearStore.SelectedSchoolYear.IsAll)
+                    return _schoolYearStore.SelectedSchoolYear.ToString();
+                return "";
+            }
+
+            set
+            {
+                OnPropertyChanged(nameof(SelectedSchoolYearName));
+            }
+        }
+
+        private async Task LoadDataAsync()
+        {
+            using (var context = new QuanlyhocsinhContext())
+            {
+                List<Hocky> semesters = await context.Hockies.ToListAsync();
+                List<Monhoc> subjects = await context.Monhocs.ToListAsync();
+                Semesters = new ObservableCollection<Hocky>(semesters);
+                Subjects = new ObservableCollection<Monhoc>(subjects);
+
+
+
+            }
+        }
+
+        private ObservableCollection<SubjectReportItemViewModel> _reportItems;
+        public ObservableCollection<SubjectReportItemViewModel> ReportItems
+        {
+            get
+            {
+                return _reportItems;
+            }
+            set
+            {
+                _reportItems = value;
+                OnPropertyChanged(nameof(ReportItems));
+            }
+        }
+        public SubjectReportViewModel(SchoolYearStore schoolYearStore)
+        {
+            Task.Run(LoadDataAsync).ConfigureAwait(false);
+            _schoolYearStore = schoolYearStore;
+            _reportItems = new ObservableCollection<SubjectReportItemViewModel>();
+            ExportReportCommand = new AsyncRelayCommand(CreateReport);
+        }
+
+
+
+
+
+        
+        private async Task FilterData()
+        {
+            try
+            {
+
+
+                using(var context = new QuanlyhocsinhContext())
+                {
+                     Thamso subjectPassingGrade = await context.Thamsos.FirstOrDefaultAsync(ts => ts.Tenthamso == "DiemDatMon");
+
+                    List<Lop> classes = await context.Lops
+                                                    .Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc)
+                                                    .Include(l => l.CtLops)
+                                                    .Include(l => l.Bangdiemmonhocs.Where(bd => bd.Mamh == _selectedSubject.Mamh & bd.Mahocky == _selectedSemester.Mahocky))
+                                                    .ThenInclude(bd => bd.CtBangdiemmonhocs.Where(ct => ct.Dtbmon >= subjectPassingGrade.Giatri))
+                                                    .ToListAsync();
+
+                    List<SubjectReportItemViewModel> subjectReportItemViewModels = new List<SubjectReportItemViewModel>();
+                    foreach(Lop classr in classes)
+                    {
+                        int count = 0;
+                        float passingRate = 0;
+                        if (!classr.Bangdiemmonhocs.IsNullOrEmpty() && classr.Siso > 0)
+                        {
+                            count = classr.Bangdiemmonhocs.First(bd => true).CtBangdiemmonhocs.Count;
+                            passingRate = Convert.ToSingle(Math.Round(1f *  count / classr.Siso, 2));
+
+                        }
+                        SubjectReportItemViewModel subjectReportItemViewModel = new SubjectReportItemViewModel(classr, count, passingRate);
+                        subjectReportItemViewModels.Add(subjectReportItemViewModel);
+                    }
+
+                    ReportItems = new ObservableCollection<SubjectReportItemViewModel>(subjectReportItemViewModels);
+
+                    Bctongketmon subjectReport = new Bctongketmon(GenerateIdService.GenerateId(), _selectedSubject.Mamh, _selectedSemester.Mahocky, _schoolYearStore.SelectedSchoolYear.Manamhoc);
+                    foreach (SubjectReportItemViewModel subjectReportItemVM in subjectReportItemViewModels)
+                    {
+                        CtBctongketmon ctBctongketmon = new CtBctongketmon(GenerateIdService.GenerateId(), subjectReportItemVM.ClassId, subjectReportItemVM.ClassSize, subjectReportItemVM.Count, Convert.ToDouble(subjectReportItemVM.PassingRate));
+                        subjectReport.CtBctongketmons.Add(ctBctongketmon);
+                    }
+                    await context.Bctongketmons.AddAsync(subjectReport);
+                    context.SaveChanges();
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+
+            }
+
+
+           
+        }
+
+
+        private async Task CreateReport()
+        {
+
+            if (_schoolYearStore.SelectedSchoolYear == null || _schoolYearStore.SelectedSchoolYear.IsAll || _selectedSemester == null)
+            {
+                MessageBox.Show("Vui lòng chọn thông tin năm học, học  kỳ và môn học!");
+                return;
+
+            }
+
+            SelectedSubjectName = _selectedSubject.Tenmh;
+            SelectedSemesterName = _selectedSemester.Tenhocky;
+            SelectedSchoolYearName = _schoolYearStore.SelectedSchoolYear.ToString();
+            await FilterData();
         }
     }
 
-    public class ClassroomReportItem
-    {
-        public string SubjectName { get; set; }
-        public string Semester { get; set; }
-        public string SchoolYear { get; set; }
-        public string ClassroomID { get; set; }
-        public int ClassroomSize { get; set; }
-        public int PassedNum { get; set; }
-        public float Percentage { get; set; }
-    }
-
-    
+   
 }

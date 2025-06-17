@@ -114,38 +114,6 @@ namespace Academix.ViewModels
         public int NewSubjectMultiplier { get; set; }
    
 
-        //public string ModifyName
-        //{
-        //    get
-        //    {
-        //        return _currentModifyingSubject.Name;
-        //    }
-        //    set
-        //    {
-        //        _currentModifyingSubject.Name = value;
-        //        OnPropertyChanged(nameof(ModifyName));
-        //    }
-        //}
-
-        //private SubjectViewModel _selectedSubject;
-        //public SubjectViewModel SelectedSubject
-        //{
-        //    get
-        //    {
-        //        return _selectedSubject;
-        //    }
-        //    set
-        //    {
-        //        _selectedSubject = value;
-        //        OnPropertyChanged(nameof(SelectedSubject));
-
-        //        if(_selectedSubject != null)
-        //        {
-        //            ShowSelectedSubject(_selectedSubject);
-        //        }
-        //    }
-        //}
-
         public ICommand ModifyCommand { get; }
         public ICommand AddNewCommand { get; }
         public ICommand DeleteCommand { get; }

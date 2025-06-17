@@ -26,12 +26,7 @@ namespace Academix.Views
             InitializeComponent();
         }
 
-        private void ViewMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            MainView.Visibility = Visibility.Collapsed;
-            ExtendView.Visibility = Visibility.Visible;
-            ExtendView.Content = new ViewClassViewModel(MainView,ExtendView);
-        }
+       
 
        
     }

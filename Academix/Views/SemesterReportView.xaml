@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Academix.Views"
+            xmlns:converters="clr-namespace:Academix.Converters"
+
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" x:Class="Academix.Views.SemesterReportView"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -20,6 +22,8 @@
            BasedOn="{StaticResource DeepBlueButton}"/>
         <Style TargetType="Expander"
            BasedOn="{StaticResource LightBlueExpander}"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>
     </UserControl.Resources>
     <DockPanel >
         <Expander 
@@ -100,13 +104,17 @@
                                 BasedOn="{StaticResource SearchInfoStack}"/>
                         </StackPanel.Resources>
                         <StackPanel>
-                            <ComboBox/>
+                            <ComboBox
+                                x:Name="cbSemester"
+                                        ItemsSource="{Binding Semesters}"
+                                        SelectedItem="{Binding SelectedSemester, Mode=TwoWay}"/>
                             <TextBlock><Run Text="Học kỳ"/></TextBlock>
                         </StackPanel>
                     </StackPanel>
                 </UniformGrid>
                 <Button HorizontalAlignment="Left"
-                    Margin="10,0,0,20">
+                    Margin="10,0,0,20"
+                        Command="{Binding ExportReportCommand}">
                     <StackPanel Orientation="Horizontal"
                         FlowDirection="LeftToRight">
                         <iconPacks:PackIconMaterial
@@ -119,7 +127,7 @@
                         <TextBlock VerticalAlignment="Center"><Run Text="Kết xuất"/></TextBlock>
                     </StackPanel>
                 </Button>
-                <Border
+                <!--<Border
                     BorderThickness="0,1,0,0"
                     BorderBrush="#FF615F5F">
                     <StackPanel Orientation="Horizontal"
@@ -146,7 +154,7 @@
                             </StackPanel>
                         </Button>
                     </StackPanel>
-                </Border>
+                </Border>-->
             </StackPanel>
         </Expander>
         <TextBlock DockPanel.Dock="Top"
@@ -170,44 +178,75 @@
                 </Style>
             </UniformGrid.Resources>
 
-            <TextBlock><Run Text="Năm học:"/></TextBlock>
-            <TextBlock><Run Text="Học kỳ:"/></TextBlock>
+            <TextBlock>
+    <Run Text="Năm học:"/>
+    <Run Text="{Binding SelectedSchoolYearName}"/>
+            </TextBlock>
+            <TextBlock>
+    <Run Text="Học kỳ:"/>
+    <Run Text="{Binding SelectedSemesterName}"/>
+            </TextBlock>
         </UniformGrid>
         <DataGrid DockPanel.Dock="Top"
-            Foreground="White"
+            Foreground="{StaticResource GrayForeground}"
             FontSize="20"
             FontWeight="Bold"
-           >
+            ItemsSource="{Binding ReportItems}"
+            AutoGenerateColumns="False"
+            SelectionUnit="FullRow"
+            SelectionMode="Single"
+            AlternationCount="10000"
+            IsReadOnly="True">
+
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="TextBlock.TextAlignment" 
+                        Value="Center"/>
+                    <Setter Property="BorderThickness"
+                        Value="1,0,0,1"/>
+                    <Setter Property="BorderBrush"
+                        Value="{StaticResource GrayBorder}"/>
+                    <Setter Property="TextElement.FontSize"
+                        Value="18"/>
+                </Style>
+            </DataGrid.CellStyle>
+
             <DataGrid.Columns>
-                <DataGridTextColumn Header="STT"
+                <DataGridTemplateColumn Header="STT" 
                     Width="100">
-                    <DataGridTextColumn.HeaderStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding AlternationIndex, Converter={StaticResource IndexToOneBasedConverter}, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"
+                                HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Lớp"
+                    </DataGridTemplateColumn.HeaderStyle>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Lớp" Binding="{Binding ClassName}"
                     Width="300">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Sĩ số"
+                <DataGridTextColumn Header="Sĩ số" Binding="{Binding ClassSize}"
                     Width="100">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Số lượng đạt"
+                <DataGridTextColumn Header="Số lượng đạt" Binding="{Binding Count}"
                     Width="230">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Tỉ lệ"
+                <DataGridTextColumn Header="Tỉ lệ" Binding="{Binding PassingRate}"
                     Width="*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"

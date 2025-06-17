@@ -12,9 +12,7 @@
              x:Class="Academix.Views.SubjectSystemView"
              mc:Ignorable="d" 
              d:DesignHeight="770" d:DesignWidth="1380">
-    <UserControl.DataContext>
-        <viewModels:SubjectSystemViewModel/>
-    </UserControl.DataContext>
+   
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>

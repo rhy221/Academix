@@ -5,10 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Academix.Views"
                           xmlns:viewModels="clr-namespace:Academix.ViewModels"
+                              xmlns:converters="clr-namespace:Academix.Converters"
                                       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
              mc:Ignorable="d" 
               d:DesignHeight="720" d:DesignWidth="1340">
-    
+
     <UserControl.Resources>
         <Style TargetType="{x:Type Label}">
             <Setter Property="FontSize"
@@ -24,6 +25,9 @@ Value="0,0,20,0"/>
             <Setter Property="FlowDirection"
                    Value="LeftToRight"/>
         </Style>
+
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>
     </UserControl.Resources>
     <DockPanel>
         <StackPanel DockPanel.Dock="Top"
@@ -62,28 +66,27 @@ Value="0,0,20,0"/>
             DockPanel.Dock="Top"
             Columns="2"
             Background="White"
-            Margin="0,0,0,20">
+            Margin="0,0,0,20"
+            >
             <UniformGrid.Resources>
                 <Style TargetType="StackPanel">
                     <Setter Property="FlowDirection"
-                            Value="RightToLeft"/>
+                            Value="LeftToRight"/>
                     <Setter Property="Margin"
-                            Value="0,0,0,20"/>
+                            Value="20,20,0,20"/>
                     <Setter Property="Orientation"
                             Value="Horizontal"/>
                 </Style>
 
                 <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="Width"
-                            Value="450"/>
-                    <Setter Property="Height"
-                            Value="35"/>
+
                     <Setter Property="FontSize"
          Value="20"/>
                     <Setter Property="Foreground"
          Value="#FF615F5F"/>
                     <Setter Property="VerticalAlignment"
          Value="Center"/>
+
                     <Setter Property="Margin"
                             Value="20,0,0,0"/>
                     <Setter Property="FlowDirection"
@@ -92,31 +95,47 @@ Value="0,0,20,0"/>
 
 
             </UniformGrid.Resources>
-            <StackPanel Margin="0,20,0,20">
-                <TextBlock/>
+            <StackPanel >
                 <Label Content="Lớp:"/>
+                <TextBlock Text="{Binding ClassName}"
+                           />
             </StackPanel>
-            <StackPanel Margin="0,20,0,20">
-                <TextBlock/>
+            <StackPanel >
                 <Label Content="Năm học:"/>
+                <TextBlock Text="{Binding SchoolYearName}"/>
             </StackPanel>
-            <StackPanel Margin="0,0,0,20">
-                <TextBlock/>
+            <StackPanel>
                 <Label Content="Sĩ số:"/>
-            </StackPanel>
-            <StackPanel Margin="0,0,0,20">
-                <TextBlock/>
-                <Label Content="GVCN:"/>
+                <TextBlock Text="{Binding ClassSize}"/>
             </StackPanel>
         </UniformGrid>
 
         <Label DockPanel.Dock="Top" 
                Content="Danh sách học sinh"
                Margin="20,0,0,20"/>
-        <DataGrid Background="White" 
+        <DataGrid 
+            Background="White" 
             DockPanel.Dock="Top"
-            FontSize="20" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+            FontSize="20" 
+                        ItemsSource="{Binding Students}"
+            SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"
+AutoGenerateColumns="False"
+SelectionUnit="FullRow"
+SelectionMode="Single"
+AlternationCount="10000"
                   HorizontalAlignment="Center">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="TextBlock.TextAlignment" 
+             Value="Center"/>
+                    <Setter Property="BorderThickness"
+             Value="1,0,0,1"/>
+                    <Setter Property="BorderBrush"
+             Value="{StaticResource GrayBorder}"/>
+                    <Setter Property="TextElement.FontSize"
+             Value="18"/>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem>
@@ -166,51 +185,65 @@ Value="0,0,20,0"/>
             </DataGrid.ContextMenu>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="STT"
-                    Width="100">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}"
-                            BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="STT" Width="100"        IsReadOnly="True"
+>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
+                   Path=AlternationIndex, 
+                   Converter={StaticResource IndexToOneBasedConverter},
+                   Mode=OneWay}"
+    HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource LightBlueHeader}" />
+                    </DataGridTemplateColumn.HeaderStyle>
+                </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Mã học sinh"
-                    Width="200">
+                    Width="200"
+                                    Binding="{Binding Id}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Họ tên"
-                    Width="250">
+                    Width="250"
+                                    Binding="{Binding Name}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Giới tính"
-                    Width="150">
+                    Width="150"
+                                    Binding="{Binding Gender}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Ngày sinh"
-                    Width="200">
+                    Width="150"
+                                    Binding="{Binding DateOfBirth}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Trạng thái"
-                    Width="150">
+                <DataGridTextColumn Header="Email"
+                    Width="200"
+                                    Binding="{Binding Email}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Địa chỉ"
-                    Width="*">
+                    Width="*"
+                                    Binding="{Binding Address}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>

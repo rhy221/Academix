@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Academix.Views.ClassesView"
+<UserControl x:Class="Academix.Views.ClassesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,21 +6,28 @@
                           xmlns:local="clr-namespace:Academix.Views"
                           xmlns:views="clr-namespace:Academix.Views"
                           xmlns:viewModels="clr-namespace:Academix.ViewModels"
+                          xmlns:dePros="clr-namespace:Academix.DependencyProperties"
+
+                 xmlns:converters="clr-namespace:Academix.Converters"
+
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1340">
-    <UserControl.DataContext>
-        <viewModels:ClassesViewModel/>
-    </UserControl.DataContext>
+
+
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type viewModels:ViewClassViewModel}">
             <views:ViewClassView/>
         </DataTemplate>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>
     </UserControl.Resources>
 
+
     <Grid>
-        <ContentControl  x:Name="MainView">
+        <ContentControl  x:Name="MainView"
+                         Visibility="{Binding MainViewVis}">
             <DockPanel
     LastChildFill="True"
             Visibility="Visible">
@@ -118,20 +125,6 @@ FlowDirection="LeftToRight">
 
 
                     </ToggleButton>
-                    <Button 
-            Margin="0,0,5,0">
-                        <StackPanel Orientation="Horizontal"
-                FlowDirection="LeftToRight">
-                            <TextBlock VerticalAlignment="Center"><Run Text="Nhập xuất"/></TextBlock>
-                            <iconPacks:PackIconMaterial
-                    Height="15"
-                    Width="15"
-                    Kind="SwapVerticalBold"
-                    Foreground="White"
-                    VerticalAlignment="Center"
-                    Margin="5,0,0,0"/>
-                        </StackPanel>
-                    </Button>
                 </StackPanel>
 
                 <Expander VerticalAlignment="Top"
@@ -169,15 +162,21 @@ FlowDirection="LeftToRight">
                                 <Setter Property="Height" 
                         Value="35"/>
                                 <Setter Property="FontSize"
-                        Value="25"/>
+                        Value="20"/>
                                 <Setter Property="Foreground"
-                        Value="Black"/>
+                        Value="{StaticResource GrayForeground}"/>
                                 <Setter Property="Background"
                         Value="White"/>
                                 <Setter Property="BorderBrush"
                         Value="{StaticResource GrayBorder}"/>
                                 <Setter Property="BorderThickness"
                         Value="2"/>
+                                <Setter Property="FontWeight"
+                                        Value="Bold"/>
+                                <Setter Property="FlowDirection"
+                                        Value="LeftToRight"/>
+                                <Setter Property="Padding"
+                                        Value="10,0,0,0"/>
                             </Style>
 
                             <Style TargetType="{x:Type TextBlock}">
@@ -202,6 +201,12 @@ FlowDirection="LeftToRight">
                         Value="LeftToRight"/>
                                 <Setter Property="BorderThickness"
                         Value="2"/>
+                                <Setter
+                                    Property="FontSize"
+                                    Value="20"/>
+                                <Setter Property="FontWeight"
+                                        Value="Bold"/>
+
                             </Style>
                         </StackPanel.Resources>
                         <UniformGrid
@@ -213,15 +218,15 @@ FlowDirection="LeftToRight">
                         BasedOn="{StaticResource SearchInfoStack}"/>
                             </UniformGrid.Resources>
                             <StackPanel>
-                                <ComboBox/>
+                                <ComboBox
+                                    ItemsSource="{Binding AllGrades}"
+                                    SelectedItem="{Binding SearchSelectedGrade, Mode=TwoWay}"
+                                
+                                   />
                                 <TextBlock><Run Text="Khối"/></TextBlock>
                             </StackPanel>
                             <StackPanel>
-                                <ComboBox/>
-                                <TextBlock><Run Text="GVCN"/></TextBlock>
-                            </StackPanel>
-                            <StackPanel>
-                                <ComboBox/>
+                                <TextBox Text="{Binding SearchClassName}"/>
                                 <TextBlock><Run Text="Lớp"/></TextBlock>
                             </StackPanel>
                         </UniformGrid>
@@ -252,7 +257,7 @@ FlowDirection="LeftToRight">
                     </StackPanel>
                 </Expander>
                 <TabControl DockPanel.Dock="Right"
-        Visibility="Collapsed"
+        Visibility="Visible"
         Background="Transparent"
         BorderThickness="0"
             >
@@ -375,13 +380,26 @@ FlowDirection="LeftToRight">
 
                             <StackPanel Orientation="Horizontal"
                     Margin="0,20,0,20">
-                                <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
+                                <TextBox Text="{Binding NewClassName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock><Run Text="Tên lớp"/></TextBlock>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal"
-                    Margin="0,0,0,20">
-                                <ComboBox SelectedItem="{Binding NewName, Mode=TwoWay}"/>
-                                <TextBlock><Run Text="GVCN"/></TextBlock>
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Margin="0,0,0,20">
+                                <ComboBox
+                                    ItemsSource="{Binding Grades}"
+                                    SelectedItem="{Binding NewClassGrade, Mode=TwoWay}"
+                                    />
+                                <TextBlock><Run Text="Khối"/></TextBlock>
+                            </StackPanel>
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Margin="0,0,0,20">
+                                <ComboBox
+                                    ItemsSource="{Binding SchoolYears}"
+                                    SelectedItem="{Binding NewClassSchoolYear, Mode=TwoWay}"
+                                    />
+                                <TextBlock><Run Text="Năm học"/></TextBlock>
                             </StackPanel>
                             <Button HorizontalAlignment="Right" Margin="0,0,20,20" Command="{Binding AddCommand}"
             >
@@ -401,7 +419,7 @@ FlowDirection="LeftToRight">
 
                     </TabItem>
                     <TabItem Header="Sửa"
-                >
+                                             >
                         <TabItem.Style>
                             <Style TargetType="{x:Type TabItem}"
                     BasedOn="{StaticResource AboveEndTabItem}"/>
@@ -413,13 +431,26 @@ FlowDirection="LeftToRight">
 
                             <StackPanel Orientation="Horizontal"
                     Margin="0,20,0,20">
-                                <TextBox Text="{Binding NewName, Mode=TwoWay}"/>
+                                <TextBox Text="{Binding EditClassName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock><Run Text="Tên lớp"/></TextBlock>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal"
-                    Margin="0,0,0,20">
-                                <ComboBox SelectedItem="{Binding NewName, Mode=TwoWay}"/>
-                                <TextBlock><Run Text="GVCN"/></TextBlock>
+                            <StackPanel
+                                        Orientation="Horizontal"
+                                        Margin="0,0,0,20">
+                                <ComboBox
+                                        ItemsSource="{Binding Grades}"
+                                        SelectedItem="{Binding EditClassGrade, Mode=TwoWay}"
+                                                                                                />
+                                <TextBlock><Run Text="Khối"/></TextBlock>
+                            </StackPanel>
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Margin="0,0,0,20">
+                                <ComboBox
+                                    ItemsSource="{Binding SchoolYears}"
+                                    SelectedItem="{Binding EditClassSchoolYear, Mode=TwoWay}"
+                                    />
+                                <TextBlock><Run Text="Năm học"/></TextBlock>
                             </StackPanel>
                             <Button HorizontalAlignment="Right" Margin="0,0,20,20" Command="{Binding EditCommand}"
             >
@@ -440,18 +471,32 @@ FlowDirection="LeftToRight">
                     </TabItem>
                 </TabControl>
                 <DataGrid
+                   
+                    ItemsSource="{Binding Classes}"
+                    SelectedItem="{Binding SelectedClass, Mode=TwoWay}"
+                    dePros:DataGridSelectedItemsBehavior.BindableSelectedItems="{Binding SelectedClasses, Mode=TwoWay}"
         AutoGenerateColumns="False"
         FontSize="20"
         SelectionUnit="FullRow"
-        SelectionMode="Single"
         AlternationCount="10000"
         Margin="0,0,20,0"
         HorizontalAlignment="Center"
-        IsReadOnly="True"
         DockPanel.Dock="Right">
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" 
+             Value="Center"/>
+                            <Setter Property="BorderThickness"
+             Value="1,0,0,1"/>
+                            <Setter Property="BorderBrush"
+             Value="{StaticResource GrayBorder}"/>
+                            <Setter Property="TextElement.FontSize"
+             Value="18"/>
+                        </Style>
+                    </DataGrid.CellStyle>
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem x:Name="ViewMenuItem" Click="ViewMenuItem_Click">
+                            <MenuItem x:Name="ViewMenuItem" Command="{Binding ViewClassCommand}">
                                 <MenuItem.Header>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xem"/></TextBlock>
@@ -466,7 +511,7 @@ FlowDirection="LeftToRight">
                                 </MenuItem.Header>
 
                             </MenuItem>
-                            <MenuItem>
+                            <MenuItem Command="{Binding DeleteCommand}">
                                 <MenuItem.Header>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Foreground="{StaticResource DeepBlueForeground}"><Run Text="Xóa"/></TextBlock>
@@ -484,53 +529,53 @@ FlowDirection="LeftToRight">
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="STT"
-                Width="80">
-                            <DataGridTextColumn.HeaderStyle>
-                                <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
-                            </DataGridTextColumn.HeaderStyle>
-                        </DataGridTextColumn>
+                        <DataGridTemplateColumn Header="STT" Width="100"        IsReadOnly="True"
+>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
+                   Path=AlternationIndex, 
+                   Converter={StaticResource IndexToOneBasedConverter},
+                   Mode=OneWay}"
+    HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource LightBlueHeader}" />
+                            </DataGridTemplateColumn.HeaderStyle>
+                        </DataGridTemplateColumn>
+
                         <DataGridTextColumn Header="Tên lớp"
-                Width="150">
+                Width="300" Binding="{Binding ClassName}" IsReadOnly="True">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Sĩ số"
-                Width="100">
+                Width="100" Binding="{Binding ClassSize}" IsReadOnly="True">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="GVCN"
-                Width="200">
+                        <DataGridTextColumn Header="Khối"
+                            Width="200" Binding="{Binding GradeName}" IsReadOnly="True">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Năm học"
-                Width="200">
+                Width="200" Binding="{Binding SchoolYearName}" IsReadOnly="True">
                             <DataGridTextColumn.HeaderStyle>
                                 <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                             </DataGridTextColumn.HeaderStyle>
                         </DataGridTextColumn>
-
-                        <DataGridCheckBoxColumn Width="80">
-                            <DataGridCheckBoxColumn.HeaderStyle>
-                                <Style TargetType="{x:Type DataGridColumnHeader}"
-                        BasedOn="{StaticResource LightBlueHeader}"/>
-                            </DataGridCheckBoxColumn.HeaderStyle>
-                            <DataGridCheckBoxColumn.Header>
-                                <CheckBox/>
-                            </DataGridCheckBoxColumn.Header>
-
-                        </DataGridCheckBoxColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </DockPanel>
 
         </ContentControl>
-        <ContentControl x:Name="ExtendView" Visibility="Collapsed"/>
+        <ContentControl x:Name="ExtendView" Visibility="{Binding ExViewVis}"
+                        Content="{Binding ExViewViewModel}" d:IsHidden="True"/>
 
     </Grid>
 </UserControl>

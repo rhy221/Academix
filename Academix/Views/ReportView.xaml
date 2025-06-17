@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Academix.Views"
-     xmlns:views="clr-namespace:Academix.Views"
+             xmlns:views="clr-namespace:Academix.Views"
+             xmlns:viewModels="clr-namespace:Academix.ViewModels"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" x:Class="Academix.Views.ReportView"
              mc:Ignorable="d" 
               d:DesignHeight="720" d:DesignWidth="1340">
@@ -34,26 +35,41 @@
         </Style>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
-        
+
         <TabControl
             TabStripPlacement="Left"
-            BorderThickness="0">
+            BorderThickness="0"
+            ItemsSource="{Binding TabItems}"
+            SelectedItem="{Binding SelectedTabItem}">
+            
             <TabControl.Resources>
                 <Style TargetType="TabItem"
-                       BasedOn="{StaticResource LeftTabItem}">
-                    
-                    <Setter Property="Padding"
-                            Value="18,8,50,8"/>
-                </Style>
-            </TabControl.Resources>
-            <TabItem Header="Báo cáo tổng kết môn"
-                     >
-                <views:SubjectReportView/>
-            </TabItem>
-            <TabItem Header="Báo cáo tổng kểt học kỳ">
-                <views:SemesterReportView/>
+       BasedOn="{StaticResource LeftTabItem}">
 
-            </TabItem>
+                    <Setter Property="Padding"
+            Value="18,8,50,8"/>
+                </Style>
+                <DataTemplate DataType="{x:Type viewModels:SubjectReportViewModel}">
+                    <views:SubjectReportView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModels:SemesterReportViewModel}">
+                    <views:SemesterReportView/>
+                </DataTemplate>
+            </TabControl.Resources>
+            
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Header}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ContentControl Content="{Binding ViewModel}">
+                    </ContentControl>
+                </DataTemplate>
+                
+            </TabControl.ContentTemplate>
         </TabControl>
     </DockPanel>
 </UserControl>

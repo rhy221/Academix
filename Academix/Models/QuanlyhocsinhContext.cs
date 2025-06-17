@@ -49,7 +49,7 @@ public partial class QuanlyhocsinhContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-           => optionsBuilder.UseSqlServer("Server=DESKTOP-NQOI7D0;Database=QUANLYHOCSINH;Trusted_Connection=True;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-NQOI7D0;Database=QUANLYHOCSINH;Trusted_Connection=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -282,7 +282,11 @@ public partial class QuanlyhocsinhContext : DbContext
         {
             entity.HasKey(e => new { e.Malop, e.Mahs }).HasName("PK__CT_LOP__BC3E101CAE7C98F2");
 
-            entity.ToTable("CT_LOP");
+            entity.ToTable("CT_LOP", tb =>
+                {
+                    tb.HasTrigger("trg_UpdateSiSo_Delete");
+                    tb.HasTrigger("trg_UpdateSiSo_Insert");
+                });
 
             entity.Property(e => e.Malop)
                 .HasMaxLength(10)
@@ -392,10 +396,6 @@ public partial class QuanlyhocsinhContext : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("MALOP");
-            entity.Property(e => e.Gvcn)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("GVCN");
             entity.Property(e => e.Makhoi)
                 .HasMaxLength(10)
                 .IsUnicode(false)
@@ -405,6 +405,9 @@ public partial class QuanlyhocsinhContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("MANAMHOC");
             entity.Property(e => e.Siso).HasColumnName("SISO");
+            entity.Property(e => e.Tenlop)
+                .HasMaxLength(10)
+                .HasColumnName("TENLOP");
 
             entity.HasOne(d => d.MakhoiNavigation).WithMany(p => p.Lops)
                 .HasForeignKey(d => d.Makhoi)

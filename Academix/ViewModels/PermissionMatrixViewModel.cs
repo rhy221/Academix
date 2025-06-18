@@ -1,4 +1,4 @@
-﻿using Academix.Models;
+using Academix.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -33,7 +33,6 @@ namespace Academix.ViewModels
                 new NhomNguoiDung { MaNhom = "admin", TenNhom = "Admin" },
                 new NhomNguoiDung { MaNhom = "bgh", TenNhom = "Ban Giám hiệu" },
                 new NhomNguoiDung { MaNhom = "giaovu", TenNhom = "Giáo vụ" },
-                new NhomNguoiDung { MaNhom = "giaovien", TenNhom = "Giáo viên" }
             };
 
             functions = new List<ChucNang>

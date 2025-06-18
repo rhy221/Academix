@@ -1,7 +1,7 @@
-﻿<Window x:Class="Academix.Views.PermissionManageView"
+<UserControl x:Class="Academix.Views.PermissionManageView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Quản lý Nhóm và Chức năng" Height="550" Width="950"
+        Height="550" Width="950"
         Background="#e8f5e9">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -71,7 +71,7 @@
                         <TextBlock Text="Tên màn hình" Foreground="#388e3c" Margin="0,0,0,2"/>
                         <ComboBox ItemsSource="{Binding AvailableScreens}" 
                                   SelectedItem="{Binding InputManHinh}" 
-                                  Background="WhiteSmoke" Padding="5" />        
+                                  Background="WhiteSmoke" Padding="5" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -110,4 +110,4 @@
             </DockPanel>
         </GroupBox>
     </Grid>
-</Window>
+</UserControl>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Academix.Views
@@ -17,12 +18,13 @@ namespace Academix.Views
     /// <summary>
     /// Interaction logic for PermissionManageView.xaml
     /// </summary>
-    public partial class PermissionManageView : Window
+    public partial class PermissionManageView : UserControl
     {
         public PermissionManageView()
         {
             InitializeComponent();
             this.DataContext = new ViewModels.PermissionManageViewModel();
+
         }
     }
 }

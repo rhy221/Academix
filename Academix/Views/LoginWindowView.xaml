@@ -1,5 +1,5 @@
-﻿<Window x:Class="Academix.Views.LoginWindowView"
-               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<Window x:Class="Academix.Views.LoginWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -8,78 +8,81 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
-        Height="330" Width="300"
-        Title="Academix"
-        SizeToContent="WidthAndHeight"
-        ResizeMode="CanMinimize"
-        Icon="/Assets/AcademixIcon.png">
+        Width="1530" Height="840"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+        SizeToContent="Manual"
+        Title="Academix - Đăng nhập"
+        Icon="/Assets/AcademixIcon.png"
+        Background="White">
 
-   
-        <StackPanel Width="300" Height="320">
+
+    <Grid Background="White">
+        <StackPanel Width="350" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Source="/Assets/AcademixLogo.png" 
                    Height="36" 
                    Width="195" Margin="0,15,0,0"/>
             <Label 
                Content="HỆ THỐNG QUẢN LÝ HỌC SINH"
-               FontSize="15"
+               FontSize="16"
                Foreground="#FF0B3948"
-                HorizontalAlignment="Center" 
-                Margin="0,2,0,4" 
-                FontWeight="Bold"/>
+               HorizontalAlignment="Center" 
+               Margin="0,2,0,4" 
+               FontWeight="Bold"/>
 
             <Label Content="Đăng nhập"
-                    FontSize="25"
-                    Foreground="#FF0B3948"
-                    HorizontalAlignment="Center" Margin="0,10,0,4"/>
+                   FontSize="28"
+                   Foreground="#FF0B3948"
+                   HorizontalAlignment="Center" Margin="0,20,0,8"/>
 
-
-
-            <StackPanel Margin="0,0,0,8"
-                        Orientation="Horizontal">
-
+            <StackPanel Margin="0,0,0,12"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
                 <iconPacks:PackIconMaterial Kind="AccountCircle" 
-                                    Height="22" 
-                                    Width="22"
-                                    Foreground="#FFD0CDD7"
-                                     VerticalAlignment="Center"
-                                        Margin="9,5,5,5"/>
+                                            Height="24" Width="24"
+                                            Foreground="#FFD0CDD7"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,8,0"/>
                 <TextBox
-                 Height="28"
-                 Width="238"
-                 Background="#FFD0CDD7"
-                 controls:TextBoxHelper.Watermark="Tên đăng nhập"
-                 controls:TextBoxHelper.WatermarkAlignment="Left"
-                 HorizontalContentAlignment="Stretch"
-                 VerticalAlignment="Center"
-                 Margin="5,5,0,5" />
+                    Height="32"
+                    Width="260"
+                    Background="#FFD0CDD7"
+                    controls:TextBoxHelper.Watermark="Tên đăng nhập"
+                    controls:TextBoxHelper.WatermarkAlignment="Left"
+                    HorizontalContentAlignment="Stretch"
+                    VerticalAlignment="Center" 
+                    Text="{Binding TenDangNhap, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
-            <StackPanel  Margin="0,0,0,8"
-                         Orientation="Horizontal">
+
+            <StackPanel Margin="0,0,0,12"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
                 <iconPacks:PackIconMaterial Kind="Lock" 
-                Height="22" 
-                Width="22"
-                Foreground="#FFD0CDD7"
-                VerticalAlignment="Center"
-                Margin="9,5,5,5"/>
+                                            Height="24" Width="24"
+                                            Foreground="#FFD0CDD7"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,8,0"/>
                 <PasswordBox
-                Height="28"
-                Width="238"
-                Background="#FFD0CDD7"
-                controls:TextBoxHelper.Watermark="Mật khẩu"
-                controls:TextBoxHelper.WatermarkAlignment="Left"
-                HorizontalContentAlignment="Stretch"
-                VerticalAlignment="Center"
-                Margin="5,5,0,5" />
+                    x:Name="passwordBox"
+                    Height="32"
+                    Width="260"
+                    Background="#FFD0CDD7"
+                    controls:TextBoxHelper.Watermark="Mật khẩu"
+                    controls:TextBoxHelper.WatermarkAlignment="Left"
+                    HorizontalContentAlignment="Stretch"
+                    VerticalAlignment="Center" 
+                    PasswordChanged="PasswordBox_PasswordChanged"/>
             </StackPanel>
 
             <Button Content="Đăng nhập" 
-                Height="28" 
-                Background="#FF0B3948"
-                Foreground="#FFD9DBF1"
-                Width="138"
-                HorizontalAlignment="Right" Margin="0,17,22,0"
-                />
+                    Height="32" 
+                    Background="#FF0B3948"
+                    Foreground="#FFD9DBF1"
+                    Width="150"
+                    HorizontalAlignment="Right"
+                    Margin="0,10,0,0"
+                    IsDefault="True"
+                    Command="{Binding DangNhapCommand}" />
         </StackPanel>
-
-
+    </Grid>
 </Window>

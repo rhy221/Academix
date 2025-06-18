@@ -1,4 +1,4 @@
-﻿using Academix.Models;
+using Academix.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
@@ -59,15 +59,13 @@ namespace Academix.ViewModels
             RoleList.Add(new NhomNguoiDung { MaNhom = "admin", TenNhom = "Admin" });
             RoleList.Add(new NhomNguoiDung { MaNhom = "bgh", TenNhom = "Ban Giám hiệu" });
             RoleList.Add(new NhomNguoiDung { MaNhom = "giaovu", TenNhom = "Giáo vụ" });
-            RoleList.Add(new NhomNguoiDung { MaNhom = "giaovien", TenNhom = "Giáo viên" });
         }
 
         private void LoadFakeAccounts()
         {
-            AccountList.Add(new NguoiDung { TenDangNhap = "admin01", MatKhau = "1234", MaNhom = "admin" });
-            AccountList.Add(new NguoiDung { TenDangNhap = "hieutruong", MatKhau = "abcd", MaNhom = "bgh" });
-            AccountList.Add(new NguoiDung { TenDangNhap = "gvv01", MatKhau = "pass", MaNhom = "giaovu" });
-            AccountList.Add(new NguoiDung { TenDangNhap = "gv01", MatKhau = "123", MaNhom = "giaovien" });
+            AccountList.Add(new NguoiDung { TenDangNhap = "admin01", MatKhau = "123456", MaNhom = "admin" });
+            AccountList.Add(new NguoiDung { TenDangNhap = "hieutruong", MatKhau = "123456", MaNhom = "bgh" });
+            AccountList.Add(new NguoiDung { TenDangNhap = "giaovu", MatKhau = "123456", MaNhom = "giaovu" });
         }
 
         private void AddAccount()

@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Globalization;
 using System.Windows;
@@ -46,15 +46,17 @@ namespace Academix.ViewModels
             var login = new Views.LoginWindowView();
             login.Show();
 
-            System.Windows.Application.Current.Windows
+            Application.Current.Windows
                 .OfType<Window>()
-                .FirstOrDefault(w => w.IsActive && w is Views.AdminDashboardView)
-                ?.Close();
+                .Where(w => !(w is Views.LoginWindowView))
+                .ToList()
+                .ForEach(w => w.Close());
         }
+
 
 
 
     }
 
-    
+
 }

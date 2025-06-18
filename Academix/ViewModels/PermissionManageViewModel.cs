@@ -1,4 +1,4 @@
-﻿using Academix.Models;
+using Academix.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
@@ -61,7 +61,6 @@ namespace Academix.ViewModels
             GroupList.Add(new NhomNguoiDung { MaNhom = "admin", TenNhom = "Admin" });
             GroupList.Add(new NhomNguoiDung { MaNhom = "bgh", TenNhom = "Ban Giám hiệu" });
             GroupList.Add(new NhomNguoiDung { MaNhom = "giaovu", TenNhom = "Giáo vụ" });
-            GroupList.Add(new NhomNguoiDung { MaNhom = "giaovien", TenNhom = "Giáo viên" });
 
             FunctionList.Add(new ChucNang { MaCN = "CN01", TenCN = "Quản lý môn học", TenManHinhDuocLoad = "SubjectReportView" });
             FunctionList.Add(new ChucNang { MaCN = "CN02", TenCN = "Quản lý tài khoản", TenManHinhDuocLoad = "AccountManageView" });

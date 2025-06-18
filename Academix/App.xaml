@@ -1,9 +1,10 @@
-﻿<Application x:Class="Academix.App"
+<Application x:Class="Academix.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Academix"
              xmlns:view="clr-namespace:Academix.Views"
-             StartupUri="MainWindow.xaml"
+             xmlns:conv="clr-namespace:Academix.Converters"
+     
              >
    
     <Application.Resources>
@@ -22,8 +23,11 @@
                 <ResourceDictionary Source="/Resources/Styles/CustomToggleButtons.xaml"/>
                 <ResourceDictionary Source="/Resources/Colors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-        
+
+            <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         </ResourceDictionary>
+        
+        
     </Application.Resources>
     
 </Application>

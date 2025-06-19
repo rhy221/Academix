@@ -43,7 +43,6 @@ public partial class MainWindow: Window
         {
             string label = item.Label;
 
-            // 🟢 Xử lý đăng xuất khi nhấn "Tài khoản"
             if (label == "Tài khoản")
             {
                 var result = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất?", "Xác nhận đăng xuất",

@@ -1,4 +1,5 @@
-﻿using System;
+using Academix.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,24 @@ namespace Academix.Views
         public LoginWindowView()
         {
             InitializeComponent();
+
+            var viewModel = new LoginWindowViewModel();
+            this.DataContext = viewModel;
+            viewModel.CloseAction = this.Close;
         }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LoginWindowViewModel viewModel)
+            {
+                viewModel.MatKhau = passwordBox.Password;
+            }
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown(); 
+        }
+
     }
 }

@@ -13,34 +13,15 @@ namespace Academix;
 /// </summary>
 public partial class App : Application
 {
-    private NavigationStore _navigationStore;
-    private SchoolYearStore _schoolYearStore;
-
-    public App()
-    {
-        _navigationStore = new NavigationStore();
-        _schoolYearStore = new SchoolYearStore();
-    }
+  
 
     protected override async void OnStartup(StartupEventArgs e)
     {
-        List<Namhoc> schoolYears;
-        
-        using (var context = new QuanlyhocsinhContext())
-        {
-            schoolYears = await context.Namhocs.ToListAsync();
-        }
+        var loginWindow = new Academix.Views.LoginWindowView();
 
-        Namhoc allSchoolYear = new Namhoc();
-        allSchoolYear.IsAll = true;
-        schoolYears.Insert(0, allSchoolYear);
-        _schoolYearStore.SchoolYears = schoolYears;
-        _schoolYearStore.SelectedSchoolYear = schoolYears[schoolYears.Count - 1];
+        Application.Current.MainWindow = loginWindow;
 
-
-        MainWindow = new MainWindow() { DataContext = new MainViewModel(_navigationStore, _schoolYearStore) };
-
-        MainWindow.Show();
+        loginWindow.Show();
 
         base.OnStartup(e);
     }

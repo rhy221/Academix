@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Academix.Views"
-                                     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+                         xmlns:local="clr-namespace:Academix.Views"
+                          xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1340">
     <UserControl.Resources>
@@ -27,6 +27,14 @@
                  Value="35"/>
             <Setter Property="Width"
                  Value="280"/>
+            <Setter Property="FontSize"
+                    Value="20"/>
+            <Setter Property="FontWeight"
+                    Value="Bold"/>
+            <Setter Property="Padding"
+                    Value="10,0,0,0"/>
+            <Setter Property="Foreground"
+                    Value="{StaticResource GrayForeground}"/>
             <Setter Property="FlowDirection"
                  Value="LeftToRight"/>
 
@@ -43,20 +51,36 @@
                  Value="2"/>
             <Setter Property="FlowDirection"
                  Value="LeftToRight"/>
+            <Setter Property="FontSize"
+         Value="20"/>
+            <Setter Property="FontWeight"
+         Value="Bold"/>
+            <Setter Property="Padding"
+         Value="10,0,0,0"/>
+            <Setter Property="Foreground"
+         Value="{StaticResource GrayForeground}"/>
         </Style>
 
-        <Style TargetType="DatePicker">
+        <!--<Style TargetType="DatePicker">
             <Setter Property="Height"
                  Value="35"/>
             <Setter Property="Width"
                  Value="280"/>
             <Setter Property="BorderBrush"
                  Value="{StaticResource GrayBorder}"/>
+            <Setter Property="FontSize"
+         Value="20"/>
+            <Setter Property="FontWeight"
+         Value="Bold"/>
+            <Setter Property="Padding"
+         Value="10,0,0,0"/>
+            <Setter Property="Foreground"
+         Value="{StaticResource GrayForeground}"/>
             <Setter Property="BorderThickness"
                  Value="2"/>
             <Setter Property="FlowDirection"
                  Value="LeftToRight"/>
-        </Style>
+        </Style>-->
 
         <Style x:Key="InforStackStyle" TargetType="StackPanel">
             <Setter Property="FlowDirection"
@@ -110,21 +134,6 @@
                         Margin="0,0,0,0"><Run Text="Lưu"/></TextBlock>
                 </StackPanel>
             </Button>
-            <Button>
-                <StackPanel Orientation="Horizontal"
-                    FlowDirection="LeftToRight">
-                    <iconPacks:PackIconMaterial
-                        Height="15"
-                        Width="15"
-                        Kind="Import"
-                        Foreground="White"
-                        VerticalAlignment="Center"
-                        Margin="0,0,5,0"/>
-                    <TextBlock VerticalAlignment="Center"
-                        Foreground="White"
-                        Margin="0,0,0,0"><Run Text="Nhập"/></TextBlock>
-                </StackPanel>
-            </Button>
 
         </StackPanel>
 
@@ -149,8 +158,8 @@
                     Foreground="{StaticResource GrayBackground}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"/>
-                <Image Source="{Binding ProfileImage}"/>
-                <Button Command="{Binding UploadImageCommand}"
+                <Image Height="150" Source="{Binding ProfileImage}"/>
+                <!--<Button Command="{Binding UploadImageCommand}"
                     VerticalAlignment="Bottom"
                     Background="{StaticResource GrayBackground}"
                     Opacity="0.8"
@@ -185,7 +194,7 @@
                     </StackPanel>
 
 
-                </Button>
+                </Button>-->
             </Grid>
             <UniformGrid Grid.Column="1"
                 Columns="2"
@@ -199,7 +208,7 @@
                         ItemsSource="{Binding GradeList}"
                         SelectedItem="{Binding SelectedGrade, Mode=TwoWay}"/>
                     <TextBlock>
-                        
+                        <Run  Foreground="Red" Text="*"/>
                         <Run Text="Khối"/>
                     </TextBlock>
 
@@ -209,45 +218,14 @@
                         ItemsSource="{Binding FilteredClassList}"
                         SelectedItem="{Binding SelectedClass, Mode=TwoWay}"/>
                     <TextBlock>
-                         
                         <Run Text="Lớp học"/>
                     </TextBlock>
 
                 </StackPanel>
                 <StackPanel>
-                    <ComboBox
-                        ItemsSource="{Binding StatusList}"
-                        SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"/>
-                    <TextBlock>
-                         <Run Foreground="Red" Text="*"/>
-                        <Run Text="Trạng thái"/>
-                    </TextBlock>
+                    <TextBox Text="{Binding FullName, Mode=TwoWay}"/>
+                    <TextBlock><Run Foreground="Red" Text="*"/><Run Text=" "/><Run Text="Họ tên"/></TextBlock>
 
-                </StackPanel>
-                <StackPanel />
-                <StackPanel>
-                    <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock>
-                         <Run Foreground="Red" Text="*"/>
-                        <Run Text="Họ tên"/>
-                    </TextBlock>
-
-                </StackPanel>
-                <StackPanel>
-                    <TextBox Text="{Binding StudentID, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock>
-                         <Run Foreground="Red" Text="*"/>
-                        <Run Text="Mã học sinh"/>
-                    </TextBlock>
-
-                </StackPanel>
-                <StackPanel/>
-                <StackPanel >
-                    <StackPanel FlowDirection="LeftToRight"
-                        Width="280">
-                        <CheckBox/>
-                        <TextBlock><Run Text="Sinh mã tự động"/></TextBlock>
-                    </StackPanel>
                 </StackPanel>
                 <StackPanel>
                     <ComboBox
@@ -260,7 +238,14 @@
 
                 </StackPanel>
                 <StackPanel >
-                    <DatePicker SelectedDate="{Binding DateOfBirth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DatePicker SelectedDate="{Binding DateOfBirth, Mode=TwoWay}" Height="33" Width="280" 
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="{StaticResource GrayForeground}"
+                                FlowDirection="LeftToRight"
+                                Padding="10,0,0,0"
+                                BorderBrush="{StaticResource GrayBorder}"
+                                BorderThickness="2"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Ngày sinh"/>
@@ -278,8 +263,16 @@
                     </TextBlock>
 
                 </StackPanel>
+                <StackPanel >
+                    <ComboBox
+                        ItemsSource="{Binding Districts}"
+                        SelectedItem="{Binding SelectedDistrict, Mode=TwoWay}"                        
+                        DisplayMemberPath="name"/>
+                    <TextBlock><Run Foreground="Red" Text="*"/><Run Text=" "/><Run Text="Quận/Huyện"/></TextBlock>
+
+                </StackPanel>
                 <StackPanel>
-                    <ComboBox 
+                    <ComboBox
                         ItemsSource="{Binding Wards}"
                         DisplayMemberPath="name"
                         SelectedItem="{Binding SelectedWard, Mode=TwoWay}"/>
@@ -289,15 +282,9 @@
                     </TextBlock>
 
                 </StackPanel>
-                <StackPanel >
-                    <ComboBox 
-                        ItemsSource="{Binding Districts}"
-                      DisplayMemberPath="name"
-                      SelectedItem="{Binding SelectedDistrict, Mode=TwoWay}"/>
-                    <TextBlock>
-                         <Run Foreground="Red" Text="*"/>
-                        <Run Text="Quận/Huyện"/>
-                    </TextBlock>
+                <StackPanel Margin="0,0,0,-31">
+                    <TextBox Text="{Binding Email, Mode=TwoWay}"/>
+                    <TextBlock><Run Text=" "/><Run Text="Email"/></TextBlock>
 
                 </StackPanel>
 

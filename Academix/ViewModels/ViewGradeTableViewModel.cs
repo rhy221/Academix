@@ -60,28 +60,32 @@ namespace Academix.ViewModels
                 foreach(Hocsinh student in students)
                 {
                     GradeTableItemViewModel gradeTableItemViewModel = new GradeTableItemViewModel(student);
-                    foreach(CtDiemmonhoc ctDiemmonhoc in student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Where(ct => ct.Maloaidiem == "M1"))
+                    if(student.CtBangdiemmonhocs.Count > 0)
                     {
-                        gradeTableItemViewModel.OralScoresList.Add(ctDiemmonhoc.Diem);
-            
-                    }
+                        foreach (CtDiemmonhoc ctDiemmonhoc in student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Where(ct => ct.Maloaidiem == "M1"))
+                        {
+                            gradeTableItemViewModel.OralScoresList.Add(ctDiemmonhoc.Diem);
 
-                    foreach (CtDiemmonhoc ctDiemmonhoc in student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Where(ct => ct.Maloaidiem == "M2"))
-                    {
-                        gradeTableItemViewModel.ShortScoresList.Add(ctDiemmonhoc.Diem);
+                        }
 
-                    }
-                    foreach (CtDiemmonhoc ctDiemmonhoc in student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Where(ct => ct.Maloaidiem == "M3"))
-                    {
-                        gradeTableItemViewModel.PeriodScoresList.Add(ctDiemmonhoc.Diem);
+                        foreach (CtDiemmonhoc ctDiemmonhoc in student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Where(ct => ct.Maloaidiem == "M2"))
+                        {
+                            gradeTableItemViewModel.ShortScoresList.Add(ctDiemmonhoc.Diem);
 
-                    }
-                    foreach (CtDiemmonhoc ctDiemmonhoc in student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Where(ct => ct.Maloaidiem == "M4"))
-                    {
-                        gradeTableItemViewModel.FinalScoresList.Add(ctDiemmonhoc.Diem);
+                        }
+                        foreach (CtDiemmonhoc ctDiemmonhoc in student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Where(ct => ct.Maloaidiem == "M3"))
+                        {
+                            gradeTableItemViewModel.PeriodScoresList.Add(ctDiemmonhoc.Diem);
 
+                        }
+                        foreach (CtDiemmonhoc ctDiemmonhoc in student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Where(ct => ct.Maloaidiem == "M4"))
+                        {
+                            gradeTableItemViewModel.FinalScoresList.Add(ctDiemmonhoc.Diem);
+
+                        }
+                        gradeTableItemViewModel.GPA = Math.Round(student.CtBangdiemmonhocs.FirstOrDefault().Dtbmon, 2);
                     }
-                    gradeTableItemViewModel.GPA = Math.Round(student.CtBangdiemmonhocs.FirstOrDefault().Dtbmon, 2);
+                   
                     gradeTableItemViewModels.Add(gradeTableItemViewModel);
                 }
                 GradeTableItems = gradeTableItemViewModels;
@@ -96,6 +100,11 @@ namespace Academix.ViewModels
                 _navigationService.Navigate(viewModel);
             }
         }
-        
+
+        public override string ToString()
+        {
+            return "Lớp >> Xem bảng điểm môn";
+        }
+
     }
 }

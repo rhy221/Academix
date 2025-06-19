@@ -199,15 +199,28 @@ namespace Academix.ViewModels
                 _allClasses.Insert(0, allClass);
                 _selectedClass = allClass;
                 ClassList = new ObservableCollection<Lop>(_allClasses);
+                List<Hocsinh> students;
+                if (!_schoolYearStore.SelectedSchoolYear.IsAll)
+                {
+                    students = await context.Hocsinhs
+                                                   .Where(hs => hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
+                                                   .Include(hs => hs.CtLops)
+                                                    .ThenInclude(ct => ct.MalopNavigation)
+                                                    .ThenInclude(l => l.MakhoiNavigation)
+                                                    .OrderBy(hs => hs.Mahs)
+                                                   .ToListAsync();
+                }
+                else
+                {
+                    students = await context.Hocsinhs
+                                                   .Include(hs => hs.CtLops)
+                                                    .ThenInclude(ct => ct.MalopNavigation)
+                                                    .ThenInclude(l => l.MakhoiNavigation)
+                                                    .OrderBy(hs => hs.Mahs)
+                                                   .ToListAsync();
+                }
 
-                List<Hocsinh> students = await context.Hocsinhs
-                                                    .Where(hs => hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
-                                                    .Include(hs => hs.CtLops)
-                                                     .ThenInclude(ct => ct.MalopNavigation)
-                                                     .ThenInclude(l => l.MakhoiNavigation)
-                                                     .OrderBy(hs => hs.Mahs)
-                                                    .ToListAsync();
-                ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
+                    ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
                 foreach(Hocsinh student in students)
                 {
                     studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
@@ -230,6 +243,7 @@ namespace Academix.ViewModels
             
         }
 
+
         private void OpenMidifyStudentView()
         {
             if (_selectedStudent != null)
@@ -238,6 +252,8 @@ namespace Academix.ViewModels
                 _navigationService.Navigate(new ModifyStudentViewModel(_navigationService,_schoolYearStore, _selectedStudent.Student));
             }
         }
+
+      
 
         private IList _selectedStudents;
         public IList SelectedStudents
@@ -295,19 +311,20 @@ namespace Academix.ViewModels
            
         }
 
-        private async Task Search()
+        public async Task Search()
         {
             try
             {
                 using (var context = new QuanlyhocsinhContext())
                 {
                     IQueryable<Hocsinh> query = context.Hocsinhs
-                                                                            .Where(hs => hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
 
                                                     .Include(hs => hs.CtLops)
                                                     .ThenInclude(ct => ct.MalopNavigation)
-                                                    .ThenInclude(l => l.MakhoiNavigation)
-                                                    .Where(hs => hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc));
+                                                    .ThenInclude(l => l.MakhoiNavigation);
+                    if (!_schoolYearStore.SelectedSchoolYear.IsAll)
+                        query = query.Where(hs => hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc));
+
                     if (!String.IsNullOrWhiteSpace(_studentID))
                         query = query.Where(hs => EF.Functions.Like(hs.Mahs, "%" + _studentID + "%"));
                     if (!String.IsNullOrWhiteSpace(_studentName))

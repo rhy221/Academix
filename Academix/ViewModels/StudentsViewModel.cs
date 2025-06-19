@@ -25,8 +25,8 @@ namespace Academix.ViewModels
             _tabItems = new ObservableCollection<TabItemViewModel>()
             {
                 new TabItemViewModel("Tìm kiếm học sinh", new SearchStudentViewModel(_navigationService, _schoolYearStore, this)),
-                //new TabItemViewModel("Tiếp nhận học sinh đầu cấp", new AddFreshmanViewModel()),
-                //new TabItemViewModel("Phân lớp", new ClassPlacementViewModel()),
+                new TabItemViewModel("Tiếp nhận học sinh", new AddFreshmanViewModel(_navigationService, _schoolYearStore)),
+                new TabItemViewModel("Phân lớp", new ClassPlacementViewModel(_navigationService, _schoolYearStore)),
             };
         }
 

@@ -383,11 +383,11 @@ namespace Academix.ViewModels
                                                        .ToListAsync();
                         foreach (Hocsinh student in students)
                         {
-                            if (student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Count > 0)
+                            if (student.CtBangdiemmonhocs.Count > 0 && student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Count > 0)
                             {
                                 CtDiemmonhoc ctD = student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.FirstOrDefault();
-                               
-                                    studentScoreDisplays.Add(new StudentScoreDisplay(student, ctD.Diem));
+
+                                studentScoreDisplays.Add(new StudentScoreDisplay(student, ctD.Diem));
                             }
                             else
                             {
@@ -446,11 +446,15 @@ namespace Academix.ViewModels
                         Bangdiemmonhoc bangdiemmonhoc = @class.Bangdiemmonhocs.FirstOrDefault();
 
                         foreach (StudentScoreDisplay studentScoreDisplay in _filteredStudents)
-                        {                           
-
+                        {
                             if (studentScoreDisplay.Score != -1)
                             {
                                 CtBangdiemmonhoc ctBangdiemmonhoc = bangdiemmonhoc.CtBangdiemmonhocs.FirstOrDefault(ct => ct.Mahs == studentScoreDisplay.ID);
+                                if (ctBangdiemmonhoc == null)
+                                {
+                                    ctBangdiemmonhoc = new CtBangdiemmonhoc(GenerateIdService.GenerateId(), bangdiemmonhoc.Mabdmh, studentScoreDisplay.ID, 0);
+                                    context.CtBangdiemmonhocs.Add(ctBangdiemmonhoc);
+                                }
                                 CtDiemmonhoc ctDiemmonhoc = ctBangdiemmonhoc.CtDiemmonhocs.FirstOrDefault(ctd => ctd.Lan == _no && ctd.Maloaidiem == _selectedScoreType.Maloaidiem);
                                 if(ctDiemmonhoc != null)
                                 {
@@ -599,6 +603,11 @@ namespace Academix.ViewModels
 
             }
             
+        }
+
+        public override string ToString()
+        {
+            return "Điểm";
         }
 
 

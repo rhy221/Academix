@@ -130,8 +130,19 @@ namespace Academix.ViewModels
                        
                     }
                     await context.SaveChangesAsync();
+                  
 
                     MessageBox.Show("Sửa học sinh thành công!");
+                    StudentsViewModel viewModel = (StudentsViewModel)_navigationService.PopStack();
+                    if (viewModel != null)
+                    {
+                        SearchStudentViewModel searchStudentViewModel = (SearchStudentViewModel)viewModel.TabItems[0].ViewModel;
+                        searchStudentViewModel.Search();
+                        _navigationService.Navigate(viewModel);
+
+                    }
+
+
                 }
 
             }
@@ -384,6 +395,11 @@ namespace Academix.ViewModels
             if (viewModel != null)
                 _navigationService.Navigate(viewModel);
 
+        }
+
+        public override string ToString()
+        {
+            return "Học sinh >> Sửa thông tin học sinh ";
         }
     }
 }

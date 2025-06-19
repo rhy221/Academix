@@ -19,6 +19,7 @@ using Academix.Models;
 using Academix.Services;
 using Microsoft.EntityFrameworkCore;
 using Academix.Stores;
+using System.Configuration;
 
 
 namespace Academix.ViewModels
@@ -88,7 +89,7 @@ namespace Academix.ViewModels
                     Thamso minimumAge = thamsos.FirstOrDefault(t => t.Tenthamso == "TuoiToiThieu");
                     Thamso maximumAge = thamsos.FirstOrDefault(t => t.Tenthamso == "TuoiToiDa");
 
-                    if (age > minimumAge.Giatri || age < maximumAge.Giatri)
+                    if (age < minimumAge.Giatri || age > maximumAge.Giatri)
                         throw new Exception($"Tuổi học sinh phải từ {minimumAge.Giatri} đến {maximumAge.Giatri}");
 
                     Thamso maximumClassSize = thamsos.FirstOrDefault(t => t.Tenthamso == "SiSoToiDa");
@@ -369,6 +370,10 @@ namespace Academix.ViewModels
 
         }
 
+        public override string ToString()
+        {
+            return "Học sinh >> Thêm học sinh ";
+        }
     }
 }
 

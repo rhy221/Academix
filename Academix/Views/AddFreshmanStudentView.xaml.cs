@@ -24,7 +24,6 @@ namespace Academix.Views
         public AddFreshmanStudentView()
         {
             InitializeComponent();
-            this.DataContext = new AddFreshmanViewModel();
         }
     }
 }

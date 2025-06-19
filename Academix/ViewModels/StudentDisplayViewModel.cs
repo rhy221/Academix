@@ -63,7 +63,7 @@ namespace Academix.ViewModels
             {
 
                 if (Student.CtLops.Count > 0)
-                    Student.CtLops.First().MalopNavigation.Tenlop = value;
+                    Student.CtLops.LastOrDefault().MalopNavigation.Tenlop = value;
                 OnPropertyChanged(nameof(ClassName));
             }
         }

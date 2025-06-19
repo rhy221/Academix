@@ -15,127 +15,110 @@ using static Academix.Models.Address;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Academix.Services;
+using Academix.Stores;
+using Microsoft.EntityFrameworkCore;
 
 namespace Academix.ViewModels
 {
     class AddFreshmanViewModel:BaseViewModel
     {
 
-        private ContentControl _mainView;
-        private ContentControl _container;
-        public ICommand BackCommand { get; }
-        public ICommand UploadImageCommand { get; }
+        private NavigationService _navigationService;
+        private SchoolYearStore _schoolYearStore;
+
         public ICommand SaveCommand { get; }
         public ICommand ResetCommand { get; }
         public event Action<Student> StudentSaved;
 
 
-        public AddFreshmanViewModel()
+
+        public AddFreshmanViewModel(NavigationService navigationService, SchoolYearStore schoolYearStore)
         {
-            BackCommand = new RelayCommand(Back);
-            UploadImageCommand = new RelayCommand(UploadImage);
-            SaveCommand = new RelayCommand(SaveStudent);
+            _navigationService = navigationService;
+            _schoolYearStore = schoolYearStore;
+
+            SaveCommand = new AsyncRelayCommand(SaveStudent);
             ResetCommand = new RelayCommand(ResetFields);
-
+            Task.Run(LoadDataAsync).ConfigureAwait(false);
             LoadProvinces();
+
         }
 
-
-        public AddFreshmanViewModel(ContentControl mainView, ContentControl container)
+        private async Task LoadDataAsync()
         {
-            _container = container;
-            _mainView = mainView;
-            BackCommand = new RelayCommand(Back);
-            UploadImageCommand = new RelayCommand(UploadImage);
-            SaveCommand = new RelayCommand(SaveStudent);
-            ResetCommand = new RelayCommand(ResetFields);
-
-            LoadProvinces();
-        }
-
-        private void Back()
-        {
-            if (_container == null || _mainView == null)
-                return;
-            _container.Visibility = Visibility.Collapsed;
-            _container.Content = null;
-            _mainView.Visibility = Visibility.Visible;
-        }
-
-        private BitmapImage profileImage;
-        public BitmapImage ProfileImage
-        {
-            get => profileImage;
-            set
+            using (var context = new QuanlyhocsinhContext())
             {
-                if (profileImage != value)
-                {
-                    profileImage = value;
-                    OnPropertyChanged(nameof(ProfileImage));
-                }
+                List<Khoi> grades = await context.Khois.ToListAsync();
+                List<Lop> classes = await context.Lops.Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc).ToListAsync();
+                GradeList = new ObservableCollection<Khoi>(grades);
+                _classList = classes;
+
             }
         }
 
-        private void UploadImage()
+        private async Task SaveStudent()
         {
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Chọn ảnh hồ sơ";
-            openFileDialog.Filter = "Ảnh (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
-
-            bool? result = openFileDialog.ShowDialog();
-
-            if (result == true)
+            try
             {
-                try
+                if (string.IsNullOrWhiteSpace(FullName) ||
+                    _selectedGrade == null ||
+                    _dateOfBirth == null ||
+                    string.IsNullOrWhiteSpace(_selectedGender) ||
+                    _selectedProvince == null ||
+                    _selectedDistrict == null ||
+                    _selectedWard == null)
                 {
-                    BitmapImage bitmap = new BitmapImage();
-                    using (var stream = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read))
+                    throw new Exception("Vui lòng điền đầy đủ thông tin học sinh.");
+                }
+
+
+
+
+                using (var context = new QuanlyhocsinhContext())
+                {
+                    List<Thamso> thamsos = await context.Thamsos.ToListAsync();
+                    DateTime dob = _dateOfBirth ?? new DateTime();
+                    int age = DateTime.Now.Year - dob.Year;
+                    Thamso minimumAge = thamsos.FirstOrDefault(t => t.Tenthamso == "TuoiToiThieu");
+                    Thamso maximumAge = thamsos.FirstOrDefault(t => t.Tenthamso == "TuoiToiDa");
+
+                    if (age < minimumAge.Giatri || age > maximumAge.Giatri)
+                        throw new Exception($"Tuổi học sinh phải từ {minimumAge.Giatri} đến {maximumAge.Giatri}");
+
+                    if(_selectedClass != null)
                     {
-                        bitmap.BeginInit();
-                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmap.StreamSource = stream;
-                        bitmap.EndInit();
-                        bitmap.Freeze(); // Để ảnh có thể được dùng trên nhiều thread
+                        Thamso maximumClassSize = thamsos.FirstOrDefault(t => t.Tenthamso == "SiSoToiDa");
+
+                        if (_selectedClass.Siso == maximumClassSize.Giatri)
+                            throw new Exception($"Không thể thêm học sinh vì vượt qua sĩ số tối đa là {maximumClassSize.Giatri}");
+                        Hocsinh student = new Hocsinh(GenerateIdService.GenerateId(), _fullName, _selectedGender, _dateOfBirth ?? new DateTime(), _selectedProvince.name + "_" + _selectedDistrict.name + "_" + _selectedWard.name, _email);
+                        student.CtLops.Add(new CtLop(_selectedClass.Malop, _studentID, "HK1", 0d));
+
+                        context.Hocsinhs.Add(student);
+                        await context.SaveChangesAsync();
                     }
-                    ProfileImage = bitmap;
+                    else
+                    {
+                        Hocsinh student = new Hocsinh(GenerateIdService.GenerateId(), _fullName, _selectedGender, _dateOfBirth ?? new DateTime(), _selectedProvince.name + "_" + _selectedDistrict.name + "_" + _selectedWard.name, _email);
+                        context.Hocsinhs.Add(student);
+                        await context.SaveChangesAsync();
+                    }
+
+
+                    MessageBox.Show("Thêm học sinh thành công!");
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Lỗi khi tải ảnh: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+
             }
-        }
-
-        private byte[] BitmapImageToByteArray(BitmapImage bitmapImage)
-        {
-            if (bitmapImage == null) return null;
-
-            byte[] data;
-            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
-            using (MemoryStream ms = new MemoryStream())
+            catch (Exception ex)
             {
-                encoder.Save(ms);
-                data = ms.ToArray();
+                MessageBox.Show(ex.Message);
             }
-            return data;
-        }
-
-        private void SaveStudent()
-        {
-            if (string.IsNullOrWhiteSpace(FullName) || string.IsNullOrWhiteSpace(StudentID))
+            finally
             {
-                MessageBox.Show("Vui lòng điền đầy đủ thông tin học sinh.");
-                return;
+
             }
 
-            var genderBool = SelectedGender == "Nam";
-            string address = $"{SelectedWard?.name}, {SelectedDistrict?.name}, {SelectedProvince?.name}";
-            byte[] avatarBytes = BitmapImageToByteArray(ProfileImage);
-
-            //var newStudent = new Student(StudentID, FullName, genderBool, DateOfBirth ?? DateTime.Now, address, "", avatarBytes);
-            //StudentSaved?.Invoke(newStudent);
-            MessageBox.Show("Đã lưu.");
         }
 
         private void ResetFields()
@@ -144,144 +127,92 @@ namespace Academix.ViewModels
             StudentID = string.Empty;
             SelectedGrade = null;
             SelectedClass = null;
-            SelectedStatus = null;
             SelectedGender = null;
             DateOfBirth = null;
             SelectedProvince = null;
             SelectedDistrict = null;
             SelectedWard = null;
-            ProfileImage = null;
+            Email = string.Empty;
         }
 
-        private string selectedGrade;
-        public List<string> GradeList { get; } = new List<string> { "10", "11", "12" };
-        public string SelectedGrade
+
+
+        private Khoi _selectedGrade;
+        private ObservableCollection<Khoi> _gradeList;
+        public ObservableCollection<Khoi> GradeList
         {
-            get => selectedGrade;
+            get => _gradeList;
             set
             {
-                selectedGrade = value;
+                _gradeList = value;
+                OnPropertyChanged(nameof(GradeList));
+            }
+        }
+
+        public Khoi SelectedGrade
+        {
+            get => _selectedGrade;
+            set
+            {
+                _selectedGrade = value;
                 OnPropertyChanged(nameof(SelectedGrade));
                 FilterClassByGrade();
             }
         }
 
-        private string selectedClass;
-        public List<string> ClassList { get; } = new List<string> { "10/1", "10/2", "10/3",
-                                                                    "11/1", "11/2", "11/3",
-                                                                    "12/1", "12/2", "12/3"};
-        public string SelectedClass
+
+        private List<Lop> _classList;
+
+        private Lop _selectedClass;
+
+        public Lop SelectedClass
         {
-            get => selectedClass;
+            get => _selectedClass;
             set
             {
-                selectedClass = value;
+                _selectedClass = value;
                 OnPropertyChanged(nameof(SelectedClass));
             }
         }
-        private List<string> filteredClassList;
-        public List<string> FilteredClassList
+
+        private ObservableCollection<Lop> _filteredClassList;
+        public ObservableCollection<Lop> FilteredClassList
         {
-            get => filteredClassList;
+            get => _filteredClassList;
             set
             {
-                filteredClassList = value;
+                _filteredClassList = value;
                 OnPropertyChanged(nameof(FilteredClassList));
             }
         }
+
         private void FilterClassByGrade()
         {
-            if (string.IsNullOrEmpty(SelectedGrade))
+            if (SelectedGrade == null)
             {
-                FilteredClassList = new List<string>();
+                FilteredClassList = new ObservableCollection<Lop>();
             }
             else
             {
-                FilteredClassList = ClassList
-                    .Where(cls => cls.StartsWith(SelectedGrade))
-                    .ToList();
+                FilteredClassList = new ObservableCollection<Lop>(_classList
+                                                                    .Where(l => l.Makhoi == _selectedGrade.Makhoi));
+
             }
 
             SelectedClass = null;
         }
 
-        private string selectedStatus;
-        public List<string> StatusList { get; } = new List<string> { "Đang học", "Nghỉ học" };
 
-        public string SelectedStatus
-        {
-            get => selectedStatus;
-            set
-            {
-                if (selectedStatus != value)
-                {
-                    selectedStatus = value;
-                    OnPropertyChanged(nameof(SelectedStatus));
-                }
-            }
-        }
 
-        private string selectedGender;
+        private string _selectedGender;
         public List<string> GenderList { get; } = new List<string> { "Nam", "Nữ" };
         public string SelectedGender
         {
-            get => selectedGender;
+            get => _selectedGender;
             set
             {
-                selectedGender = value;
+                _selectedGender = value;
                 OnPropertyChanged(nameof(SelectedGender));
-            }
-        }
-
-        private string selectedEthnicity;
-        public List<string> EthnicityList { get; } = new List<string>
-        {
-            "Ba Na", "Bố Y", "Brâu", "Bru - Vân Kiều", "Chăm",
-            "Chơ Ro", "Chứt", "Co", "Cơ Tu", "Cống",
-            "Cờ Lao", "Dao", "Ê Đê", "Giáy", "Gia Rai",
-            "Hà Nhì", "Hrê", "H'Mông", "Kháng", "Khơ Mú",
-            "Khmer", "Kinh", "La Chí", "La Ha", "La Hủ",
-            "Lào", "Lô Lô", "Lự", "Mạ", "Mảng",
-            "Mnông", "Mường", "Ngái", "Nùng", "Ô Đu",
-            "Pà Thẻn", "Phù Lá", "Pu Péo", "Ra Glai", "Rơ Măm",
-            "Sán Chay", "Sán Dìu", "Si La", "Stiêng", "Tà Ôi",
-            "Tày", "Thái", "Thổ", "Xê Đăng", "Xinh Mun",
-            "Xơ Đăng", "Yến", "Dao Đỏ", "Khác"
-        };
-        public string SelectedEthnicity
-        {
-            get => selectedEthnicity;
-            set
-            {
-                selectedEthnicity = value;
-                OnPropertyChanged(nameof(SelectedEthnicity));
-            }
-        }
-
-        private string studentID;
-        public string StudentID
-        {
-            get => studentID;
-            set
-            {
-                if (studentID != value)
-                {
-                    studentID = value;
-                    OnPropertyChanged(nameof(StudentID));
-                }
-            }
-        }
-        private string fullName;
-        public string FullName
-        {
-            get => fullName;
-            set
-            {
-                if (fullName != value)
-                {
-                    fullName = value;
-                    OnPropertyChanged(nameof(FullName));
-                }
             }
         }
 
@@ -335,15 +266,23 @@ namespace Academix.ViewModels
 
         public void LoadProvinces()
         {
-            string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "DonViHanhChinhVietNam.json");
-            string json = System.IO.File.ReadAllText(path);
-            var provinceDict = JsonConvert.DeserializeObject<Dictionary<string, Province>>(json);
-
-            Provinces.Clear();
-            foreach (var p in provinceDict.Values.OrderBy(p => p.name)) 
+            try
             {
-                Provinces.Add(p);
+                string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Resources\DonViHanhChinhVietNam.json");
+                string json = System.IO.File.ReadAllText(path);
+                var provinceDict = JsonConvert.DeserializeObject<Dictionary<string, Province>>(json);
+
+                Provinces.Clear();
+                foreach (var p in provinceDict.Values.OrderBy(p => p.name))
+                {
+                    Provinces.Add(p);
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void LoadDistricts()
@@ -353,7 +292,7 @@ namespace Academix.ViewModels
 
             if (SelectedProvince != null && SelectedProvince.quan_huyen != null)
             {
-                foreach (var d in SelectedProvince.quan_huyen.Values.OrderBy(d => d.name)) 
+                foreach (var d in SelectedProvince.quan_huyen.Values.OrderBy(d => d.name))
                 {
                     Districts.Add(d);
                 }
@@ -366,25 +305,65 @@ namespace Academix.ViewModels
 
             if (SelectedDistrict != null && SelectedDistrict.xa_phuong != null)
             {
-                foreach (var w in SelectedDistrict.xa_phuong.Values.OrderBy(w => w.name)) 
+                foreach (var w in SelectedDistrict.xa_phuong.Values.OrderBy(w => w.name))
                 {
                     Wards.Add(w);
                 }
             }
         }
 
-        private DateTime? dateOfBirth;
+        private DateTime? _dateOfBirth;
         public DateTime? DateOfBirth
         {
-            get => dateOfBirth;
+            get => _dateOfBirth;
             set
             {
-                if (dateOfBirth != value)
+                if (_dateOfBirth != value)
                 {
-                    dateOfBirth = value;
+                    _dateOfBirth = value;
                     OnPropertyChanged(nameof(DateOfBirth));
                 }
             }
         }
+
+        private string _studentID;
+        public string StudentID
+        {
+            get => _studentID;
+            set
+            {
+                if (_studentID != value)
+                {
+                    _studentID = value;
+                    OnPropertyChanged(nameof(StudentID));
+                }
+            }
+        }
+
+        private string _fullName;
+        public string FullName
+        {
+            get => _fullName;
+            set
+            {
+                if (_fullName != value)
+                {
+                    _fullName = value;
+                    OnPropertyChanged(nameof(FullName));
+                }
+            }
+        }
+
+        private string _email;
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                _email = value;
+                OnPropertyChanged(nameof(Email));
+            }
+        }
+
     }
 }

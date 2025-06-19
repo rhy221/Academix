@@ -5,9 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:Academix.Views"
+              xmlns:converters="clr-namespace:Academix.Converters"
+         xmlns:dePros="clr-namespace:Academix.DependencyProperties"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1340">
     <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>
         <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource LightBlueGridViewColumnHeaderStyle}"/>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
@@ -20,10 +24,29 @@
                     <Setter Property="Margin" Value="5,0,5,0"/>
                 </Style>
             </StackPanel.Resources>
-            <Button Content="Hủy phân lớp" />
-            <Button Content="Chuyển đến lớp" />
-            <Button Content="Phân lớp tự động" />
-            <StackPanel Orientation="Horizontal"
+            <!--<Button Content="Hủy phân lớp" />-->
+            <Button Content="Chuyển đến lớp" Command="{Binding PlaceStudentCommand}" />
+            <!--<StackPanel Orientation="Horizontal"
+FlowDirection="RightToLeft"
+        Margin="20,0,0,0">
+                <ComboBox                     
+    ItemsSource="{Binding GradeList}"
+    SelectedItem="{Binding SelectedGrade, Mode=TwoWay}"
+    Height="30"
+    Width="120"
+    FlowDirection="LeftToRight"
+    VerticalAlignment="Center" 
+    Margin="10,0,0,0"/>
+                <TextBlock FontSize="20"
+    Height="30"
+    Foreground="{StaticResource GrayForeground}"
+    FlowDirection="LeftToRight"
+    FontWeight="Bold"
+    VerticalAlignment="Center"
+    Margin="10,0,0,0"><Run Text="Khối"/></TextBlock>
+            </StackPanel>-->
+            <!--<Button Content="Phân lớp tự động" />-->
+            <!--<StackPanel Orientation="Horizontal"
                    VerticalAlignment="Center"
                    FlowDirection="RightToLeft">
                 <TextBox Height="30"
@@ -41,9 +64,9 @@
                       FontWeight="Bold"
                       VerticalAlignment="Center"
                       Margin="10,0,0,0"><Run Text="Họ và tên"/></TextBlock>
-            </StackPanel>
+            </StackPanel>-->
         </StackPanel>
-        
+
         <StackPanel Background="White"
                     Margin="0,0,20,0">
             <TextBlock
@@ -54,14 +77,41 @@
                 Text="Danh sách lớp"
                 Padding="40,0,40,0"/>
 
+            <Button
+                HorizontalAlignment="Left"
+                Command="{Binding NotPlaceFilterCommand}"
+                Background="Transparent"
+                BorderThickness="0">
+                <TextBlock
+              
+                Foreground="{StaticResource GrayForeground}"
+FontSize="18"
+FontWeight="Bold"
+Padding="10,0,0,0"><Run Text="Chưa phân lớp:"/><Run Text=" "/><Run Text="{Binding NotPlaceNum}"/></TextBlock>
+
+            </Button>
+
             <TreeView
-    ItemsSource="{Binding Grades}"
+    ItemsSource="{Binding TreeItems}"
     Background="Transparent"
     Margin="20"
+               
    >
-
+                <i:Interaction.Behaviors>
+                    <dePros:TreeViewSelectedItemBehavior SelectedItem="{Binding SelectedTreeItem, Mode=TwoWay}"/>
+                </i:Interaction.Behaviors>
 
                 <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Foreground="{StaticResource GrayForeground}"
+                            Text="{Binding Title}" />
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+
+                <!--<TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Classes}">
                         <TextBlock Text="{Binding GradeName}" />
                         <HierarchicalDataTemplate.ItemTemplate>
@@ -78,7 +128,7 @@
                             </DataTemplate>
                         </HierarchicalDataTemplate.ItemTemplate>
                     </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
+                </TreeView.ItemTemplate>-->
             </TreeView>
 
 
@@ -87,19 +137,44 @@
         </StackPanel>
         <DataGrid ItemsSource="{Binding Students}" 
                   SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"
-                  AutoGenerateColumns="False"
-                  DockPanel.Dock="Left"
-                  FontSize="20"
-                  HorizontalAlignment="Center">
+                                            dePros:DataGridSelectedItemsBehavior.BindableSelectedItems="{Binding SelectedStudents, Mode=TwoWay}"
+AutoGenerateColumns="False"
+SelectionUnit="FullRow"
+AlternationCount="10000"
+            IsReadOnly="True"
+                          Background="White" 
+                        DockPanel.Dock="Top"
+                        FontSize="20" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                        HorizontalAlignment="Center">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="TextBlock.TextAlignment" 
+ Value="Center"/>
+                    <Setter Property="BorderThickness"
+ Value="1,0,0,1"/>
+                    <Setter Property="BorderBrush"
+ Value="{StaticResource GrayBorder}"/>
+                    <Setter Property="TextElement.FontSize"
+ Value="18"/>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="STT"
-                                    Binding="{Binding Index}"
-                                    Width="80">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="DataGridColumnHeader"
-                               BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="STT" Width="80"        IsReadOnly="True"
+>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
+                   Path=AlternationIndex, 
+                   Converter={StaticResource IndexToOneBasedConverter},
+                   Mode=OneWay}"
+    HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource LightBlueHeader}" />
+                    </DataGridTemplateColumn.HeaderStyle>
+                </DataGridTemplateColumn>
+
                 <DataGridTextColumn Header="Họ và tên" 
                                     Binding="{Binding Name}"
                                     Width="300">
@@ -109,7 +184,7 @@
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Mã học sinh" 
-                                    Binding="{Binding ID}"
+                                    Binding="{Binding Id}"
                                     Width="200">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
@@ -132,20 +207,16 @@
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridCheckBoxColumn Width="80" 
-                                        Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <DataGridCheckBoxColumn.HeaderStyle>
+                <DataGridTextColumn Header="Lớp" 
+                    Binding="{Binding ClassName}"
+                    Width="150">
+                    <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
-                                       BasedOn="{StaticResource LightBlueHeader}"/>
-                    </DataGridCheckBoxColumn.HeaderStyle>
-                    <DataGridCheckBoxColumn.Header>
-                        <CheckBox IsChecked="{Binding DataContext.IsAllSelected, RelativeSource={RelativeSource AncestorType=DataGrid}, Mode=TwoWay}"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"/>
-                    </DataGridCheckBoxColumn.Header>
-                </DataGridCheckBoxColumn>
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
- 
+
 </UserControl>

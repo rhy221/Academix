@@ -100,5 +100,9 @@ namespace Academix.ViewModels
                 _navigationService.Navigate(viewModel);
 
         }
+        public override string ToString()
+        {
+            return "Học sinh >> Xem thông tin học sinh ";
+        }
     }
 }

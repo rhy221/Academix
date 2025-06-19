@@ -22,7 +22,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Content="Thêm" Command="{Binding AddGroupCommand}" Margin="2" Background="#a5d6a7"/>
-                        <Button Content="Lưu thay đổi" Command="{Binding EditGroupCommand}" Margin="2" Background="#fff176"/>
+                        <Button Content="Lưu thay đổi" Command="{Binding SaveGroupsCommand}" Margin="2" Background="#fff176"/>
                         <Button Content="Xoá đã chọn" Command="{Binding DeleteGroupCommand}" Margin="2" Background="#ef9a9a"/>
                     </StackPanel>
                 </StackPanel>
@@ -76,7 +76,7 @@
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Content="Thêm" Command="{Binding AddFunctionCommand}" Margin="2" Background="#a5d6a7"/>
-                        <Button Content="Lưu thay đổi" Command="{Binding EditFunctionCommand}" Margin="2" Background="#fff176"/>
+                        <Button Content="Lưu thay đổi" Command="{Binding SaveFunctionsCommand}" Margin="2" Background="#fff176"/>
                         <Button Content="Xoá đã chọn" Command="{Binding DeleteFunctionCommand}" Margin="2" Background="#ef9a9a"/>
                     </StackPanel>
                 </StackPanel>

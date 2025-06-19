@@ -1,5 +1,7 @@
 using Academix.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -7,6 +9,7 @@ namespace Academix.ViewModels
 {
     public class PermissionMatrixRow
     {
+        public string MaChucNang { get; set; }
         public string TenChucNang { get; set; }
         public Dictionary<string, bool> Permissions { get; set; } = new();
     }
@@ -20,36 +23,21 @@ namespace Academix.ViewModels
         private List<ChucNang> functions;
         private List<PhanQuyen> permissions;
 
+        public IRelayCommand SaveMatrixCommand { get; }
+
         public PermissionMatrixViewModel()
         {
-            LoadFakeData();
+            SaveMatrixCommand = new RelayCommand(SaveMatrix);
+            LoadFromDatabase();
             BuildMatrix();
         }
 
-        private void LoadFakeData()
+        private void LoadFromDatabase()
         {
-            groups = new List<NhomNguoiDung>
-            {
-                new NhomNguoiDung { MaNhom = "admin", TenNhom = "Admin" },
-                new NhomNguoiDung { MaNhom = "bgh", TenNhom = "Ban Giám hiệu" },
-                new NhomNguoiDung { MaNhom = "giaovu", TenNhom = "Giáo vụ" },
-            };
-
-            functions = new List<ChucNang>
-            {
-                new ChucNang { MaCN = "CN01", TenCN = "Quản lý môn học", TenManHinhDuocLoad = "SubjectReportView" },
-                new ChucNang { MaCN = "CN02", TenCN = "Quản lý tài khoản", TenManHinhDuocLoad = "AccountManageView" },
-                new ChucNang { MaCN = "CN03", TenCN = "Phân quyền", TenManHinhDuocLoad = "PermissionManageView" }
-            };
-
-            permissions = new List<PhanQuyen>
-            {
-                new PhanQuyen { MaNhom = "admin", MaChucNang = "CN01" },
-                new PhanQuyen { MaNhom = "admin", MaChucNang = "CN02" },
-                new PhanQuyen { MaNhom = "admin", MaChucNang = "CN03" },
-                new PhanQuyen { MaNhom = "bgh", MaChucNang = "CN01" },
-                new PhanQuyen { MaNhom = "giaovu", MaChucNang = "CN02" }
-            };
+            using var db = new PhanQuyenNguoiDungContext();
+            groups = db.NhomNguoiDung.AsNoTracking().ToList();
+            functions = db.ChucNang.AsNoTracking().ToList();
+            permissions = db.PhanQuyen.AsNoTracking().ToList();
         }
 
         private void BuildMatrix()
@@ -63,6 +51,7 @@ namespace Academix.ViewModels
             {
                 var row = new PermissionMatrixRow
                 {
+                    MaChucNang = f.MaCN,
                     TenChucNang = f.TenCN
                 };
 
@@ -74,6 +63,32 @@ namespace Academix.ViewModels
 
                 PermissionMatrix.Add(row);
             }
+        }
+
+        private void SaveMatrix()
+        {
+            using var db = new PhanQuyenNguoiDungContext();
+            var allPermissions = db.PhanQuyen.ToList();
+            db.PhanQuyen.RemoveRange(allPermissions);
+
+            foreach (var row in PermissionMatrix)
+            {
+                foreach (var entry in row.Permissions)
+                {
+                    var group = groups.FirstOrDefault(g => g.TenNhom == entry.Key);
+                    if (group != null && entry.Value)
+                    {
+                        db.PhanQuyen.Add(new PhanQuyen
+                        {
+                            MaNhom = group.MaNhom,
+                            MaChucNang = row.MaChucNang
+                        });
+                    }
+                }
+            }
+
+            db.SaveChanges();
+            System.Windows.MessageBox.Show("Đã lưu phân quyền vào CSDL!", "Thông báo", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
         }
     }
 }

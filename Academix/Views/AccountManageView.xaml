@@ -70,6 +70,34 @@
                   AlternatingRowBackground="#C8E6C9"
                   Foreground="Black">
 
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="#E8F5E9"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#A5D6A7"/>
+                            <!-- Màu nền khi chọn -->
+                            <Setter Property="Foreground" Value="Black"/>
+                            <!-- Màu chữ khi chọn -->
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#A5D6A7"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+
+
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -99,7 +127,8 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <ComboBox
-                                ItemsSource="{Binding DataContext.RoleList, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemsSource="{Binding DataContext.RoleList, RelativeSource={RelativeSource AncestorType=UserControl}}"
+
                                 SelectedValue="{Binding MaNhom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectedValuePath="MaNhom"
                                 DisplayMemberPath="TenNhom"

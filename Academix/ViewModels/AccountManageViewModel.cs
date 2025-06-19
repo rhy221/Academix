@@ -1,7 +1,10 @@
 using Academix.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Academix.ViewModels
@@ -9,7 +12,6 @@ namespace Academix.ViewModels
     public class AccountManageViewModel : ObservableObject
     {
         public ObservableCollection<NguoiDung> AccountList { get; set; } = new();
-
         public ObservableCollection<NhomNguoiDung> RoleList { get; set; } = new();
 
         private string _newUsername;
@@ -46,26 +48,28 @@ namespace Academix.ViewModels
 
         public AccountManageViewModel()
         {
-            LoadFakeRoles();
-            LoadFakeAccounts();
+            LoadAccountsFromDb();
+            LoadRolesFromDb();
 
             AddAccountCommand = new RelayCommand(AddAccount);
             DeleteAccountCommand = new RelayCommand(DeleteSelectedAccount);
             SaveChangesCommand = new RelayCommand(SaveChanges);
         }
 
-        private void LoadFakeRoles()
+        private void LoadAccountsFromDb()
         {
-            RoleList.Add(new NhomNguoiDung { MaNhom = "admin", TenNhom = "Admin" });
-            RoleList.Add(new NhomNguoiDung { MaNhom = "bgh", TenNhom = "Ban Giám hiệu" });
-            RoleList.Add(new NhomNguoiDung { MaNhom = "giaovu", TenNhom = "Giáo vụ" });
+            using var db = new PhanQuyenNguoiDungContext();
+            var users = db.NguoiDung.AsNoTracking().ToList();
+            AccountList = new ObservableCollection<NguoiDung>(users);
+            OnPropertyChanged(nameof(AccountList));
         }
 
-        private void LoadFakeAccounts()
+        private void LoadRolesFromDb()
         {
-            AccountList.Add(new NguoiDung { TenDangNhap = "admin01", MatKhau = "123456", MaNhom = "admin" });
-            AccountList.Add(new NguoiDung { TenDangNhap = "hieutruong", MatKhau = "123456", MaNhom = "bgh" });
-            AccountList.Add(new NguoiDung { TenDangNhap = "giaovu", MatKhau = "123456", MaNhom = "giaovu" });
+            using var db = new PhanQuyenNguoiDungContext();
+            var roles = db.NhomNguoiDung.AsNoTracking().ToList();
+            RoleList = new ObservableCollection<NhomNguoiDung>(roles);
+            OnPropertyChanged(nameof(RoleList));
         }
 
         private void AddAccount()
@@ -74,12 +78,11 @@ namespace Academix.ViewModels
                 !string.IsNullOrWhiteSpace(NewPassword) &&
                 !string.IsNullOrWhiteSpace(NewSelectedRole))
             {
-                bool isDuplicate = AccountList.Any(acc =>
-                    acc.TenDangNhap.Trim().ToLower() == NewUsername.Trim().ToLower());
-
-                if (isDuplicate)
+                using var db = new PhanQuyenNguoiDungContext();
+                bool exists = db.NguoiDung.Any(u => u.TenDangNhap == NewUsername);
+                if (exists)
                 {
-                    System.Windows.MessageBox.Show("Tên đăng nhập đã tồn tại!", "Lỗi", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                    MessageBox.Show("Tên đăng nhập đã tồn tại!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -89,6 +92,10 @@ namespace Academix.ViewModels
                     MatKhau = NewPassword,
                     MaNhom = NewSelectedRole
                 };
+
+                db.NguoiDung.Add(newUser);
+                db.SaveChanges();
+
                 AccountList.Add(newUser);
 
                 NewUsername = string.Empty;
@@ -97,16 +104,39 @@ namespace Academix.ViewModels
             }
         }
 
-
         private void DeleteSelectedAccount()
         {
             if (SelectedAccount != null)
+            {
+                using var db = new PhanQuyenNguoiDungContext();
+                var user = db.NguoiDung.Find(SelectedAccount.TenDangNhap);
+                if (user != null)
+                {
+                    db.NguoiDung.Remove(user);
+                    db.SaveChanges();
+                }
+
                 AccountList.Remove(SelectedAccount);
+            }
         }
 
         private void SaveChanges()
         {
+            using var db = new PhanQuyenNguoiDungContext();
 
+            foreach (var user in AccountList)
+            {
+                var existing = db.NguoiDung.FirstOrDefault(u => u.TenDangNhap == user.TenDangNhap);
+                if (existing != null &&
+                    (existing.MatKhau != user.MatKhau || existing.MaNhom != user.MaNhom))
+                {
+                    existing.MatKhau = user.MatKhau;
+                    existing.MaNhom = user.MaNhom;
+                }
+            }
+
+            db.SaveChanges();
+            MessageBox.Show("Đã lưu các thay đổi vào cơ sở dữ liệu!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

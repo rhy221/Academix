@@ -1,10 +1,13 @@
-﻿using Academix.Models;
+using Academix.Helpers;
+using Academix.Models;
 using Academix.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Windows;
+using Academix.Helpers;
 
 namespace Academix.ViewModels
 {
@@ -23,8 +26,8 @@ namespace Academix.ViewModels
             get => matKhau;
             set => SetProperty(ref matKhau, value);
         }
+
         public Action? CloseAction { get; set; }
-        public ObservableCollection<NguoiDung> TaiKhoanAo { get; }
 
         public static string CurrentUserGroup { get; private set; }
 
@@ -32,42 +35,44 @@ namespace Academix.ViewModels
 
         public LoginWindowViewModel()
         {
-            TaiKhoanAo = new ObservableCollection<NguoiDung>
-            {
-                new NguoiDung { TenDangNhap = "admin01", MatKhau = "123456", MaNhom = "admin" },
-                new NguoiDung { TenDangNhap = "hieutruong", MatKhau = "123456", MaNhom = "bgh" },
-                new NguoiDung { TenDangNhap = "giaovu", MatKhau = "123456", MaNhom = "giaovu" }
-            };
-
             DangNhapCommand = new RelayCommand(ThucHienDangNhap);
         }
 
         private void ThucHienDangNhap()
         {
-            var user = TaiKhoanAo.FirstOrDefault(u => u.TenDangNhap == TenDangNhap && u.MatKhau == MatKhau);
-            if (user != null)
+            using (var db = new PhanQuyenNguoiDungContext())
             {
-                CurrentUserGroup = user.MaNhom;
+                var user = db.NguoiDung
+                             .Include(u => u.NhomNguoiDung)
+                             .FirstOrDefault(u => u.TenDangNhap == TenDangNhap && u.MatKhau == MatKhau);
 
-                Window? nextWindow = null;
-
-                switch (CurrentUserGroup)
+                if (user != null)
                 {
-                    case "admin":
-                        nextWindow = new AdminDashboardView();
-                        break;
+                    CurrentUserGroup = user.MaNhom;
 
-                    default:
-                        nextWindow = new MainWindow();
-                        break;
+                    Session.TenDangNhap = user.TenDangNhap;
+                    Session.MaNhom = user.MaNhom;
+                    Session.TenNhom = user.NhomNguoiDung?.TenNhom;
+
+
+                    Session.ManHinhDuocLoadDuocPhep = db.PhanQuyen
+                        .Include(p => p.ChucNang)
+                        .Where(p => p.MaNhom == user.MaNhom)
+                        .Select(p => p.ChucNang.TenManHinhDuocLoad)
+                        .Distinct()
+                        .ToList();
+
+                    Window? nextWindow = CurrentUserGroup == "ADMIN"
+                        ? new AdminDashboardView()
+                        : new MainWindow();
+
+                    nextWindow.Show();
+                    CloseAction?.Invoke();
                 }
-
-                nextWindow?.Show();
-                CloseAction?.Invoke();
-            }
-            else
-            {
-                MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                else
+                {
+                    MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 

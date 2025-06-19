@@ -8,16 +8,32 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
-        Width="1530" Height="840"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="CanResize"
+        WindowState="Maximized"
+        ResizeMode="NoResize"
         SizeToContent="Manual"
         Title="Academix - Đăng nhập"
         Icon="/Assets/AcademixIcon.png"
-        Background="White">
+        Background="White"
+        WindowStyle="None"
+        AllowsTransparency="False">
 
 
     <Grid Background="White">
+        <!-- Nút X (thoát) -->
+        <Button Content="✕"
+                Width="40" Height="40"
+                FontSize="16"
+                Background="Transparent"
+                Foreground="Black"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,5,5,0"
+                Cursor="Hand"
+                Click="CloseButton_Click"
+                ToolTip="Thoát"/>
+
+        <!-- Nội dung đăng nhập -->
         <StackPanel Width="350" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Source="/Assets/AcademixLogo.png" 
                    Height="36" 

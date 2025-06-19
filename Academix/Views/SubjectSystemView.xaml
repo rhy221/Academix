@@ -483,7 +483,7 @@ Value="LeftToRight"/>
             </DataGrid>
 
         </DockPanel>
-        <Grid 
+        <!--<Grid 
             Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
             Background="Transparent">
             <Controls:ProgressRing 
@@ -493,7 +493,7 @@ IsActive="{Binding IsProcessing}"
 Visibility="{Binding IsProcessing, Converter={StaticResource BoolToVisibilityConverter}}"
 HorizontalAlignment="Center"
 VerticalAlignment="Center" />
-        </Grid>
+        </Grid>-->
     </Grid>
 
 </UserControl>

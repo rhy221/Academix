@@ -161,38 +161,63 @@ namespace Academix.ViewModels
                 {
                      Thamso subjectPassingGrade = await context.Thamsos.FirstOrDefaultAsync(ts => ts.Tenthamso == "DiemDatMon");
 
-                    List<Lop> classes = await context.Lops
-                                                    .Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc)
-                                                    .Include(l => l.CtLops)
-                                                    .Include(l => l.Bangdiemmonhocs.Where(bd => bd.Mamh == _selectedSubject.Mamh & bd.Mahocky == _selectedSemester.Mahocky))
-                                                    .ThenInclude(bd => bd.CtBangdiemmonhocs.Where(ct => ct.Dtbmon >= subjectPassingGrade.Giatri))
-                                                    .ToListAsync();
-
+                    Bctongketmon bctongketmon = await context.Bctongketmons
+                        .Include(bd => bd.CtBctongketmons)
+                        .ThenInclude(ct => ct.MalopNavigation)
+                        .FirstOrDefaultAsync(bc => bc.Mamh == _selectedSubject.Mamh && bc.Mahocky == _selectedSemester.Mahocky && bc.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc);
                     List<SubjectReportItemViewModel> subjectReportItemViewModels = new List<SubjectReportItemViewModel>();
-                    foreach(Lop classr in classes)
+
+                    if (bctongketmon != null)
                     {
-                        int count = 0;
-                        float passingRate = 0;
-                        if (!classr.Bangdiemmonhocs.IsNullOrEmpty() && classr.Siso > 0)
+                        foreach(CtBctongketmon ctBctongketmon in bctongketmon.CtBctongketmons)
                         {
-                            count = classr.Bangdiemmonhocs.First(bd => true).CtBangdiemmonhocs.Count;
-                            passingRate = Convert.ToSingle(Math.Round(1f *  count / classr.Siso, 2));
-
+                            SubjectReportItemViewModel subjectReportItemViewModel = new SubjectReportItemViewModel(ctBctongketmon.MalopNavigation, ctBctongketmon.Soluongdat,Math.Round(ctBctongketmon.Tiledat, 2));
+                            subjectReportItemViewModels.Add(subjectReportItemViewModel);
                         }
-                        SubjectReportItemViewModel subjectReportItemViewModel = new SubjectReportItemViewModel(classr, count, passingRate);
-                        subjectReportItemViewModels.Add(subjectReportItemViewModel);
                     }
+                    else
+                    {
+                        List<Lop> classes = await context.Lops
+                                                                               .Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc)
+                                                                               .Include(l => l.CtLops)
+                                                                               .Include(l => l.Bangdiemmonhocs.Where(bd => bd.Mamh == _selectedSubject.Mamh & bd.Mahocky == _selectedSemester.Mahocky))
+                                                                               .ThenInclude(bd => bd.CtBangdiemmonhocs.Where(ct => ct.Dtbmon >= subjectPassingGrade.Giatri))
+                                                                               .ToListAsync();
 
+                        foreach (Lop classr in classes)
+                        {
+                            int count = 0;
+                            double passingRate = 0;
+                            Bangdiemmonhoc bangdiemmonhoc = classr.Bangdiemmonhocs.FirstOrDefault();
+                            if (bangdiemmonhoc != null && classr.Siso > 0)
+                            {
+                                count = bangdiemmonhoc.CtBangdiemmonhocs.Count;
+                                passingRate = Math.Round(1d * count / classr.Siso, 2);
+                                SubjectReportItemViewModel subjectReportItemViewModel = new SubjectReportItemViewModel(classr, count, passingRate);
+                                subjectReportItemViewModels.Add(subjectReportItemViewModel);
+
+                            }
+                            else
+                            {
+                                SubjectReportItemViewModel subjectReportItemViewModel = new SubjectReportItemViewModel(classr, 0, 0);
+                                subjectReportItemViewModels.Add(subjectReportItemViewModel);
+                            }
+                                
+                        }
+
+
+                        Bctongketmon subjectReport = new Bctongketmon(GenerateIdService.GenerateId(), _selectedSubject.Mamh, _selectedSemester.Mahocky, _schoolYearStore.SelectedSchoolYear.Manamhoc);
+                        foreach (SubjectReportItemViewModel subjectReportItemVM in subjectReportItemViewModels)
+                        {
+                            CtBctongketmon ctBctongketmon = new CtBctongketmon(subjectReport.Mabctkmon, subjectReportItemVM.ClassId, subjectReportItemVM.ClassSize, subjectReportItemVM.Count, subjectReportItemVM.PassingRate);
+                            subjectReport.CtBctongketmons.Add(ctBctongketmon);
+                        }
+                        await context.Bctongketmons.AddAsync(subjectReport);
+                        await context.SaveChangesAsync();
+
+                    }
                     ReportItems = new ObservableCollection<SubjectReportItemViewModel>(subjectReportItemViewModels);
 
-                    Bctongketmon subjectReport = new Bctongketmon(GenerateIdService.GenerateId(), _selectedSubject.Mamh, _selectedSemester.Mahocky, _schoolYearStore.SelectedSchoolYear.Manamhoc);
-                    foreach (SubjectReportItemViewModel subjectReportItemVM in subjectReportItemViewModels)
-                    {
-                        CtBctongketmon ctBctongketmon = new CtBctongketmon(GenerateIdService.GenerateId(), subjectReportItemVM.ClassId, subjectReportItemVM.ClassSize, subjectReportItemVM.Count, Convert.ToDouble(subjectReportItemVM.PassingRate));
-                        subjectReport.CtBctongketmons.Add(ctBctongketmon);
-                    }
-                    await context.Bctongketmons.AddAsync(subjectReport);
-                    context.SaveChanges();
                 }
             }
             catch(Exception ex)

@@ -267,26 +267,31 @@ namespace Academix.ViewModels
         {
             try
             {
-                IsProcessing = true;
-                if (_selectedSubject == null)
-                    throw new Exception("Xin hãy chọn môn học muốn xóa!");
-                using(var context = new QuanlyhocsinhContext())
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa môn học?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
                 {
-                    Monhoc subject = await context.Monhocs
-                                                    .Include(s => s.Maloaidiems)
-                                                    .FirstOrDefaultAsync(s => s.Mamh == _selectedSubject.Id);
-                    subject.Maloaidiems.Clear();
-                    context.Monhocs.Remove(subject);
-                    await context.SaveChangesAsync();
+                    IsProcessing = true;
+                    if (_selectedSubject == null)
+                        throw new Exception("Xin hãy chọn môn học muốn xóa!");
+                    using (var context = new QuanlyhocsinhContext())
+                    {
+                        Monhoc subject = await context.Monhocs
+                                                        .Include(s => s.Maloaidiems)
+                                                        .FirstOrDefaultAsync(s => s.Mamh == _selectedSubject.Id);
+                        subject.Maloaidiems.Clear();
+                        context.Monhocs.Remove(subject);
+                        await context.SaveChangesAsync();
+                    }
+                    _subjects.Remove(_selectedSubject);
+                    _selectedSubject = null;
+                    SelectedSubjectName = "";
+                    SelectedSubjectMultiplier = 1;
+                    OnPropertyChanged(nameof(SelectedSubjectName));
+                    OnPropertyChanged(nameof(SelectedSubjectMultiplier));
+                    MessageBox.Show("Xóa môn học thành công!");
                 }
-                _subjects.Remove(_selectedSubject);
-                _selectedSubject = null;
-                SelectedSubjectName = "";
-                SelectedSubjectMultiplier = 1;
-                OnPropertyChanged(nameof(SelectedSubjectName));
-                OnPropertyChanged(nameof(SelectedSubjectMultiplier));
-                MessageBox.Show("Xóa môn học thành công!");
             }
+                  
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);

@@ -35,7 +35,7 @@ public partial class App : Application
         allSchoolYear.IsAll = true;
         schoolYears.Insert(0, allSchoolYear);
         _schoolYearStore.SchoolYears = schoolYears;
-        _schoolYearStore.SelectedSchoolYear = allSchoolYear;
+        _schoolYearStore.SelectedSchoolYear = schoolYears[schoolYears.Count - 1];
 
 
         MainWindow = new MainWindow() { DataContext = new MainViewModel(_navigationStore, _schoolYearStore) };

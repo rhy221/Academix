@@ -26,25 +26,6 @@ namespace Academix.Views
             InitializeComponent();
         }
 
-        private void ModifyMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            MainView.Visibility = Visibility.Collapsed;
-            ExtendView.Visibility = Visibility.Visible;
-            ExtendView.Content = new ModifyStudentViewModel(MainView, ExtendView);
-        }
 
-        private void ViewMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            MainView.Visibility = Visibility.Collapsed;
-            ExtendView.Visibility = Visibility.Visible;
-            ExtendView.Content = new ViewStudentViewModel(MainView, ExtendView);
-        }
-
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainView.Visibility = Visibility.Collapsed;
-            ExtendView.Visibility = Visibility.Visible;
-            ExtendView.Content = new AddStudentViewModel(MainView, ExtendView);
-        }
     }
 }

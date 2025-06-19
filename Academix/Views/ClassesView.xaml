@@ -257,7 +257,7 @@ FlowDirection="LeftToRight">
                     </StackPanel>
                 </Expander>
                 <TabControl DockPanel.Dock="Right"
-        Visibility="Visible"
+        Visibility="Collapsed"
         Background="Transparent"
         BorderThickness="0"
             >
@@ -574,8 +574,6 @@ FlowDirection="LeftToRight">
             </DockPanel>
 
         </ContentControl>
-        <ContentControl x:Name="ExtendView" Visibility="{Binding ExViewVis}"
-                        Content="{Binding ExViewViewModel}" d:IsHidden="True"/>
 
     </Grid>
 </UserControl>

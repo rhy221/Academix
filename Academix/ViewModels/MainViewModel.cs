@@ -54,8 +54,7 @@ namespace Academix.ViewModels
             _sideBarViewModel = new HamburgerMenuViewModel(new NavigationService(navigationStore), _schoolYearStore);
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
             _schoolYears = new ObservableCollection<Namhoc>(_schoolYearStore.SchoolYears);
-            
-           
+                       
         }
 
         private void OnCurrentViewModelChanged()

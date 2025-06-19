@@ -21,5 +21,14 @@ namespace Academix.Models
             Makhoi = maKhoi;
             Manamhoc = maNam;
         }
+
+        public bool IsAll = false;
+
+        public override string ToString()
+        {
+            if (IsAll)
+                return "[Tất cả]";
+            return Tenlop;
+        }
     }
 }

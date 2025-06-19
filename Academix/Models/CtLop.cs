@@ -13,6 +13,8 @@ public partial class CtLop
 
     public double Dtbhk { get; set; }
 
+    public virtual Hocky MahockyNavigation { get; set; } = null!;
+
     public virtual Hocsinh MahsNavigation { get; set; } = null!;
 
     public virtual Lop MalopNavigation { get; set; } = null!;

@@ -43,8 +43,8 @@ namespace Academix.ViewModels
             }
         }
 
-        private float _passingRate;
-        public float PassingRate
+        private double _passingRate;
+        public double PassingRate
         {
             get => _passingRate;
             set 
@@ -54,7 +54,7 @@ namespace Academix.ViewModels
             }
         }
 
-        public SubjectReportItemViewModel(Lop cl, int count, float passingRate)
+        public SubjectReportItemViewModel(Lop cl, int count, double passingRate)
         {
             _class = cl;
             _count = count;

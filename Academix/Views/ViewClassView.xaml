@@ -121,8 +121,8 @@ Value="0,0,20,0"/>
             SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"
 AutoGenerateColumns="False"
 SelectionUnit="FullRow"
-SelectionMode="Single"
 AlternationCount="10000"
+            IsReadOnly="True"
                   HorizontalAlignment="Center">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">

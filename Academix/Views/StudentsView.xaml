@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="Academix.Views.StudentsView"
+                          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Academix.Views"
+                          xmlns:views="clr-namespace:Academix.Views"
+
+                          xmlns:viewModels="clr-namespace:Academix.ViewModels"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="770" d:DesignWidth="1380">
+
+    <DockPanel 
+               LastChildFill="True">
+       
+        <TabControl Background="Transparent"
+                    ItemsSource="{Binding TabItems}"
+                    SelectedIndex="0">
+            <TabControl.Resources>
+                <Style TargetType="TabItem"
+                        BasedOn="{StaticResource AboveMiddleTabItem}"/>
+                <DataTemplate DataType="{x:Type viewModels:SearchStudentViewModel}">
+                    <views:SearchStudentView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModels:ClassPlacementViewModel}">
+                    <views:ClassPlacementView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModels:AddFreshmanViewModel}">
+                    <views:AddFreshmanStudentView/>
+                </DataTemplate>
+            </TabControl.Resources>
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Header}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ContentControl Content="{Binding ViewModel}">
+                    </ContentControl>
+                </DataTemplate>
+
+            </TabControl.ContentTemplate>
+
+        </TabControl>
+    </DockPanel>
+    
+    
+</UserControl>

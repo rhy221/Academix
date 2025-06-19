@@ -183,18 +183,23 @@ namespace Academix.ViewModels
 
                     if (String.IsNullOrWhiteSpace(SelectedScoreTypeName))
                         throw new Exception("Tên không được trống!");
-                    
-                    Loaidiem scoreType = await context.Loaidiems.FirstOrDefaultAsync(st => st.Maloaidiem == _selectedScoreType.Id);
-                    context.Loaidiems.Remove(scoreType);
-                    await context.SaveChangesAsync();
-                    _scoreTypes.Remove(_selectedScoreType);
-                    _selectedScoreType = null;
-                    SelectedScoreTypeName = "";
-                    SelectedScoreTypeMultiplier = 1;
-                    OnPropertyChanged(nameof(SelectedScoreTypeName));
-                    OnPropertyChanged(nameof(SelectedScoreTypeMultiplier));
-                    OnPropertyChanged(nameof(ScoreTypes));
-                    MessageBox.Show("Xóa loại điểm thành công!");
+
+                    var result = MessageBox.Show("Bạn có chắc chắn muốn xóa học sinh?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        Loaidiem scoreType = await context.Loaidiems.FirstOrDefaultAsync(st => st.Maloaidiem == _selectedScoreType.Id);
+                        context.Loaidiems.Remove(scoreType);
+                        await context.SaveChangesAsync();
+                        _scoreTypes.Remove(_selectedScoreType);
+                        _selectedScoreType = null;
+                        SelectedScoreTypeName = "";
+                        SelectedScoreTypeMultiplier = 1;
+                        OnPropertyChanged(nameof(SelectedScoreTypeName));
+                        OnPropertyChanged(nameof(SelectedScoreTypeMultiplier));
+                        OnPropertyChanged(nameof(ScoreTypes));
+                        MessageBox.Show("Xóa loại điểm thành công!");
+                    }
+                        
 
                 }
                 catch (Exception ex)

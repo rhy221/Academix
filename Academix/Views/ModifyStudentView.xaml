@@ -17,7 +17,7 @@
             <Setter Property="VerticalAlignment"
                  Value="Center"/>
             <Setter Property="Padding"
-                   Value="20,0,0,0"/>
+                    Value="20,0,0,0"/>
         </Style>
 
         <Style TargetType="ComboBox">
@@ -27,6 +27,14 @@
                  Value="35"/>
             <Setter Property="Width"
                  Value="280"/>
+            <Setter Property="FontSize"
+                    Value="20"/>
+            <Setter Property="FontWeight"
+                    Value="Bold"/>
+            <Setter Property="Padding"
+                    Value="10,0,0,0"/>
+            <Setter Property="Foreground"
+                    Value="{StaticResource GrayForeground}"/>
             <Setter Property="FlowDirection"
                  Value="LeftToRight"/>
 
@@ -43,20 +51,36 @@
                  Value="2"/>
             <Setter Property="FlowDirection"
                  Value="LeftToRight"/>
+            <Setter Property="FontSize"
+         Value="20"/>
+            <Setter Property="FontWeight"
+         Value="Bold"/>
+            <Setter Property="Padding"
+         Value="10,0,0,0"/>
+            <Setter Property="Foreground"
+         Value="{StaticResource GrayForeground}"/>
         </Style>
 
-        <Style TargetType="DatePicker">
+        <!--<Style TargetType="DatePicker">
             <Setter Property="Height"
                  Value="35"/>
             <Setter Property="Width"
                  Value="280"/>
             <Setter Property="BorderBrush"
                  Value="{StaticResource GrayBorder}"/>
+            <Setter Property="FontSize"
+         Value="20"/>
+            <Setter Property="FontWeight"
+         Value="Bold"/>
+            <Setter Property="Padding"
+         Value="10,0,0,0"/>
+            <Setter Property="Foreground"
+         Value="{StaticResource GrayForeground}"/>
             <Setter Property="BorderThickness"
                  Value="2"/>
             <Setter Property="FlowDirection"
                  Value="LeftToRight"/>
-        </Style>
+        </Style>-->
 
         <Style x:Key="InforStackStyle" TargetType="StackPanel">
             <Setter Property="FlowDirection"
@@ -95,7 +119,7 @@
                         Margin="0,0,0,0"><Run Text="Quay lại"/></TextBlock>
                 </StackPanel>
             </Button>
-            <Button>
+            <Button Command="{Binding SaveCommand}">
                 <StackPanel Orientation="Horizontal"
                     FlowDirection="LeftToRight">
                     <iconPacks:PackIconMaterial
@@ -134,8 +158,9 @@
                     Foreground="{StaticResource GrayBackground}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"/>
-                <Image/>
-                <Button VerticalAlignment="Bottom"
+                <Image Height="150" Source="{Binding ProfileImage}"/>
+                <!--<Button Command="{Binding UploadImageCommand}"
+                    VerticalAlignment="Bottom"
                     Background="{StaticResource GrayBackground}"
                     Opacity="0.8"
                     Height="35">
@@ -169,7 +194,7 @@
                     </StackPanel>
 
 
-                </Button>
+                </Button>-->
             </Grid>
             <UniformGrid Grid.Column="1"
                 Columns="2"
@@ -179,7 +204,9 @@
                         BasedOn="{StaticResource InforStackStyle}"/>
                 </UniformGrid.Resources>
                 <StackPanel>
-                    <ComboBox/>
+                    <ComboBox
+                        ItemsSource="{Binding GradeList}"
+                        SelectedItem="{Binding SelectedGrade, Mode=TwoWay}"/>
                     <TextBlock>
                         <Run  Foreground="Red" Text="*"/>
                         <Run Text="Khối"/>
@@ -187,7 +214,9 @@
 
                 </StackPanel>
                 <StackPanel>
-                    <ComboBox/>
+                    <ComboBox
+                        ItemsSource="{Binding FilteredClassList}"
+                        SelectedItem="{Binding SelectedClass, Mode=TwoWay}"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Lớp học"/>
@@ -195,33 +224,25 @@
 
                 </StackPanel>
                 <StackPanel>
-                    <ComboBox/>
-                    <TextBlock>
-                         <Run Foreground="Red" Text="*"/>
-                        <Run Text="Trạng thái"/>
-                    </TextBlock>
-
-                </StackPanel>
-                <StackPanel />
-                <StackPanel>
-                    <TextBox/>
-                    <TextBlock>
-                         <Run Foreground="Red" Text="*"/>
-                        <Run Text="Họ tên"/>
-                    </TextBlock>
-
-                </StackPanel>
-                <StackPanel>
                     <TextBlock 
-                        Width="280"/>
+         Width="280" Text="{Binding StudentID}"
+                        FlowDirection="LeftToRight"
+                        Padding="10,0,0,0"/>
                     <TextBlock>
-                         <Run Foreground="Red" Text="*"/>
-                        <Run Text="Mã học sinh"/>
+          <Run Foreground="Red" Text="*"/>
+         <Run Text="Mã học sinh"/>
                     </TextBlock>
 
                 </StackPanel>
                 <StackPanel>
-                    <ComboBox/>
+                    <TextBox Text="{Binding FullName, Mode=TwoWay}"/>
+                    <TextBlock><Run Foreground="Red" Text="*"/><Run Text=" "/><Run Text="Họ tên"/></TextBlock>
+
+                </StackPanel>
+                <StackPanel>
+                    <ComboBox
+                        ItemsSource="{Binding GenderList}"
+                        SelectedItem="{Binding SelectedGender, Mode=TwoWay}"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Giới tính"/>
@@ -229,7 +250,14 @@
 
                 </StackPanel>
                 <StackPanel >
-                    <DatePicker/>
+                    <DatePicker SelectedDate="{Binding DateOfBirth, Mode=TwoWay}" Height="33" Width="280" 
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="{StaticResource GrayForeground}"
+                                FlowDirection="LeftToRight"
+                                Padding="10,0,0,0"
+                                BorderBrush="{StaticResource GrayBorder}"
+                                BorderThickness="2"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Ngày sinh"/>
@@ -237,31 +265,37 @@
 
                 </StackPanel>
                 <StackPanel>
-                    <ComboBox/>
+                    <ComboBox
+                        ItemsSource="{Binding Provinces}"
+                        SelectedItem="{Binding SelectedProvince, Mode=TwoWay}"                        
+                        DisplayMemberPath="name"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Tỉnh/Thành"/>
                     </TextBlock>
 
                 </StackPanel>
+                <StackPanel >
+                    <ComboBox
+                        ItemsSource="{Binding Districts}"
+                        SelectedItem="{Binding SelectedDistrict, Mode=TwoWay}"                        
+                        DisplayMemberPath="name"/>
+                    <TextBlock><Run Foreground="Red" Text="*"/><Run Text=" "/><Run Text="Quận/Huyện"/></TextBlock>
+
+                </StackPanel>
                 <StackPanel>
-                    <DatePicker/>
+                    <ComboBox
+                        ItemsSource="{Binding Wards}"
+                        DisplayMemberPath="name"
+                        SelectedItem="{Binding SelectedWard, Mode=TwoWay}"/>
                     <TextBlock>
                          <Run Foreground="Red" Text="*"/>
                         <Run Text="Xã/Phường"/>
                     </TextBlock>
 
                 </StackPanel>
-                <StackPanel >
-                    <ComboBox/>
-                    <TextBlock>
-                         <Run Foreground="Red" Text="*"/>
-                        <Run Text="Quận/Huyện"/>
-                    </TextBlock>
-
-                </StackPanel>
-                <StackPanel Margin="0,0,0,15">
-                    <TextBox/>
+                <StackPanel Margin="0,0,0,-31">
+                    <TextBox Text="{Binding Email, Mode=TwoWay}"/>
                     <TextBlock><Run Text=" "/><Run Text="Email"/></TextBlock>
 
                 </StackPanel>

@@ -101,7 +101,7 @@
     <DockPanel LastChildFill="True" Background="{StaticResource LightGrayBackground}">
         <DockPanel.Resources>
             <DataTemplate DataType="{x:Type viewModels:StudentsViewModel}">
-                <views:StudentView/>
+                <views:StudentsView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ClassesViewModel}">
                 <views:ClassesView/>
@@ -118,10 +118,21 @@
             <DataTemplate DataType="{x:Type viewModels:ViewClassViewModel}">
                 <views:ViewClassView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ViewStudentViewModel}">
+                <views:ViewStudentView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:AddStudentViewModel}">
+                <views:AddStudentView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ModifyStudentViewModel}">
+                <views:ModifyStudentView/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:HamburgerMenuViewModel}">
                 <views:HamburgerMenu/>
             </DataTemplate>
-            
+            <DataTemplate DataType="{x:Type viewModels:ViewGradeTableViewModel}">
+                <views:ViewGradeTableView/>
+            </DataTemplate>
 
         </DockPanel.Resources>
         <!--<Grid x:Name="HamGrid" HorizontalAlignment="Left">

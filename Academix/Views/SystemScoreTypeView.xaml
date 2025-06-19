@@ -372,7 +372,7 @@ xmlns:converters="clr-namespace:Academix.Converters"
             </DataGrid>
 
         </DockPanel>
-        <Grid 
+        <!--<Grid 
             Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
             Background="Transparent" d:IsHidden="True">
             <mah:ProgressRing 
@@ -382,6 +382,6 @@ xmlns:converters="clr-namespace:Academix.Converters"
                 Visibility="{Binding IsProcessing, Converter={StaticResource BoolToVisibilityConverter}}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center" />
-        </Grid>
+        </Grid>-->
     </Grid>
 </UserControl>

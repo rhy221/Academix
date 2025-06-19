@@ -158,8 +158,7 @@ namespace Academix.ViewModels
             }
                 set
             {
-                if (value == null)
-                    MessageBox.Show("null");
+               
                 _selectedClasses = value;
                 OnPropertyChanged(nameof(SelectedClasses));
             } }
@@ -253,7 +252,8 @@ namespace Academix.ViewModels
 
                     IQueryable<Lop> query = context.Lops
                 .Include(l => l.MakhoiNavigation)
-                .Include(l => l.ManamhocNavigation);
+                .Include(l => l.ManamhocNavigation)
+                .Include(l => l.CtLops);
 
                     if (!_schoolYearStore.SelectedSchoolYear.IsAll)
                         query = query.Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc);
@@ -309,6 +309,7 @@ namespace Academix.ViewModels
                     @class = await context.Lops
                                     .Include(l => l.MakhoiNavigation)
                                     .Include(l => l.ManamhocNavigation)
+                                    .Include(l => l.CtLops)
                                     .FirstOrDefaultAsync(l => l.Malop == id);
                     Classes.Add(new ClassViewModel(@class, NewClassGrade.Tenkhoi, NewClassSchoolYear.ToString()));
 
@@ -354,6 +355,7 @@ namespace Academix.ViewModels
                     @class = await context.Lops
                                    .Include(l => l.MakhoiNavigation)
                                    .Include(l => l.ManamhocNavigation)
+                                   .Include(l => l.CtLops)
                                    .FirstOrDefaultAsync(l => l.Malop == _selectedClass.Id);
                     
                     int position = Classes.IndexOf(_selectedClass);
@@ -377,23 +379,31 @@ namespace Academix.ViewModels
         {
             try
             {
-                using(var context = new QuanlyhocsinhContext())
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa lớp?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
                 {
-                    List<ClassViewModel> classViewModels = _selectedClasses.Cast<ClassViewModel>().ToList();
-                    foreach(ClassViewModel classViewModel in classViewModels)
+                    using (var context = new QuanlyhocsinhContext())
                     {
-                        context.Lops.Remove(classViewModel.Class);
-                    }
+                        List<ClassViewModel> classViewModels = _selectedClasses.Cast<ClassViewModel>().ToList();
+                        foreach (ClassViewModel classViewModel in classViewModels)
+                        {
+                            if (classViewModel.Class.CtLops.Count > 0)
+                                throw new Exception("Không thể xóa do lớp đã có học sinh");
+                            context.Lops.Remove(classViewModel.Class);
+                        }
 
-                    await context.SaveChangesAsync();
-                    foreach (ClassViewModel classViewModel in classViewModels)
-                    {
-                       _classes.Remove(classViewModel);
-                    }
-                    OnPropertyChanged(nameof(Classes));
+                        await context.SaveChangesAsync();
+                        foreach (ClassViewModel classViewModel in classViewModels)
+                        {
 
-                    MessageBox.Show("Xoá lớp thành công!");
+                            _classes.Remove(classViewModel);
+                        }
+                        OnPropertyChanged(nameof(Classes));
+
+                        MessageBox.Show("Xoá lớp thành công!");
+                    }
                 }
+                   
             }
             catch (Exception ex)
             {

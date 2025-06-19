@@ -132,7 +132,9 @@
                 </UniformGrid.Resources>
                 <StackPanel>
                     <TextBlock
-                        Width="280"/>
+                        Width="280" Text="{Binding GradeName}"
+                        Foreground="{StaticResource LightBlueBackground}"
+                        FontWeight="Bold"/>
                     <TextBlock>
                         <Run Text="Khối:"/>
                     </TextBlock>
@@ -140,7 +142,9 @@
                 </StackPanel>
                 <StackPanel>
                     <TextBlock
-     Width="280"/>
+     Width="280" Text="{Binding ClassName}"
+                        Foreground="{StaticResource LightBlueBackground}"
+FontWeight="Bold"/>
                     <TextBlock>
                         <Run Text="Lớp học:"/>
                     </TextBlock>
@@ -148,16 +152,9 @@
                 </StackPanel>
                 <StackPanel>
                     <TextBlock
-     Width="280"/>
-                    <TextBlock>
-                        <Run Text="Trạng thái:"/>
-                    </TextBlock>
-
-                </StackPanel>
-                <StackPanel />
-                <StackPanel>
-                    <TextBlock
-     Width="280"/>
+     Width="280" Text="{Binding Name}"
+                        Foreground="{StaticResource LightBlueBackground}"
+FontWeight="Bold"/>
                     <TextBlock>
                         <Run Text="Họ tên:"/>
                     </TextBlock>
@@ -165,7 +162,9 @@
                 </StackPanel>
                 <StackPanel>
                     <TextBlock
-     Width="280"/>
+     Width="280" Text="{Binding Id}"
+                        Foreground="{StaticResource LightBlueBackground}"
+FontWeight="Bold"/>
                     <TextBlock>
                         <Run Text="Mã học sinh:"/>
                     </TextBlock>
@@ -173,7 +172,9 @@
                 </StackPanel>
                 <StackPanel>
                     <TextBlock
-     Width="280"/>
+     Width="280" Text="{Binding Gender}"
+                        Foreground="{StaticResource LightBlueBackground}"
+FontWeight="Bold"/>
                     <TextBlock>
                         <Run Text="Giới tính:"/>
                     </TextBlock>
@@ -181,16 +182,20 @@
                 </StackPanel>
                 <StackPanel >
                     <TextBlock
-     Width="280"/>
+     Width="280" Text="{Binding DateOfBirth}"
+                        Foreground="{StaticResource LightBlueBackground}"
+FontWeight="Bold"/>
                     <TextBlock>
 
-                        <Run Text="Ngày sinh"/>
+                        <Run Text="Ngày sinh:"/>
                     </TextBlock>
 
                 </StackPanel>
                 <StackPanel>
                     <TextBlock
-     Width="280"/>
+     Width="280" Text="{Binding Province}"
+                        Foreground="{StaticResource LightBlueBackground}"
+FontWeight="Bold"/>
                     <TextBlock>
 
                         <Run Text="Tỉnh/Thành:"/>
@@ -199,13 +204,17 @@
                 </StackPanel>
                 <StackPanel >
                     <TextBlock
-     Width="280"/>
+     Width="280" Text="{Binding District}"
+                        Foreground="{StaticResource LightBlueBackground}"
+FontWeight="Bold"/>
                     <TextBlock><Run Text="Quận/Huyện:"/></TextBlock>
 
                 </StackPanel>
                 <StackPanel>
                     <TextBlock
-     Width="280"/>
+     Width="280" Text="{Binding Commune}"
+                        Foreground="{StaticResource LightBlueBackground}"
+FontWeight="Bold"/>
                     <TextBlock>
                         <Run Text="Xã/Phường:"/>
                     </TextBlock>
@@ -213,7 +222,9 @@
                 </StackPanel>
                 <StackPanel Margin="0,0,0,15">
                     <TextBlock
-Width="280"/>
+Width="280" Text="{Binding Email}"
+                        Foreground="{StaticResource LightBlueBackground}"
+FontWeight="Bold"/>
                     <TextBlock><Run Text="Email:"/></TextBlock>
 
                 </StackPanel>

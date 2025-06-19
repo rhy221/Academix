@@ -77,8 +77,8 @@ namespace Academix.ViewModels
             }
         }
 
-        private float _minimumScore;
-        public float MinimumScore
+        private double _minimumScore;
+        public double MinimumScore
         {
             get
             {
@@ -91,8 +91,8 @@ namespace Academix.ViewModels
             }
         }
 
-        private float _maximumScore;
-        public float MaximumScore
+        private double _maximumScore;
+        public double MaximumScore
         {
             get
             {
@@ -105,8 +105,8 @@ namespace Academix.ViewModels
             }
         }
 
-        private float _passingGrade;
-        public float PassingGrade
+        private double _passingGrade;
+        public double PassingGrade
         {
             get
             {
@@ -119,8 +119,8 @@ namespace Academix.ViewModels
             }
         }
 
-        private float _subjectPassingGrade;
-        public float SubjectPassingGrade
+        private double _subjectPassingGrade;
+        public double SubjectPassingGrade
         {
             get
             {
@@ -151,11 +151,11 @@ namespace Academix.ViewModels
                 List<Thamso> parameters = await context.Thamsos.ToListAsync();
                 MinimumAge = Convert.ToInt32(parameters.FirstOrDefault(p => p.Tenthamso == MINIMUM_AGE).Giatri);
                 MaximumAge = Convert.ToInt32(parameters.FirstOrDefault(p => p.Tenthamso == MAXIMUM_AGE).Giatri);
-                MinimumScore = parameters.FirstOrDefault(p => p.Tenthamso == MINIMUM_SCORE).Giatri ?? 0f;
-                MaximumScore = parameters.FirstOrDefault(p => p.Tenthamso == MAXIMUM_SCORE).Giatri ?? 0f;
+                MinimumScore = parameters.FirstOrDefault(p => p.Tenthamso == MINIMUM_SCORE).Giatri ?? 0d;
+                MaximumScore = parameters.FirstOrDefault(p => p.Tenthamso == MAXIMUM_SCORE).Giatri ?? 0d;
                 MaximumClassize = Convert.ToInt32(parameters.FirstOrDefault(p => p.Tenthamso == MAXIMUM_CLASS_SIZE).Giatri);
-                PassingGrade = parameters.FirstOrDefault(p => p.Tenthamso == PASSING_GRADE).Giatri ?? 0f;
-                SubjectPassingGrade = parameters.FirstOrDefault(p => p.Tenthamso == SUBJECT_PASSING_GRADE).Giatri ?? 0f;
+                PassingGrade = parameters.FirstOrDefault(p => p.Tenthamso == PASSING_GRADE).Giatri ?? 0d;
+                SubjectPassingGrade = parameters.FirstOrDefault(p => p.Tenthamso == SUBJECT_PASSING_GRADE).Giatri ?? 0d;
 
             }
 

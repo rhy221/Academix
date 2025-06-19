@@ -22,7 +22,8 @@
                 <ContentPresenter x:Name="ContentSite"
                                  IsHitTestVisible="False"
                                  Content="{TemplateBinding SelectionBoxItem}"                                                   
-                                 Margin="5,0,35,0"
+                                 Margin="{TemplateBinding Padding}"
+                                 
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Left"/>
 

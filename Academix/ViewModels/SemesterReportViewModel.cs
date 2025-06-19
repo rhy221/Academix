@@ -119,36 +119,59 @@ namespace Academix.ViewModels
                 {
                     Thamso passingGrade = await context.Thamsos.FirstOrDefaultAsync(ts => ts.Tenthamso == "DiemDat");
 
-                    List<Lop> classes = await context.Lops
-                                                    .Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc)
-                                                    .Include(l => l.CtLops.Where(ct => ct.Mahocky == _selectedSemester.Mahocky && ct.Dtbhk >= passingGrade.Giatri))
-                                                    .ToListAsync();
+                    Bctongkethocky bctongkethocky = await context.Bctongkethockies
+                        .Include(bc => bc.CtBctongkethockies)
+                        .ThenInclude(ct => ct.MalopNavigation)
+                        .FirstOrDefaultAsync(bc => bc.Mahocky == _selectedSemester.Mahocky && bc.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc);
 
                     List<SemesterReportItemViewModel> semesterReportItemViewModels = new List<SemesterReportItemViewModel>();
-                    foreach (Lop classr in classes)
+
+                    if (bctongkethocky != null)
                     {
-                        int count = 0;
-                        float passingRate = 0;
-                        if (!classr.CtLops.IsNullOrEmpty() && classr.Siso > 0)
+                        foreach(CtBctongkethocky ctBctongkethocky in bctongkethocky.CtBctongkethockies)
                         {
-                            count = classr.CtLops.Count;
-                            passingRate = Convert.ToSingle(Math.Round(1f * count / classr.Siso, 2));
-
+                            SemesterReportItemViewModel semesterReportItemViewModel = new SemesterReportItemViewModel(ctBctongkethocky.MalopNavigation, ctBctongkethocky.Soluongdat, ctBctongkethocky.Tiledat);
+                            semesterReportItemViewModels.Add(semesterReportItemViewModel);
                         }
-                        SemesterReportItemViewModel semesterReportItemViewModel = new SemesterReportItemViewModel(classr, count, passingRate);
-                        semesterReportItemViewModels.Add(semesterReportItemViewModel);
                     }
+                    else
+                    {
+                        List<Lop> classes = await context.Lops
+                                                        .Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc)
+                                                        .Include(l => l.CtLops.Where(ct => ct.Mahocky == _selectedSemester.Mahocky && ct.Dtbhk >= passingGrade.Giatri))
+                                                        .ToListAsync();
 
+                        foreach (Lop classr in classes)
+                        {
+                            int count = 0;
+                            double passingRate = 0;
+                            if ( classr.Siso > 0)
+                            {
+                                count = classr.CtLops.Count;
+                                passingRate = Math.Round(1d * count / classr.Siso, 2);
+                                SemesterReportItemViewModel semesterReportItemViewModel = new SemesterReportItemViewModel(classr, count, passingRate);
+                                semesterReportItemViewModels.Add(semesterReportItemViewModel);
+                            }
+                            else
+                            {
+                                SemesterReportItemViewModel semesterReportItemViewModel = new SemesterReportItemViewModel(classr, 0, 0);
+                                semesterReportItemViewModels.Add(semesterReportItemViewModel);
+                            }
+                           
+                        }
+
+
+                        Bctongkethocky semesterReport = new Bctongkethocky(GenerateIdService.GenerateId(), _selectedSemester.Mahocky, _schoolYearStore.SelectedSchoolYear.Manamhoc);
+                        foreach (SemesterReportItemViewModel semesterReportItemVM in semesterReportItemViewModels)
+                        {
+                            CtBctongkethocky ctBctongkethocky = new CtBctongkethocky(semesterReport.Mabctkhocky, semesterReportItemVM.ClassId, semesterReportItemVM.ClassSize, semesterReportItemVM.Count, semesterReportItemVM.PassingRate);
+                            semesterReport.CtBctongkethockies.Add(ctBctongkethocky);
+                        }
+                        await context.Bctongkethockies.AddAsync(semesterReport);
+                        context.SaveChanges();
+                    }
                     ReportItems = new ObservableCollection<SemesterReportItemViewModel>(semesterReportItemViewModels);
 
-                    Bctongkethocky semesterReport = new Bctongkethocky(GenerateIdService.GenerateId(), _selectedSemester.Mahocky, _schoolYearStore.SelectedSchoolYear.Manamhoc);
-                    foreach (SemesterReportItemViewModel semesterReportItemVM in semesterReportItemViewModels)
-                    {
-                        CtBctongkethocky ctBctongkethocky = new CtBctongkethocky(GenerateIdService.GenerateId(), semesterReportItemVM.ClassId, semesterReportItemVM.ClassSize, semesterReportItemVM.Count, Convert.ToDouble(semesterReportItemVM.PassingRate));
-                        semesterReport.CtBctongkethockies.Add(ctBctongkethocky);
-                    }
-                    await context.Bctongkethockies.AddAsync(semesterReport);
-                    context.SaveChanges();
                 }
             }
             catch (Exception ex)

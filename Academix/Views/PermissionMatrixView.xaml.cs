@@ -1,3 +1,4 @@
+using Academix.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,30 @@ namespace Academix.Views
         public PermissionMatrixView()
         {
             InitializeComponent();
-            this.DataContext = new ViewModels.PermissionManageViewModel();
+            this.DataContext = new ViewModels.PermissionMatrixViewModel();
+            this.Loaded += PermissionMatrixView_Loaded;
+        }
+
+        private void PermissionMatrixView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as PermissionMatrixViewModel;
+            if (vm == null) return;
+
+
+            while (PermissionMatrixGrid.Columns.Count > 1) 
+                PermissionMatrixGrid.Columns.RemoveAt(1);
+
+
+            foreach (var groupName in vm.GroupHeaders)
+            {
+                var column = new DataGridCheckBoxColumn
+                {
+                    Header = groupName,
+                    Binding = new Binding($"Permissions[{groupName}]") { Mode = BindingMode.TwoWay },
+                    Width = 120
+                };
+                PermissionMatrixGrid.Columns.Add(column);
+            }
         }
     }
 }

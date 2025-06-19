@@ -39,17 +39,8 @@
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
 
-
                     <DataGrid.Columns>
                         <DataGridCheckBoxColumn Header="" Binding="{Binding IsChecked}" Width="30"/>
-                        <DataGridTemplateColumn Header="STT" Width="50">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock HorizontalAlignment="Center"
-                                        Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}, Path=AlternationIndex, StringFormat={}{0:+1}}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                         <DataGridTextColumn Header="TÊN NHÓM NGƯỜI DÙNG" Binding="{Binding TenNhom}" Width="2*"/>
                     </DataGrid.Columns>
                 </DataGrid>
@@ -95,14 +86,6 @@
 
                     <DataGrid.Columns>
                         <DataGridCheckBoxColumn Header="" Binding="{Binding IsChecked}" Width="30"/>
-                        <DataGridTemplateColumn Header="STT" Width="50">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock HorizontalAlignment="Center"
-                                        Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}, Path=AlternationIndex, StringFormat={}{0:+1}}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                         <DataGridTextColumn Header="TÊN CHỨC NĂNG" Binding="{Binding TenCN}" Width="2*"/>
                         <DataGridTextColumn Header="MÀN HÌNH ĐƯỢC LOAD" Binding="{Binding TenManHinhDuocLoad}" Width="2*"/>
                     </DataGrid.Columns>

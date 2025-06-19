@@ -89,7 +89,8 @@ namespace Academix.ViewModels
                             _schoolYearStore.SelectedSchoolYear = schoolYears[schoolYears.Count - 1];
 
 
-                            Window mainWindow = new MainWindow() { DataContext = new MainViewModel(_navigationStore, _schoolYearStore) };
+                            Window mainWindow = new MainWindow();
+                            mainWindow.DataContext = new MainViewModel(_navigationStore, _schoolYearStore, mainWindow);
                             mainWindow.Show();
 
                         }

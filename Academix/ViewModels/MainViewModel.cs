@@ -47,11 +47,11 @@ namespace Academix.ViewModels
             }
         }
         
-        public MainViewModel(NavigationStore navigationStore, SchoolYearStore schoolYearStore )
+        public MainViewModel(NavigationStore navigationStore, SchoolYearStore schoolYearStore, Window mainWindow)
         {
             _navigationStore = navigationStore;
             _schoolYearStore = schoolYearStore;
-            _sideBarViewModel = new HamburgerMenuViewModel(new NavigationService(navigationStore), _schoolYearStore);
+            _sideBarViewModel = new HamburgerMenuViewModel(new NavigationService(navigationStore), _schoolYearStore, mainWindow);
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
             _schoolYears = new ObservableCollection<Namhoc>(_schoolYearStore.SchoolYears);
                        

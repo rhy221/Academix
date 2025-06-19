@@ -130,7 +130,7 @@ namespace Academix.ViewModels
                     {
                         foreach(CtBctongkethocky ctBctongkethocky in bctongkethocky.CtBctongkethockies)
                         {
-                            SemesterReportItemViewModel semesterReportItemViewModel = new SemesterReportItemViewModel(ctBctongkethocky.MalopNavigation, ctBctongkethocky.Soluongdat, ctBctongkethocky.Tiledat);
+                            SemesterReportItemViewModel semesterReportItemViewModel = new SemesterReportItemViewModel(ctBctongkethocky.MalopNavigation, ctBctongkethocky.Soluongdat, Math.Round(ctBctongkethocky.Tiledat, 2));
                             semesterReportItemViewModels.Add(semesterReportItemViewModel);
                         }
                     }

@@ -311,7 +311,7 @@
             <Controls:HamburgerMenu.OptionsItemsSource>
                 <Controls:HamburgerMenuItemCollection>
 
-                    <Controls:HamburgerMenuIconItem Label="Tài khoản">
+                    <Controls:HamburgerMenuIconItem Label="Đăng xuất" Command="{Binding LogOutCommand}">
                         <Controls:HamburgerMenuIconItem.Icon>
                             <iconPacks:PackIconMaterial Width="22"
                                 Height="22"

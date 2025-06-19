@@ -1,3 +1,4 @@
+using Academix.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Globalization;
@@ -10,8 +11,7 @@ namespace Academix.ViewModels
     public class AdminDashboardViewModel : ObservableObject
     {
 
-        public bool IsAdmin => LoginWindowViewModel.CurrentUserGroup == "admin";
-
+        public bool IsAdmin => Session.MaNhom.ToUpper() == "ADMIN";
 
         private UserControl _currentView;
         public UserControl CurrentView

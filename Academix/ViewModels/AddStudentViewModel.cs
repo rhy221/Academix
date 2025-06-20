@@ -99,6 +99,7 @@ namespace Academix.ViewModels
 
                     Hocsinh student = new Hocsinh(GenerateIdService.GenerateId(), _fullName, _selectedGender, _dateOfBirth ?? new DateTime(), _selectedProvince.name + "_" + _selectedDistrict.name + "_" + _selectedWard.name, _email);
                     student.CtLops.Add(new CtLop(_selectedClass.Malop, _studentID, "HK1", 0d));
+                    student.CtLops.Add(new CtLop(_selectedClass.Malop, _studentID, "HK2", 0d));
 
                     context.Hocsinhs.Add(student);
                     await context.SaveChangesAsync();

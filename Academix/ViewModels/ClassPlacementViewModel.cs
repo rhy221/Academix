@@ -259,11 +259,12 @@ namespace Academix.ViewModels
                         //}
                         //else
                         //{
-                            CtLop ct = new CtLop(@class.Malop, student.Id, "HK1", 0);
-                            context.CtLops.Add(ct);
+                            
+                            context.CtLops.Add(new CtLop(@class.Malop, student.Id, "HK1", 0));
+                        context.CtLops.Add(new CtLop(@class.Malop, student.Id, "HK2", 0));
 
                         //}
-                
+
                     }
                     await context.SaveChangesAsync();
                     @class.Siso += studentDisplayViewModels.Count;

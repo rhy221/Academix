@@ -477,6 +477,8 @@ namespace Academix.ViewModels
                             }
 
                         }
+                        await context.SaveChangesAsync();
+
                     }
                     else
                     {
@@ -484,19 +486,22 @@ namespace Academix.ViewModels
                         foreach(StudentScoreDisplay studentScoreDisplay in _filteredStudents)
                         {
                             CtBangdiemmonhoc ctBangdiemmonhoc = new CtBangdiemmonhoc(GenerateIdService.GenerateId(), bangdiemmonhoc.Mabdmh, studentScoreDisplay.ID, 0);
-                            bangdiemmonhoc.CtBangdiemmonhocs.Add(ctBangdiemmonhoc);
+                            //bangdiemmonhoc.CtBangdiemmonhocs.Add(ctBangdiemmonhoc);
+                            context.CtBangdiemmonhocs.Add(ctBangdiemmonhoc);
 
                             if (studentScoreDisplay.Score != -1)
                             {
                                 CtDiemmonhoc ctDiemmonhoc = new CtDiemmonhoc(ctBangdiemmonhoc.Mactbdmh, _selectedScoreType.Maloaidiem, _no, studentScoreDisplay.Score);
-                                ctBangdiemmonhoc.CtDiemmonhocs.Add(ctDiemmonhoc);
+                                //ctBangdiemmonhoc.CtDiemmonhocs.Add(ctDiemmonhoc);
+                                context.CtDiemmonhocs.Add(ctDiemmonhoc);
                             }
                             
                         }
                         context.Bangdiemmonhocs.Add(bangdiemmonhoc);
+                        await context.SaveChangesAsync();
+
                     }
 
-                   await context.SaveChangesAsync();
                     MessageBox.Show("Lưu thành công");
                 }
             }

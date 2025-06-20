@@ -284,7 +284,11 @@ namespace Academix.ViewModels
                             if (student.CtBangdiemmonhocs.Count > 0)
                                 throw new Exception("Học sinh đã có dữ liệu điểm không thể xóa");
                             if (student.CtLops.Count > 0)
-                                context.CtLops.Remove(student.CtLops.LastOrDefault());
+                            {
+                                foreach(CtLop ctLop in student.CtLops)
+                                    context.CtLops.Remove(ctLop);
+
+                            }
                             else
                                 context.Hocsinhs.Remove(student);
                         }

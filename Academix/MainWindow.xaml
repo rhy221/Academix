@@ -8,9 +8,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Academix"
         xmlns:views="clr-namespace:Academix.Views"
-        xmlns:viewModels="clr-namespace:Academix.ViewModels"
+        xmlns:viewModels="clr-namespace:Academix.ViewModels.Main"
+        xmlns:studentViewModels="clr-namespace:Academix.ViewModels.Main.Student"
+        xmlns:classViewModels="clr-namespace:Academix.ViewModels.Main.Class"
+        xmlns:gradeViewModels="clr-namespace:Academix.ViewModels.Main.Grade"
+        xmlns:reportViewModels="clr-namespace:Academix.ViewModels.Main.Report"
+        xmlns:systemViewModels="clr-namespace:Academix.ViewModels.Main.System"
+                Icon="/Assets/AcademixIcon.png"
+        
         mc:Ignorable="d"
-        Title="LoginWindowView" Height="840" Width="1530"
+        Title="Academix" Height="840" Width="1530"
         WindowState="Maximized"
         SnapsToDevicePixels="True"
         
@@ -100,181 +107,42 @@
 
     <DockPanel LastChildFill="True" Background="{StaticResource LightGrayBackground}">
         <DockPanel.Resources>
-            <DataTemplate DataType="{x:Type viewModels:StudentsViewModel}">
+            <DataTemplate DataType="{x:Type studentViewModels:StudentsViewModel}">
                 <views:StudentsView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:ClassesViewModel}">
+            <DataTemplate DataType="{x:Type classViewModels:ClassesViewModel}">
                 <views:ClassesView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:GradeViewModel}">
+            <DataTemplate DataType="{x:Type gradeViewModels:GradeViewModel}">
                 <views:GradeView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:ReportViewModel}">
+            <DataTemplate DataType="{x:Type reportViewModels:ReportViewModel}">
                 <views:ReportView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:DataSystemViewModel}">
+            <DataTemplate DataType="{x:Type systemViewModels:DataSystemViewModel}">
                 <views:DataSystemView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:ViewClassViewModel}">
+            <DataTemplate DataType="{x:Type classViewModels:ViewClassViewModel}">
                 <views:ViewClassView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:ViewStudentViewModel}">
+            <DataTemplate DataType="{x:Type studentViewModels:ViewStudentViewModel}">
                 <views:ViewStudentView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:AddStudentViewModel}">
+            <DataTemplate DataType="{x:Type studentViewModels:AddStudentViewModel}">
                 <views:AddStudentView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:ModifyStudentViewModel}">
+            <DataTemplate DataType="{x:Type studentViewModels:ModifyStudentViewModel}">
                 <views:ModifyStudentView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:HamburgerMenuViewModel}">
                 <views:HamburgerMenu/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:ViewGradeTableViewModel}">
+            <DataTemplate DataType="{x:Type gradeViewModels:ViewGradeTableViewModel}">
                 <views:ViewGradeTableView/>
             </DataTemplate>
 
         </DockPanel.Resources>
-        <!--<Grid x:Name="HamGrid" HorizontalAlignment="Left">
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=Toggle}" Value="False">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Width" From="240" To="48" Duration="0:0:0.2">
-                                            <DoubleAnimation.EasingFunction>
-                                                <PowerEase></PowerEase>
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Width" From="48" To="240" Duration="0:0:0.2">
-                                            <DoubleAnimation.EasingFunction>
-                                                <PowerEase></PowerEase>
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <Controls:HamburgerMenu x:Name="HamburgerMenuControl"
-                        Width="240"
-    DisplayMode="CompactOverlay"
-    HamburgerWidth="48"
-    ItemTemplate="{StaticResource HamburgerMenuItem}"
-    OptionsItemTemplate="{StaticResource HamburgerOptionsMenuItem}"
-                        HorizontalAlignment="Left"
-                        IsPaneOpen="True"
-                        ItemInvoked="HamburgerMenuControl_ItemInvoked">
-                <Controls:HamburgerMenu.PaneBackground>
-                    <ImageBrush ImageSource="/Assets/HamBarBG.png" Stretch="UniformToFill"/>
-                </Controls:HamburgerMenu.PaneBackground>
-               
-                --><!--  Items  --><!--
-                <Controls:HamburgerMenu.ItemsSource>
-                    <Controls:HamburgerMenuItemCollection>
-                        <Controls:HamburgerMenuIconItem Label="Hệ thống">
-                            <Controls:HamburgerMenuIconItem.Icon>
-                                <iconPacks:PackIconMaterial Width="22"
-                                                            Height="22"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center"
-                                                            Kind="Cog"/>
-                            </Controls:HamburgerMenuIconItem.Icon>
-                        </Controls:HamburgerMenuIconItem>
-                        <Controls:HamburgerMenuIconItem Label="Học sinh">
-                            <Controls:HamburgerMenuIconItem.Icon>
-                                <iconPacks:PackIconMaterial Width="22"
-                        Height="22"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"                                     
-                        Kind="AccountSchool"/>
-                            </Controls:HamburgerMenuIconItem.Icon>
-
-                        </Controls:HamburgerMenuIconItem>
-                        <Controls:HamburgerMenuIconItem Label="Lớp">
-                            <Controls:HamburgerMenuIconItem.Icon>
-                                <iconPacks:PackIconMaterial Width="22"
-                        Height="22"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Kind="GoogleClassroom"/>
-                            </Controls:HamburgerMenuIconItem.Icon>
-                        </Controls:HamburgerMenuIconItem>
-
-                        
-
-                        <Controls:HamburgerMenuIconItem Label="Điểm">
-                            <Controls:HamburgerMenuIconItem.Icon>
-                                <iconPacks:PackIconMaterial Width="22"
-                        Height="22"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Kind="ChartBar"/>
-                            </Controls:HamburgerMenuIconItem.Icon>
-                        </Controls:HamburgerMenuIconItem>
-
-
-                        <Controls:HamburgerMenuIconItem Label="Báo cáo">
-                            <Controls:HamburgerMenuIconItem.Icon>
-                                <iconPacks:PackIconMaterial
-                        Width="22"
-                        Height="22"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Kind="TextBox"/>
-                            </Controls:HamburgerMenuIconItem.Icon>
-                        </Controls:HamburgerMenuIconItem>
-                    </Controls:HamburgerMenuItemCollection>
-                </Controls:HamburgerMenu.ItemsSource>
-
-                --><!--Options  --><!--
-                <Controls:HamburgerMenu.OptionsItemsSource>
-                    <Controls:HamburgerMenuItemCollection>
-
-                        <Controls:HamburgerMenuIconItem Label="Tài khoản">
-                            <Controls:HamburgerMenuIconItem.Icon>
-                                <iconPacks:PackIconMaterial Width="22"
-                        Height="22"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Kind="Account" />
-                            </Controls:HamburgerMenuIconItem.Icon>
-
-                        </Controls:HamburgerMenuIconItem>
-
-                    </Controls:HamburgerMenuItemCollection>
-                </Controls:HamburgerMenu.OptionsItemsSource>
-
-            </Controls:HamburgerMenu>
-            <ToggleButton x:Name="Toggle" Height="48"
-        Width="48"
-        VerticalAlignment="Top"
-        HorizontalAlignment="Left"
         
-        IsChecked="True">
-                <ToggleButton.Style>
-                    <Style TargetType="ToggleButton">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ToggleButton">
-                                    <Grid Background="Transparent"></Grid>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ToggleButton.Style>
-            </ToggleButton>
-        </Grid>-->
         <ContentControl Content="{Binding SideBarViewModel}">
             
         </ContentControl>

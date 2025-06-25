@@ -12,6 +12,7 @@ using Academix.Helpers;
 using Academix.Models;
 using Academix.Views;
 using MahApps.Metro.Controls;
+using Academix.DbContexts;
 
 namespace Academix;
 

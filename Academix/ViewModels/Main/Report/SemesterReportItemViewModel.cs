@@ -15,7 +15,7 @@ namespace Academix.ViewModels.Main.Report
 
         public string ClassName
         {
-            get => _class.Malop.Substring(_class.Malop.IndexOf("_") + 1);
+            get => _class.Tenlop;
         }
 
         public int ClassSize

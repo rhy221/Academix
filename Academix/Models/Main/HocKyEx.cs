@@ -9,6 +9,17 @@ namespace Academix.Models
 
     public partial class Hocky
     {
+
+        public Hocky()
+        {
+
+        }
+
+        public Hocky(string maHk, string tenHK)
+        {
+            Mahocky = maHk;
+            Tenhocky = tenHK;
+        }
         public override string ToString()
         {
             return Tenhocky;

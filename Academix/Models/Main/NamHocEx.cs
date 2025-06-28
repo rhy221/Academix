@@ -9,6 +9,16 @@ namespace Academix.Models
     public partial class Namhoc
     {
         public bool IsAll = false;
+        public Namhoc()
+        {
+
+        }
+        public Namhoc(string maNH, int nam1, int nam2)
+        {
+            Manamhoc = maNH;
+            Nam1 = nam1;
+            Nam2 = nam2;
+        }
         public override string ToString()
         {
             if (IsAll)

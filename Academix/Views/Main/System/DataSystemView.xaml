@@ -39,6 +39,13 @@
                 <DataTemplate DataType="{x:Type viewModels:SystemScoreTypeViewModel}">
                     <views:SystemScoreTypeView/>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModels:SystemSemesterViewModel}">
+                    <views:SystemSemesterView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModels:SystemSchoolYearViewModel}">
+                    <views:SystemSchoolYearView/>
+                </DataTemplate>
+               
             </TabControl.Resources>
 
             <TabControl.ItemTemplate>

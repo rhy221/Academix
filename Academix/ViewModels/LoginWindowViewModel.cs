@@ -81,7 +81,7 @@ namespace Academix.ViewModels
 
                             using (var context = new QuanlyhocsinhContext())
                             {
-                                schoolYears = await context.Namhocs.ToListAsync();
+                                schoolYears = await context.Namhocs.OrderBy(nh => nh.Nam1).ToListAsync();
                             }
 
                             Namhoc allSchoolYear = new Namhoc();

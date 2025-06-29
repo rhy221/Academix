@@ -56,7 +56,7 @@ namespace Academix.ViewModels.Main.Student
                 {
                     return Student.CtLops.LastOrDefault().MalopNavigation.Tenlop;
                 }
-                return "Không có thông tin";
+                return "";
             }
             set
             {

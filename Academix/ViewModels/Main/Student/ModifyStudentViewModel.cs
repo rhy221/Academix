@@ -29,7 +29,7 @@ namespace Academix.ViewModels.Main.Student
         public ICommand BackCommand { get; }
         public ICommand SaveCommand { get; }
 
-
+        public event Action<string> ModifyStudent;
 
         public ModifyStudentViewModel(NavigationService navigationService, SchoolYearStore schoolYearStore, Hocsinh student)
         {
@@ -111,7 +111,9 @@ namespace Academix.ViewModels.Main.Student
 
                 using (var context = new QuanlyhocsinhContext())
                 {
-                    Hocsinh student = await context.Hocsinhs.FirstOrDefaultAsync(hs => hs.Mahs == _student.Mahs);
+                    Hocsinh student = await context.Hocsinhs
+                        .Include(hs => hs.CtLops.Where(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
+                        .FirstOrDefaultAsync(hs => hs.Mahs == _student.Mahs);
 
                     student.Hoten = _fullName;
                     student.Gioitinh = _selectedGender;
@@ -131,17 +133,10 @@ namespace Academix.ViewModels.Main.Student
                        
                     }
                     await context.SaveChangesAsync();
-                  
 
+                    ModifyStudent?.Invoke(_student.Mahs);
                     MessageBox.Show("Sửa học sinh thành công!");
-                    StudentsViewModel viewModel = (StudentsViewModel)_navigationService.PopStack();
-                    if (viewModel != null)
-                    {
-                        SearchStudentViewModel searchStudentViewModel = (SearchStudentViewModel)viewModel.TabItems[0].ViewModel;
-                        searchStudentViewModel.Search();
-                        _navigationService.Navigate(viewModel);
-
-                    }
+                    Back();
 
 
                 }

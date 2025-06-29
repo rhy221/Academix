@@ -175,12 +175,23 @@ namespace Academix.ViewModels.Main.Student
             ModifyStudentCommand = new RelayCommand(OpenMidifyStudentView);
             DeleteCommand = new AsyncRelayCommand(DeleteStudent);
             SearchCommand = new AsyncRelayCommand(Search);
+            _schoolYearStore.SelectedSchoolYearChanged += Update;
 
             Task.Run(LoadDataAsync).ConfigureAwait(false);
         }
 
+        ~SearchStudentViewModel()
+        {
+            _schoolYearStore.SelectedSchoolYearChanged -= Update;
+        }
+        private void Update()
+        {
+            LoadDataAsync();
+        }
+
         private async Task LoadDataAsync()
         {
+            
             using(var context = new QuanlyhocsinhContext())
             {
                 List<Khoi> grades = await context.Khois.ToListAsync();
@@ -205,7 +216,7 @@ namespace Academix.ViewModels.Main.Student
                 {
                     students = await context.Hocsinhs
                                                    .Where(hs => hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
-                                                   .Include(hs => hs.CtLops)
+                                                   .Include(hs => hs.CtLops.Where(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
                                                     .ThenInclude(ct => ct.MalopNavigation)
                                                     .ThenInclude(l => l.MakhoiNavigation)
                                                     .OrderBy(hs => hs.Mahs)
@@ -232,13 +243,36 @@ namespace Academix.ViewModels.Main.Student
         private void OpenAddStudentView()
         {
             _navigationService.PushStack(_parent);
-            _navigationService.Navigate(new AddStudentViewModel(_navigationService, _schoolYearStore));
+            AddStudentViewModel addStudentViewModel = new AddStudentViewModel(_navigationService, _schoolYearStore);
+            Action<string> handler = null;
+                handler = (id) =>
+            {
+                AddStudent(id);
+                addStudentViewModel.AddStudent -= handler;
+            };
+            addStudentViewModel.AddStudent += handler;
+
+            _navigationService.Navigate(addStudentViewModel);
+        }
+
+        private async Task AddStudent(string id)
+        {
+            using(var context = new QuanlyhocsinhContext())
+            {
+                Hocsinh student = await context.Hocsinhs
+                    .Include(hs => hs.CtLops)
+                                                    .ThenInclude(ct => ct.MalopNavigation)
+                                                    .ThenInclude(l => l.MakhoiNavigation)
+                    .FirstOrDefaultAsync(hs => hs.Mahs == id);
+                Students.Insert(0,new StudentDisplayViewModel(student));
+            }
         }
         private void OpenViewStudentView()
         {
             if(_selectedStudent != null)
             {
                 _navigationService.PushStack(_parent);
+               
                 _navigationService.Navigate(new ViewStudentViewModel(_navigationService,_selectedStudent.Student));
             }
             
@@ -250,10 +284,33 @@ namespace Academix.ViewModels.Main.Student
             if (_selectedStudent != null)
             {
                 _navigationService.PushStack(_parent);
-                _navigationService.Navigate(new ModifyStudentViewModel(_navigationService,_schoolYearStore, _selectedStudent.Student));
+                ModifyStudentViewModel modifyStudentViewModel = new ModifyStudentViewModel(_navigationService, _schoolYearStore, _selectedStudent.Student);
+                Action<string> handler = null;
+                handler = (id) =>
+
+                {
+                    ModifyStudent(id);
+                    modifyStudentViewModel.ModifyStudent -= handler;
+                };
+                modifyStudentViewModel.ModifyStudent += handler;
+                _navigationService.Navigate(modifyStudentViewModel);
             }
         }
 
+        private async Task ModifyStudent(string id)
+        {
+            using (var context = new QuanlyhocsinhContext())
+            {
+                Hocsinh student = await context.Hocsinhs
+                    .Include(hs => hs.CtLops)
+                                                    .ThenInclude(ct => ct.MalopNavigation)
+                                                    .ThenInclude(l => l.MakhoiNavigation)
+                    .FirstOrDefaultAsync(hs => hs.Mahs == id);
+                int pos = Students.IndexOf(SelectedStudent);
+                Students.RemoveAt(pos);
+                Students.Insert(pos, new StudentDisplayViewModel(student));
+            }
+        }
       
 
         private IList _selectedStudents;
@@ -304,7 +361,12 @@ namespace Academix.ViewModels.Main.Student
                     }
                 }
             }
-            catch(Exception ex)
+            catch (DbUpdateException ex)
+            {
+
+                MessageBox.Show("Tồn tại dữ liệu liên quan học sinh không thể xóa");
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }

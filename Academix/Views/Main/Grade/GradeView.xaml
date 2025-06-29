@@ -329,7 +329,7 @@ AlternationCount="10000"
                     </DataGridTemplateColumn>
 
                     <DataGridTextColumn Width="250"
-                                    Binding="{Binding ID}">
+                                    Binding="{Binding ID, Mode=OneWay}">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                         </DataGridTextColumn.HeaderStyle>
@@ -341,7 +341,7 @@ AlternationCount="10000"
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Width="350"
-                                    Binding="{Binding Name}">
+                                    Binding="{Binding Name,Mode=OneWay}">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource LightBlueHeader}"/>
                         </DataGridTextColumn.HeaderStyle>

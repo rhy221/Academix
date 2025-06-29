@@ -22,7 +22,8 @@ namespace Academix.ViewModels.Main.Student
 
         private NavigationService _navigationService;
         private SchoolYearStore _schoolYearStore;
-      
+
+        private bool isAlreadyPlaced = false;
 
         private ObservableCollection<StudentDisplayViewModel> _students;
         public ObservableCollection<StudentDisplayViewModel> Students
@@ -34,6 +35,9 @@ namespace Academix.ViewModels.Main.Student
                 OnPropertyChanged(nameof(Students));
             }
         }
+
+        private List<Khoi> _grades = new List<Khoi>();
+        private List<Lop> _classes = new List<Lop>();
 
         private ObservableCollection<Khoi> _gradeList = new ObservableCollection<Khoi>();
         public ObservableCollection<Khoi> GradeList
@@ -52,7 +56,32 @@ namespace Academix.ViewModels.Main.Student
             set
             {
                 _selectedGrade = value;
+                SelectedClass = null;
+                ClassList = new ObservableCollection<Lop>(_classes.Where(l => l.Makhoi == _selectedGrade.Makhoi));
+
                 OnPropertyChanged(nameof(SelectedGrade));
+            }
+        }
+
+        private ObservableCollection<Lop> _classlist = new ObservableCollection<Lop>();
+        public ObservableCollection<Lop> ClassList
+        {
+            get => _classlist;
+            set
+            {
+                _classlist = value;
+                OnPropertyChanged(nameof(ClassList));
+            }
+        }
+
+        private Lop _selectedClass;
+        public Lop SelectedClass
+        {
+            get => _selectedClass;
+            set
+            {
+                _selectedClass = value;
+                OnPropertyChanged(nameof(SelectedClass));
             }
         }
 
@@ -60,8 +89,7 @@ namespace Academix.ViewModels.Main.Student
         public ICommand NotPlaceFilterCommand { get; }
         public ICommand PlaceStudentCommand { get; }
 
-        private List<Khoi> _grades = new List<Khoi>();
-        private List<Lop> _classes = new List<Lop>();
+       
 
         private ObservableCollection<TreeItemViewModel> _treeItems = new ObservableCollection<TreeItemViewModel>();
         public ObservableCollection<TreeItemViewModel> TreeItems
@@ -80,10 +108,10 @@ namespace Academix.ViewModels.Main.Student
             get => _selectedTreeItem;
             set
             {
-                //if(value.Item is Lop lop)
-                //{
-                //    Filter(lop);
-                //}
+                if (value != null && value.Item is Lop lop)
+                {
+                    Filter(lop);
+                }
                 _selectedTreeItem = value;
                 OnPropertyChanged(nameof(SelectedTreeItem));
             }
@@ -107,7 +135,18 @@ namespace Academix.ViewModels.Main.Student
             _schoolYearStore = schoolYearStore;
             NotPlaceFilterCommand = new AsyncRelayCommand(NotPlaceFilter);
             PlaceStudentCommand = new AsyncRelayCommand(PlaceStudent);
+            _schoolYearStore.SelectedSchoolYearChanged += Update;
             Task.Run(LoadDataAsync).ConfigureAwait(false);
+        }
+
+        ~ClassPlacementViewModel()
+        {
+            _schoolYearStore.SelectedSchoolYearChanged -= Update;
+        }
+
+        private void Update()
+        {
+            LoadDataAsync();
         }
          
         private async Task LoadDataAsync()
@@ -116,7 +155,7 @@ namespace Academix.ViewModels.Main.Student
             {
                 using (var context = new QuanlyhocsinhContext())
                 {
-                    _grades = await context.Khois.Where(k => k.Makhoi == "K10").ToListAsync();
+                    _grades = await context.Khois.ToListAsync();
                     _classes = await context.Lops.Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc).ToListAsync();
                     GradeList = new ObservableCollection<Khoi>(_grades);
                     ObservableCollection<TreeItemViewModel> treeItemViewModels = new ObservableCollection<TreeItemViewModel>();
@@ -130,25 +169,30 @@ namespace Academix.ViewModels.Main.Student
                         treeItemViewModels.Add(gradeTreeItem);
                     }
                     TreeItems = treeItemViewModels;
-                    List<Hocsinh> students = await context.Hocsinhs
-                        .Where(hs => hs.CtLops.Count == 0)
-                        .Include(hs => hs.CtLops)
-                        .ThenInclude(ct => ct.MalopNavigation)
-                        .ToListAsync();
-                    //List<Hocsinh> students = await context.Hocsinhs
-                    //    .Where(hs => hs.CtLops.Count == 0 || hs.CtLops.OrderBy(ct => ct.MalopNavigation.Manamhoc)
-                    //                                                    .LastOrDefault().MalopNavigation.Manamhoc != _schoolYearStore.SchoolYears
-                    //                                                                                                        .LastOrDefault().Manamhoc)
-                    //    .Include(hs => hs.CtLops)
-                    //    .ThenInclude(ct => ct.MalopNavigation)
-                    //    .ToListAsync();
-                    ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
-                    foreach (Hocsinh student in students)
+                    Namhoc previousSchoolYear = await context.Namhocs.FirstOrDefaultAsync(nh => nh.Nam1 == _schoolYearStore.SelectedSchoolYear.Nam1 - 1);
+                    if(previousSchoolYear != null)
                     {
-                        studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
+                        List<Hocsinh> students = await context.Hocsinhs
+                                               .Include(hs => hs.CtLops.Where(ct => ct.MalopNavigation.Manamhoc == previousSchoolYear.Manamhoc || ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
+                                               .ThenInclude(ct => ct.MalopNavigation)
+                                               .Where(hs => !hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc) && !hs.CtLops.Any(ct => ct.MalopNavigation.Makhoi == "K12"))
+                                               .ToListAsync();
+                        //List<Hocsinh> students = await context.Hocsinhs
+                        //    .Where(hs => hs.CtLops.Count == 0 || hs.CtLops.OrderBy(ct => ct.MalopNavigation.Manamhoc)
+                        //                                                    .LastOrDefault().MalopNavigation.Manamhoc != _schoolYearStore.SchoolYears
+                        //                                                                                                        .LastOrDefault().Manamhoc)
+                        //    .Include(hs => hs.CtLops)
+                        //    .ThenInclude(ct => ct.MalopNavigation)
+                        //    .ToListAsync();
+                        ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
+                        foreach (Hocsinh student in students)
+                        {
+                            studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
+                        }
+                        NotPlaceNum = studentDisplayViewModels.Count;
+                        Students = studentDisplayViewModels;
                     }
-                    NotPlaceNum = studentDisplayViewModels.Count;
-                    Students = studentDisplayViewModels;
+                   
                 }
             }
             catch(Exception ex)
@@ -162,19 +206,29 @@ namespace Academix.ViewModels.Main.Student
            
         }
 
-        //private async Task Filter(Lop @class)
-        //{
-        //    using (var context = new QuanlyhocsinhContext())
-        //    {
-        //        List<Hocsinh> students = await context.Hocsinhs.Where(hs => hs.CtLops.Any(ct => ct.Malop == @class.Malop)).ToListAsync();
-        //        ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
-        //        foreach(Hocsinh student in students)
-        //        {
-        //            studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
-        //        }
-        //        Students = studentDisplayViewModels;
-        //    }
-        //}
+        private async Task Filter(Lop @class)
+        {
+            using (var context = new QuanlyhocsinhContext())
+            {
+                Namhoc previousSchoolYear = await context.Namhocs.FirstOrDefaultAsync(nh => nh.Nam1 == _schoolYearStore.SelectedSchoolYear.Nam1 - 1);
+                if(previousSchoolYear != null)
+                {
+
+                }
+                List<Hocsinh> students = await context.Hocsinhs.Where(hs => hs.CtLops.Any(ct => ct.Malop == @class.Malop))
+                    .Include(hs => hs.CtLops.Where(ct => ct.MalopNavigation.Manamhoc == previousSchoolYear.Manamhoc || ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
+                    .ThenInclude(ct => ct.MalopNavigation)
+                    .ToListAsync();
+                ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
+                foreach (Hocsinh student in students)
+                {
+                    studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
+                }
+                Students = studentDisplayViewModels;
+            }
+            isAlreadyPlaced = true;
+
+        }
 
         private async Task Filter()
         {
@@ -217,77 +271,133 @@ namespace Academix.ViewModels.Main.Student
         }
         private async Task NotPlaceFilter()
         {
-            using (var context = new QuanlyhocsinhContext())
+            try
             {
-                
-                List<Hocsinh> students = await context.Hocsinhs
-                    .Where(hs => hs.CtLops.Count == 0)
-                    .Include(hs => hs.CtLops)
-                    .ThenInclude(ct => ct.MalopNavigation)
-                    .ToListAsync();
-                ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
-                foreach (Hocsinh student in students)
+                using (var context = new QuanlyhocsinhContext())
                 {
-                    studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
-                }
-                NotPlaceNum = studentDisplayViewModels.Count;
+                    Namhoc previousSchoolYear = await context.Namhocs.FirstOrDefaultAsync(nh => nh.Nam1 == _schoolYearStore.SelectedSchoolYear.Nam1 - 1);
+                    if (previousSchoolYear != null)
+                    {
+                        List<Hocsinh> students = await context.Hocsinhs
+                                               .Include(hs => hs.CtLops.Where(ct => ct.MalopNavigation.Manamhoc == previousSchoolYear.Manamhoc || ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
+                                               .ThenInclude(ct => ct.MalopNavigation)
+                                               .Where(hs => !hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc) && !hs.CtLops.Any(ct => ct.MalopNavigation.Makhoi == "K12"))
+                                               .ToListAsync();
+                        //List<Hocsinh> students = await context.Hocsinhs
+                        //    .Where(hs => hs.CtLops.Count == 0 || hs.CtLops.OrderBy(ct => ct.MalopNavigation.Manamhoc)
+                        //                                                    .LastOrDefault().MalopNavigation.Manamhoc != _schoolYearStore.SchoolYears
+                        //                                                                                                        .LastOrDefault().Manamhoc)
+                        //    .Include(hs => hs.CtLops)
+                        //    .ThenInclude(ct => ct.MalopNavigation)
+                        //    .ToListAsync();
+                        ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
+                        foreach (Hocsinh student in students)
+                        {
+                            studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
+                        }
+                        Students = studentDisplayViewModels;
+                        SelectedTreeItem = null;
+                    }
+                    isAlreadyPlaced = false;
 
-                Students = studentDisplayViewModels;
+                }
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+
+            }
+            
         }
 
         private async Task PlaceStudent()
         {
             try
             {
-                if (_selectedTreeItem == null || _selectedTreeItem.Item is not Lop @class)
+                if (_selectedClass == null)
                     throw new Exception("Xin hãy chọn lớp muốn chuyển!");
                 if(SelectedStudents.Count == 0)
                     throw new Exception("Xin hãy chọn học sinh muốn chuyển!");
 
                 using (var context = new QuanlyhocsinhContext())
                 {
-                    List<StudentDisplayViewModel> studentDisplayViewModels = SelectedStudents.Cast<StudentDisplayViewModel>().ToList();
-                    foreach(StudentDisplayViewModel student in studentDisplayViewModels)
-                    {
-                        //CtLop ctLop = await context.CtLops.FirstOrDefaultAsync(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SchoolYears.LastOrDefault().Manamhoc);
-                        //if (ctLop != null)
-                        //{
-                        //    context.CtLops.Remove(ctLop);
-                        //    CtLop ct = new CtLop(@class.Malop, student.Id, "HK1", 0);
-                        //    context.CtLops.Add(ct);
-                        //}
-                        //else
-                        //{
-                            
-                            context.CtLops.Add(new CtLop(@class.Malop, student.Id, "HK1", 0));
-                        context.CtLops.Add(new CtLop(@class.Malop, student.Id, "HK2", 0));
 
-                        //}
 
-                    }
-                    await context.SaveChangesAsync();
-                    @class.Siso += studentDisplayViewModels.Count;
-                    ObservableCollection<TreeItemViewModel> treeItemViewModels = new ObservableCollection<TreeItemViewModel>();
-                    foreach (Khoi grade in _grades)
-                    {
-                        TreeItemViewModel gradeTreeItem = new TreeItemViewModel(grade);
-                        foreach (Lop @classs in _classes.Where(l => l.Makhoi == grade.Makhoi).ToList())
+                    if (isAlreadyPlaced && _selectedClass.Malop == _selectedTreeItem.Id)
+                        throw new Exception("Học sinh đã có trong lớp!");
+                        List<StudentDisplayViewModel> studentDisplayViewModels = SelectedStudents.Cast<StudentDisplayViewModel>().ToList();
+
+                        foreach (StudentDisplayViewModel student in studentDisplayViewModels)
                         {
-                            gradeTreeItem.Children.Add(new TreeItemViewModel(@classs));
-                        }
-                        treeItemViewModels.Add(gradeTreeItem);
+
+                            List<CtLop> ctLops = await context.CtLops.Where(ct => ct.Mahs == student.Id && ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc).ToListAsync();
+                            foreach (CtLop ctLop in ctLops)
+                            {
+                                context.CtLops.Remove(ctLop);
+                            }
+
+
+                            List<Hocky> semesters = await context.Hockies.ToListAsync();
+                            foreach (Hocky semester in semesters)
+                            {
+                                context.CtLops.Add(new CtLop(_selectedClass.Malop, student.Id, semester.Mahocky, 0));
+
+                            }
+
+                            await context.SaveChangesAsync();
+                            foreach (TreeItemViewModel treeItemViewModel in _treeItems)
+                            {
+                                if (treeItemViewModel.Id == _selectedGrade.Makhoi)
+                                {
+                                    foreach (TreeItemViewModel child in treeItemViewModel.Children)
+                                    {
+                                        if (child.Id == _selectedClass.Malop && child.Item is Lop clas)
+                                        {
+                                            if (isAlreadyPlaced && _selectedTreeItem != null && SelectedTreeItem.Item is Lop @class)
+                                            {
+                                                @class.Siso -= SelectedStudents.Count;
+                                                SelectedTreeItem.NotifyItemChange();
+                                            }
+                                            clas.Siso += SelectedStudents.Count;
+                                            child.NotifyItemChange();
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                            foreach (StudentDisplayViewModel studentDisplayViewModel in studentDisplayViewModels)
+                            {
+                                Students.Remove(studentDisplayViewModel);
+                            }
+                            NotPlaceNum = studentDisplayViewModels.Count;
+
+                            SelectedStudents.Clear();
+                            MessageBox.Show("Chuyển lớp thành công!");
+
+
+
+
+
+
+                        
                     }
-                    TreeItems = treeItemViewModels;
+                    
+                    
+                    
+                   
+
+
 
                 }
-                await NotPlaceFilter();
-                MessageBox.Show("Chuyển lớp thành công!");
 
             }
-            catch
+            catch(Exception ex)
             {
-
+                MessageBox.Show(ex.Message);
             }
             finally
             {

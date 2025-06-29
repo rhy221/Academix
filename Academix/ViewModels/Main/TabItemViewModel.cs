@@ -10,12 +10,21 @@ namespace Academix.ViewModels.Main
     public class TabItemViewModel:BaseViewModel
     {
         public string Header { get; set; }
-        public BaseViewModel ViewModel { get; set; }  
+        private BaseViewModel _viewModel;
+        public BaseViewModel ViewModel
+        {
+            get => _viewModel;
+            set
+            {
+                _viewModel = value;
+                OnPropertyChanged(nameof(ViewModel));
+            }
+        }
 
         public TabItemViewModel(string header, BaseViewModel viewModel)
         {
             Header = header;
-            ViewModel = viewModel;
+            _viewModel = viewModel;
         }
     }
 }

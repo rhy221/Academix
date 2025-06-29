@@ -15,10 +15,39 @@ xmlns:converters="clr-namespace:Academix.Converters"
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>
+        <Style TargetType="{x:Type Button}"
+BasedOn="{StaticResource DeepBlueButton}">
+            <Setter Property="FlowDirection"
+    Value="LeftToRight"/>
+
+
+        </Style>
     </UserControl.Resources>
     <Grid >
         <DockPanel LastChildFill="True"
            >
+            <StackPanel
+                DockPanel.Dock="Top"
+                Orientation="Horizontal"
+                FlowDirection="RightToLeft"
+                Margin="0,0,0,20">
+                <Button
+                    Command="{Binding DeleteScoreTypeCommand}"
+                    Margin="20,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterial
+                            Height="15"
+                            Width="15"
+                            Kind="Close"
+                            VerticalAlignment="Center"
+                            Margin="0,0,5,0"/>
+                        <TextBlock Foreground="White" 
+                            FontSize="18"><Run Text="Xóa"/></TextBlock>
+                    </StackPanel>
+                </Button>
+
+            </StackPanel>
+
             <TabControl DockPanel.Dock="Right"
                 VerticalAlignment="Top"
                 Visibility="Visible"
@@ -252,43 +281,6 @@ xmlns:converters="clr-namespace:Academix.Converters"
                                     Margin="5,0,0,0"/>
                                 <TextBlock Foreground="White" 
                                     FontSize="18"><Run Text="Sửa"/></TextBlock>
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-
-                </TabItem>
-                <TabItem Header="Xóa"
-                        >
-                    <TabItem.Style>
-                        <Style TargetType="{x:Type TabItem}"
-                            BasedOn="{StaticResource AboveEndTabItem}"/>
-                    </TabItem.Style>
-                    <StackPanel 
-                        VerticalAlignment="Top"
-                        Margin="10"
-                        FlowDirection="RightToLeft">
-                        <StackPanel Orientation="Horizontal"
-                            Margin="0,0,0,20">
-                            <TextBox IsReadOnly="True" Text="{Binding SelectedScoreTypeName, Mode=OneWay}"/>
-                            <TextBlock><Run Text="Tên loại điểm"/></TextBlock>
-                        </StackPanel>
-                        <StackPanel
-                            Orientation="Vertical"
-                            HorizontalAlignment="Right"
-                        >
-                          
-                        </StackPanel>
-                        <Button HorizontalAlignment="Left"
-                            Command="{Binding DeleteScoreTypeCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <iconPacks:PackIconMaterial
-                                    Height="15"
-                                    Width="15"
-                                    Kind="Close"
-                                    VerticalAlignment="Center"
-                                    Margin="5,0,0,0"/>
-                                <TextBlock Foreground="White" 
-                                    FontSize="18"><Run Text="Xóa"/></TextBlock>
                             </StackPanel>
                         </Button>
                     </StackPanel>

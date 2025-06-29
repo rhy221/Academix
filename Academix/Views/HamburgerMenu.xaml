@@ -125,6 +125,7 @@
                                 Width="240"
             DisplayMode="CompactOverlay"
             HamburgerWidth="48"
+                                SelectedIndex="1"
             ItemTemplate="{StaticResource HamburgerMenuItem}"
             OptionsItemTemplate="{StaticResource HamburgerOptionsMenuItem}"
                                 HorizontalAlignment="Left"

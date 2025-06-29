@@ -12,8 +12,12 @@ namespace Academix.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is double doubleValue && doubleValue == -1)
-                return string.Empty;
+            if (value is double doubleValue)
+            {
+                if(doubleValue == -1 || doubleValue == Double.MinValue)
+                    return string.Empty;
+                
+            }
 
             return value.ToString();
         }
@@ -21,7 +25,7 @@ namespace Academix.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (string.IsNullOrWhiteSpace(value as string))
-                return -1;
+                return Double.MinValue;
 
             if (double.TryParse(value as string, out double result))
                 return result;

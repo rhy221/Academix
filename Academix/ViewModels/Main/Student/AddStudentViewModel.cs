@@ -35,7 +35,7 @@ namespace Academix.ViewModels.Main.Student
         public ICommand SaveCommand { get; }
         public ICommand ResetCommand { get; }
 
-
+        public event Action<string> AddStudent;
 
         public AddStudentViewModel(NavigationService navigationService, SchoolYearStore schoolYearStore)
         {
@@ -73,7 +73,8 @@ namespace Academix.ViewModels.Main.Student
                     string.IsNullOrWhiteSpace(_selectedGender)||
                     _selectedProvince == null ||
                     _selectedDistrict == null ||
-                    _selectedWard == null)
+                    _selectedWard == null||
+                    string.IsNullOrWhiteSpace(_email))
                 {
                     throw new Exception("Vui lòng điền đầy đủ thông tin học sinh.");
                 }
@@ -98,12 +99,15 @@ namespace Academix.ViewModels.Main.Student
                         throw new Exception($"Không thể thêm học sinh vì vượt qua sĩ số tối đa là {maximumClassSize.Giatri}");
 
                     Hocsinh student = new Hocsinh(GenerateIdService.GenerateId(), _fullName, _selectedGender, _dateOfBirth ?? new DateTime(), _selectedProvince.name + "_" + _selectedDistrict.name + "_" + _selectedWard.name, _email);
-                    student.CtLops.Add(new CtLop(_selectedClass.Malop, _studentID, "HK1", 0d));
-                    student.CtLops.Add(new CtLop(_selectedClass.Malop, _studentID, "HK2", 0d));
+                    List<Hocky> semesters = await context.Hockies.ToListAsync();
+                    foreach(Hocky semester in semesters)
+                    {
+                        student.CtLops.Add(new CtLop(_selectedClass.Malop, _studentID, semester.Mahocky, 0d));
 
+                    }
                     context.Hocsinhs.Add(student);
                     await context.SaveChangesAsync();
-
+                    AddStudent?.Invoke(student.Mahs);
                     MessageBox.Show("Thêm học sinh thành công!");
                 }
             

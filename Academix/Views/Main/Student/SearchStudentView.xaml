@@ -52,6 +52,7 @@
             LastChildFill="True"
                    Visibility="Visible">
                 <Expander 
+                    IsExpanded="True"
                 Background="Transparent"
                 BorderBrush="#FF615F5F"
                 DockPanel.Dock="Top"
@@ -147,7 +148,7 @@
                                 <TextBlock><Run Text="Khối"/></TextBlock>
                             </StackPanel>
                             <StackPanel>
-                                <ComboBox Padding="0,0,20,0"
+                                <ComboBox Padding="20,0,0,0"
                                         ItemsSource="{Binding GenderList}"
                                         SelectedItem="{Binding SelectedGender, Mode=TwoWay}"/>
                                 <TextBlock><Run Text="Giới tính"/></TextBlock>

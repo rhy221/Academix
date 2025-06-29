@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Academix.ViewModels.Main
 {
@@ -14,6 +15,22 @@ namespace Academix.ViewModels.Main
         public TreeItemViewModel(object item)
         {
             Item = item;
+        }
+        public string Id
+        {
+            get
+            {
+                if (Item is Khoi grade)
+                {
+                    return grade.Makhoi;
+                }
+                else if (Item is Lop @class)
+                {
+                    return @class.Malop;
+                }
+
+                return "";
+            }
         }
         public string Title { 
             get
@@ -30,6 +47,7 @@ namespace Academix.ViewModels.Main
 
                 return "";
             }
+            
                 }
         public ObservableCollection<TreeItemViewModel> Children { get; set; } = new();
 
@@ -45,6 +63,12 @@ namespace Academix.ViewModels.Main
             }
 
             return "";
+        }
+
+        public void NotifyItemChange()
+        {
+            OnPropertyChanged(nameof(Title));
+           
         }
     }
 }

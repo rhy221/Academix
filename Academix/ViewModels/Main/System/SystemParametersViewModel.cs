@@ -168,22 +168,39 @@ namespace Academix.ViewModels.Main.System
 
         private async Task SaveData()
         {
-            using(var context = new QuanlyhocsinhContext())
+            try
             {
-                List<Thamso> parameters = await context.Thamsos.ToListAsync();
-                parameters.FirstOrDefault(p => p.Tenthamso == MINIMUM_AGE).Giatri = MinimumAge;
-                parameters.FirstOrDefault(p => p.Tenthamso == MAXIMUM_AGE).Giatri = MaximumAge;
-                parameters.FirstOrDefault(p => p.Tenthamso == MINIMUM_SCORE).Giatri = MinimumScore;
-                parameters.FirstOrDefault(p => p.Tenthamso == MAXIMUM_SCORE).Giatri = MaximumScore;
-                parameters.FirstOrDefault(p => p.Tenthamso == MAXIMUM_CLASS_SIZE).Giatri = MaximumClassize;
-                parameters.FirstOrDefault(p => p.Tenthamso == PASSING_GRADE).Giatri = PassingGrade;
-                parameters.FirstOrDefault(p => p.Tenthamso == SUBJECT_PASSING_GRADE).Giatri = SubjectPassingGrade;
-                IsProcessing = true;
-                await context.SaveChangesAsync();
-            }
+                
+                if (MinimumAge >= MaximumAge)
+                    throw new Exception("Tuổi tối thiểu không được lớn hơn tuổi tối đa");
+                if (MinimumScore >= MaximumScore)
+                    throw new Exception("Điểm tối thiểu không được lớn hơn điển tối đa");
+                using (var context = new QuanlyhocsinhContext())
+                {
+                    List<Thamso> parameters = await context.Thamsos.ToListAsync();
+                    parameters.FirstOrDefault(p => p.Tenthamso == MINIMUM_AGE).Giatri = MinimumAge;
+                    parameters.FirstOrDefault(p => p.Tenthamso == MAXIMUM_AGE).Giatri = MaximumAge;
+                    parameters.FirstOrDefault(p => p.Tenthamso == MINIMUM_SCORE).Giatri = MinimumScore;
+                    parameters.FirstOrDefault(p => p.Tenthamso == MAXIMUM_SCORE).Giatri = MaximumScore;
+                    parameters.FirstOrDefault(p => p.Tenthamso == MAXIMUM_CLASS_SIZE).Giatri = MaximumClassize;
+                    parameters.FirstOrDefault(p => p.Tenthamso == PASSING_GRADE).Giatri = PassingGrade;
+                    parameters.FirstOrDefault(p => p.Tenthamso == SUBJECT_PASSING_GRADE).Giatri = SubjectPassingGrade;
+                    IsProcessing = true;
+                    await context.SaveChangesAsync();
+                }
 
-            IsProcessing = false;
-            MessageBox.Show("Thay đổi lưu thành công");
+                IsProcessing = false;
+                MessageBox.Show("Thay đổi lưu thành công");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+
+            }
+           
         }
 
 

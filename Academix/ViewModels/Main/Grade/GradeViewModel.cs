@@ -449,7 +449,7 @@ namespace Academix.ViewModels.Main.Grade
 
                         foreach (StudentScoreDisplay studentScoreDisplay in _filteredStudents)
                         {
-                            if (studentScoreDisplay.Score != -1)
+                            if (studentScoreDisplay.Score != -1 && studentScoreDisplay.Score != Double.MinValue)
                             {
                                 CtBangdiemmonhoc ctBangdiemmonhoc = bangdiemmonhoc.CtBangdiemmonhocs.FirstOrDefault(ct => ct.Mahs == studentScoreDisplay.ID);
                                 if (ctBangdiemmonhoc == null)
@@ -490,7 +490,7 @@ namespace Academix.ViewModels.Main.Grade
                             //bangdiemmonhoc.CtBangdiemmonhocs.Add(ctBangdiemmonhoc);
                             context.CtBangdiemmonhocs.Add(ctBangdiemmonhoc);
 
-                            if (studentScoreDisplay.Score != -1)
+                            if (studentScoreDisplay.Score != -1 && studentScoreDisplay.Score != Double.MinValue)
                             {
                                 CtDiemmonhoc ctDiemmonhoc = new CtDiemmonhoc(ctBangdiemmonhoc.Mactbdmh, _selectedScoreType.Maloaidiem, _no, studentScoreDisplay.Score);
                                 //ctBangdiemmonhoc.CtDiemmonhocs.Add(ctDiemmonhoc);

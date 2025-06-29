@@ -16,6 +16,7 @@
        
         <TabControl Background="Transparent"
                     ItemsSource="{Binding TabItems}"
+                    SelectedItem="{Binding SelectedTabItem, Mode=TwoWay}"
                     SelectedIndex="0">
             <TabControl.Resources>
                 <Style TargetType="TabItem"

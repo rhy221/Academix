@@ -17,6 +17,29 @@ namespace Academix.ViewModels.Main.Student
         private NavigationService _navigationService;
         private ObservableCollection<TabItemViewModel> _tabItems;
         public ObservableCollection<TabItemViewModel> TabItems => _tabItems;
+        private TabItemViewModel _selectedTabItem;
+        public TabItemViewModel SelectedTabItem
+        {
+            get => _selectedTabItem;
+            set
+            {
+                if(value.Header == "Tìm kiếm học sinh")
+                {
+                    value.ViewModel = new SearchStudentViewModel(_navigationService, _schoolYearStore, this);
+                }
+
+                if (value.Header == "Tiếp nhận học sinh")
+                {
+                    value.ViewModel = new AddFreshmanViewModel(_navigationService, _schoolYearStore);
+                }
+                else if(value.Header == "Phân lớp")
+                {
+                    value.ViewModel = new ClassPlacementViewModel(_navigationService, _schoolYearStore);
+                }
+                _selectedTabItem = value;
+                
+            }
+        }
 
         public StudentsViewModel(NavigationService navigationService, SchoolYearStore schoolYearStore)
         {
@@ -25,9 +48,10 @@ namespace Academix.ViewModels.Main.Student
             _tabItems = new ObservableCollection<TabItemViewModel>()
             {
                 new TabItemViewModel("Tìm kiếm học sinh", new SearchStudentViewModel(_navigationService, _schoolYearStore, this)),
-                new TabItemViewModel("Tiếp nhận học sinh đầu cấp", new AddFreshmanViewModel(_navigationService, _schoolYearStore)),
-                new TabItemViewModel("Phân lớp", new ClassPlacementViewModel(_navigationService, _schoolYearStore)),
+                new TabItemViewModel("Tiếp nhận học sinh", null),
+                new TabItemViewModel("Phân lớp", null),
             };
+            SelectedTabItem = _tabItems[0];
         }
 
        

@@ -48,8 +48,8 @@ namespace Academix.ViewModels.Main.System
         public string NewScoreTypeName { get; set; }
         public int NewScoreTypeMultiplier { get; set; }
 
-        public string SelectedScoreTypeName { get; set; }
-        public int SelectedScoreTypeMultiplier { get; set; }
+        public string SelectedScoreTypeName { get; set; } = "";
+        public int SelectedScoreTypeMultiplier { get; set; } = 1;
 
         private ScoreTypeViewModel _selectedScoreType;
         public ScoreTypeViewModel SelectedScoreType
@@ -203,6 +203,11 @@ namespace Academix.ViewModels.Main.System
                     }
                         
 
+                }
+                catch (DbUpdateException ex)
+                {
+
+                    MessageBox.Show("Tồn tại dữ liệu liên quan loại điểm không thể xóa");
                 }
                 catch (Exception ex)
                 {

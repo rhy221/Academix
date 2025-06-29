@@ -23,7 +23,7 @@ namespace Academix.ViewModels.Main.Grade
             get => _score;
             set
             {
-                if(value >= MinimumScore && value <= MaximumScore)
+                if(value >= MinimumScore && value <= MaximumScore || value == Double.MinValue)
                 {
                     _score = value;
                 }

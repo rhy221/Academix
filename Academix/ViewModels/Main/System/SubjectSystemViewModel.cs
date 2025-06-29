@@ -293,8 +293,13 @@ namespace Academix.ViewModels.Main.System
                     MessageBox.Show("Xóa môn học thành công!");
                 }
             }
-                  
-            catch(Exception ex)
+            catch (DbUpdateException ex)
+            {
+
+                MessageBox.Show("Tồn tại dữ liệu liên quan môn học không thể xóa");
+            }
+
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }

@@ -16,10 +16,40 @@
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>
+        <Style TargetType="{x:Type Button}"
+BasedOn="{StaticResource DeepBlueButton}">
+        <Setter Property="FlowDirection"
+    Value="LeftToRight"/>
+
+
+    </Style>
     </UserControl.Resources>
     <Grid>
         <DockPanel LastChildFill="True"
                >
+            <StackPanel
+                DockPanel.Dock="Top"
+                Orientation="Horizontal"
+                FlowDirection="RightToLeft"
+                Margin="0,0,0,20"
+                >
+                <Button
+                    Command="{Binding DeleteCommand}"
+                    Margin="20,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterial
+                            Height="15"
+                            Width="15"
+                            Kind="Close"
+                            VerticalAlignment="Center"
+                            Margin="0,0,5,0"/>
+                        <TextBlock Foreground="White" 
+                            FontSize="18"><Run Text="Xóa"/></TextBlock>
+                    </StackPanel>
+                </Button>
+
+            </StackPanel>
+
             <TabControl DockPanel.Dock="Right"
                     VerticalAlignment="Top"
                     Visibility="Visible"
@@ -123,7 +153,7 @@ Value="LeftToRight"/>
             </TabControl.Style>-->
                 <TabItem Header="Thêm mới">
                     <TabItem.Style>
-                        <Style TargetType="TabItem"
+                        <Style TargetType="{x:Type TabItem}"
                            BasedOn="{StaticResource AboveStartTabItem}"/>
                     </TabItem.Style>
                     <StackPanel
@@ -219,7 +249,7 @@ Value="LeftToRight"/>
                 <TabItem Header="Sửa"
                         >
                     <TabItem.Style>
-                        <Style TargetType="TabItem"
+                        <Style TargetType="{x:Type TabItem}"
            BasedOn="{StaticResource AboveMiddleTabItem}"/>
                     </TabItem.Style>
                     <StackPanel 
@@ -308,61 +338,6 @@ Value="LeftToRight"/>
                     </StackPanel>
 
                 </TabItem>
-                <TabItem Header="Xóa"
-                        >
-                    <TabItem.Style>
-                        <Style TargetType="{x:Type TabItem}"
-                        BasedOn="{StaticResource AboveEndTabItem}"/>
-                    </TabItem.Style>
-                    <StackPanel 
-                    VerticalAlignment="Top"
-                    Margin="10"
-                    FlowDirection="RightToLeft">
-                        <StackPanel Orientation="Horizontal"
-                        Margin="0,0,0,20">
-                            <TextBox IsReadOnly="True" Text="{Binding SelectedSubjectName, Mode=OneWay}"/>
-                            <TextBlock><Run Text="Tên môn"/></TextBlock>
-                        </StackPanel>
-                        <StackPanel
-                        Orientation="Vertical"
-                        HorizontalAlignment="Right"
-                        >
-                            <!--<StackPanel.Resources>
-                            <Style TargetType="{x:Type StackPanel}">
-                                <Setter Property="Margin"
-                                    Value="0,0,0,20"/>
-                            </Style>
-                        </StackPanel.Resources>
-                        <StackPanel Orientation="Horizontal" >
-                            <Controls:NumericUpDown Value="{Binding ModifyOralNum, Mode=TwoWay}"/>
-
-                            <TextBlock><Run Text="Miệng"/></TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Controls:NumericUpDown Value="{Binding ModifyShortNum, Mode=TwoWay}"/>
-                            <TextBlock><Run Text="15 Phút"/></TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Controls:NumericUpDown  Value="{Binding ModifyPeriodNum, Mode=TwoWay}"/>
-                            <TextBlock><Run Text="1 Tiết"/></TextBlock>
-                        </StackPanel>-->
-                        </StackPanel>
-                        <Button HorizontalAlignment="Left"
-                        Command="{Binding DeleteCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <iconPacks:PackIconMaterial
-                                Height="15"
-                                Width="15"
-                                Kind="Close"
-                                VerticalAlignment="Center"
-                                Margin="5,0,0,0"/>
-                                <TextBlock Foreground="White" 
-                                FontSize="18"><Run Text="Xóa"/></TextBlock>
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-
-                </TabItem>
             </TabControl>
             <DataGrid DockPanel.Dock="Right"
                   HorizontalAlignment="Center"
@@ -396,7 +371,7 @@ Value="LeftToRight"/>
                 </DataGrid.Resources>
 
                 <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell">
+                    <Style TargetType="{x:Type DataGridCell}">
                         <Setter Property="TextBlock.TextAlignment" 
                             Value="Center"/>
                         <Setter Property="BorderThickness"
@@ -411,15 +386,12 @@ Value="LeftToRight"/>
                     <DataGridTemplateColumn Header="STT" Width="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
-                                      Path=AlternationIndex, 
-                                      Converter={StaticResource IndexToOneBasedConverter},
-                                      Mode=OneWay}"
+                                <TextBlock Text="{Binding AlternationIndex, Converter={StaticResource IndexToOneBasedConverter}, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"
                        HorizontalAlignment="Center"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource CustomHeader}" />
+                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource CustomHeader}" />
                         </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
 

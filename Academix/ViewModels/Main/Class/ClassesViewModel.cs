@@ -37,16 +37,40 @@ namespace Academix.ViewModels.Main.Class
             DeleteCommand = new AsyncRelayCommand(DeleteSelected);
             ViewClassCommand = new RelayCommand(ViewClass);
             Task.Run(LoadDataAsync).ConfigureAwait(false);
+            _schoolYearStore.SelectedSchoolYearChanged += Update;
+        }
+
+         ~ClassesViewModel()
+        {
+            _schoolYearStore.SelectedSchoolYearChanged -= Update;
+        }
+
+        private void Update()
+        {
+            LoadDataAsync();
         }
 
         private async Task LoadDataAsync()
         {
             using(var context = new QuanlyhocsinhContext())
             {
-                List<Lop> classes = await context.Lops
+                List<Lop> classes;
+                if (!_schoolYearStore.SelectedSchoolYear.IsAll)
+                {
+                    classes = await context.Lops
+                                                .Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc)
                                                  .Include(l => l.MakhoiNavigation)
                                                  .Include(l => l.ManamhocNavigation)
                                                 .ToListAsync();
+                }
+                else
+                {
+                    classes = await context.Lops
+                                                 .Include(l => l.MakhoiNavigation)
+                                                 .Include(l => l.ManamhocNavigation)
+                                                .ToListAsync();
+                }
+                
                 List<Khoi> grades = await context.Khois.ToListAsync();
 
                 Khoi AllGrade = new Khoi();
@@ -405,6 +429,11 @@ namespace Academix.ViewModels.Main.Class
                     }
                 }
                    
+            }
+            catch (DbUpdateException ex)
+            {
+
+                MessageBox.Show("Tồn tại dữ liệu liên quan lớp học không thể xóa");
             }
             catch (Exception ex)
             {

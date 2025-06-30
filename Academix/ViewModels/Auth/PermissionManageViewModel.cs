@@ -113,11 +113,17 @@ namespace Academix.ViewModels
             if (SelectedGroup != null)
             {
                 using var db = new PhanQuyenNguoiDungContext();
-                var entity = db.NhomNguoiDung.Find(SelectedGroup.MaNhom);
+                var entity = db.NhomNguoiDung
+                       .Include(n => n.PhanQuyens)
+                       .FirstOrDefault(n => n.MaNhom == SelectedGroup.MaNhom);
                 if (entity != null)
                 {
+                    db.PhanQuyen.RemoveRange(entity.PhanQuyens);
+
                     db.NhomNguoiDung.Remove(entity);
+
                     db.SaveChanges();
+
                     GroupList.Remove(SelectedGroup);
                     SelectedGroup = null;
                 }

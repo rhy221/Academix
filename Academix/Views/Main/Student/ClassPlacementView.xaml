@@ -14,7 +14,7 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>
         <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource LightBlueGridViewColumnHeaderStyle}"/>
-       
+
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <StackPanel
@@ -30,7 +30,7 @@
                 Columns="2"
                 FlowDirection="LeftToRight">
                 <UniformGrid.Resources>
-                    
+
                     <Style TargetType="{x:Type TextBox}">
                         <Setter Property="Width"
                             Value="400"/>
@@ -115,7 +115,7 @@
                     FlowDirection="RightToLeft"
                     Margin="0,0,0,20">
             <StackPanel.Resources>
-                
+
             </StackPanel.Resources>
             <!--<StackPanel Orientation="Horizontal"
 FlowDirection="RightToLeft"
@@ -265,7 +265,7 @@ AlternationCount="10000"
 
                 <DataGridTextColumn Header="Họ và tên" 
                                     Binding="{Binding Name}"
-                                    Width="300">
+                                    Width="200">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
@@ -273,7 +273,7 @@ AlternationCount="10000"
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Mã học sinh" 
                                     Binding="{Binding Id}"
-                                    Width="200">
+                                    Width="150">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
@@ -281,7 +281,7 @@ AlternationCount="10000"
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Giới tính" 
                                     Binding="{Binding Gender}"
-                                    Width="150">
+                                    Width="120">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>
@@ -295,9 +295,17 @@ AlternationCount="10000"
                             BasedOn="{StaticResource LightBlueHeader}"/>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
+                <DataGridTextColumn Header="Địa chỉ" 
+                    Binding="{Binding Address}"
+                    Width="*">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}"
+                            BasedOn="{StaticResource LightBlueHeader}"/>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Lớp trước đó" 
                     Binding="{Binding ClassName}"
-                    Width="*">
+                    Width="200">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>

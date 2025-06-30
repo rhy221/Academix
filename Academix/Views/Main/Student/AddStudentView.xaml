@@ -256,6 +256,8 @@
                 </StackPanel>
                 <StackPanel >
                     <DatePicker SelectedDate="{Binding DateOfBirth, Mode=TwoWay}" Height="33" Width="280" 
+                                SelectedDateFormat="Short"
+            Language="vi-VN"
                                 FontSize="20"
                                 FontWeight="Bold"
                                 Foreground="{StaticResource GrayForeground}"

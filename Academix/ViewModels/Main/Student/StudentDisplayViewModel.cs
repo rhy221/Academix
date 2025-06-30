@@ -18,6 +18,8 @@ namespace Academix.ViewModels.Main.Student
             get => Student.Mahs;
         }
 
+      
+
         public string Name
         {
             get => Student.Hoten;
@@ -45,6 +47,16 @@ namespace Academix.ViewModels.Main.Student
             {
                 Student.Ngaysinh = DateTime.ParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 OnPropertyChanged(nameof(DateOfBirth));
+            }
+        }
+
+        public string Address
+        {
+            get => Student.Diachi.Replace("_", ", ");
+            set
+            {
+                Student.Diachi = value;
+                OnPropertyChanged(nameof(Address));
             }
         }
      

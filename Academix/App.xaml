@@ -1,11 +1,11 @@
-﻿<Application x:Class="Academix.App"
+<Application x:Class="Academix.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Academix"
              xmlns:view="clr-namespace:Academix.Views"
              
              >
-   
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,8 +22,8 @@
                 <ResourceDictionary Source="/Resources/Styles/CustomToggleButtons.xaml"/>
                 <ResourceDictionary Source="/Resources/Colors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-        
+
         </ResourceDictionary>
     </Application.Resources>
-    
+
 </Application>

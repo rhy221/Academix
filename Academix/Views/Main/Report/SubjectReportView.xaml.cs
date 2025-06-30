@@ -24,6 +24,7 @@ namespace Academix.Views
         public SubjectReportView()
         {
             InitializeComponent();
+            this.DataContext = new SubjectReportViewModel();
         }
     }
 }

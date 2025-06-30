@@ -43,7 +43,7 @@ namespace Academix.ViewModels
         }
 
         private async Task ThucHienDangNhap()
-        { 
+        {
             try
             {
                 using (var db = new PhanQuyenNguoiDungContext())
@@ -107,7 +107,7 @@ namespace Academix.ViewModels
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -115,7 +115,7 @@ namespace Academix.ViewModels
             {
 
             }
-            
+
         }
 
     }

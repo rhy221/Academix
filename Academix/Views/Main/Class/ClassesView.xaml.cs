@@ -24,6 +24,7 @@ namespace Academix.Views
         public ClassesView()
         {
             InitializeComponent();
+            this.DataContext = new ClassesViewModel();
         }
 
        

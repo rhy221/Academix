@@ -1,4 +1,4 @@
-﻿using Academix.Models;
+using Academix.Models;
 using Academix.Stores;
 using Academix.ViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +13,7 @@ namespace Academix;
 /// </summary>
 public partial class App : Application
 {
-  
+
 
     protected override async void OnStartup(StartupEventArgs e)
     {

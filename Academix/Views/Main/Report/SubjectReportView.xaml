@@ -22,8 +22,8 @@
                BasedOn="{StaticResource DeepBlueButton}"/>
         <Style TargetType="Expander"
                BasedOn="{StaticResource LightBlueExpander}"/>
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-            <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:IndexToOneBasedConverter x:Key="IndexToOneBasedConverter"/>
     </UserControl.Resources>
     <DockPanel>
         <Expander 

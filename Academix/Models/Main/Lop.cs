@@ -7,13 +7,13 @@ public partial class Lop
 {
     public string Malop { get; set; } = null!;
 
+    public string Tenlop { get; set; } = null!;
+
     public int Siso { get; set; }
 
     public string Makhoi { get; set; } = null!;
 
     public string Manamhoc { get; set; } = null!;
-
-    public string? Tenlop { get; set; }
 
     public virtual ICollection<Bangdiemmonhoc> Bangdiemmonhocs { get; set; } = new List<Bangdiemmonhoc>();
 

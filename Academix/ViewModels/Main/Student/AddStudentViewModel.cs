@@ -114,7 +114,7 @@ namespace Academix.ViewModels.Main.Student
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.StackTrace);
             }
             finally
             {

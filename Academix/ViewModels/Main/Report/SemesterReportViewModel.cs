@@ -58,7 +58,12 @@ namespace Academix.ViewModels.Main.Report
 
         public string SelectedSemesterName
         {
-            get => _selectedSemester.Tenhocky;
+            get
+            {
+                if (_selectedSemester != null)
+                    return _selectedSemester.Tenhocky;
+                return "";
+            }
             set
             {
                 _selectedSemester.Tenhocky = value;

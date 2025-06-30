@@ -23,8 +23,16 @@ namespace Academix.ViewModels.Main.Student
         private NavigationService _navigationService;
         private SchoolYearStore _schoolYearStore;
 
-        private bool isAlreadyPlaced = false;
-
+        private bool _isAlreadyPlaced = false;
+        public bool IsAlreadyPlaced
+        {
+            get => _isAlreadyPlaced;
+            set
+            {
+                _isAlreadyPlaced = value;
+                OnPropertyChanged(nameof(IsAlreadyPlaced));
+            }
+        }
         private ObservableCollection<StudentDisplayViewModel> _students;
         public ObservableCollection<StudentDisplayViewModel> Students
         {
@@ -88,7 +96,7 @@ namespace Academix.ViewModels.Main.Student
         public IList SelectedStudents { get; set; } = new List<StudentDisplayViewModel>();
         public ICommand NotPlaceFilterCommand { get; }
         public ICommand PlaceStudentCommand { get; }
-
+        public ICommand UnPlaceStudentCommand { get; }
        
 
         private ObservableCollection<TreeItemViewModel> _treeItems = new ObservableCollection<TreeItemViewModel>();
@@ -135,6 +143,7 @@ namespace Academix.ViewModels.Main.Student
             _schoolYearStore = schoolYearStore;
             NotPlaceFilterCommand = new AsyncRelayCommand(NotPlaceFilter);
             PlaceStudentCommand = new AsyncRelayCommand(PlaceStudent);
+            UnPlaceStudentCommand = new AsyncRelayCommand(UnPlaceStudent);
             _schoolYearStore.SelectedSchoolYearChanged += Update;
             Task.Run(LoadDataAsync).ConfigureAwait(false);
         }
@@ -226,7 +235,7 @@ namespace Academix.ViewModels.Main.Student
                 }
                 Students = studentDisplayViewModels;
             }
-            isAlreadyPlaced = true;
+            IsAlreadyPlaced = true;
 
         }
 
@@ -298,7 +307,7 @@ namespace Academix.ViewModels.Main.Student
                         Students = studentDisplayViewModels;
                         SelectedTreeItem = null;
                     }
-                    isAlreadyPlaced = false;
+                    IsAlreadyPlaced = false;
 
                 }
             }
@@ -313,6 +322,74 @@ namespace Academix.ViewModels.Main.Student
             
         }
 
+        private async Task UnPlaceStudent()
+        {
+            try
+            {
+                
+                if (SelectedStudents.Count == 0)
+                    throw new Exception("Xin hãy chọn học sinh muốn hủy phân lớp!");
+
+                using (var context = new QuanlyhocsinhContext())
+                {
+
+
+                  
+                    List<StudentDisplayViewModel> studentDisplayViewModels = SelectedStudents.Cast<StudentDisplayViewModel>().ToList();
+
+                    foreach (StudentDisplayViewModel student in studentDisplayViewModels)
+                    {
+
+                        List<CtLop> ctLops = await context.CtLops.Where(ct => ct.Mahs == student.Id && ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc).ToListAsync();
+                        foreach (CtLop ctLop in ctLops)
+                        {
+                            context.CtLops.Remove(ctLop);
+                        }
+
+
+                        await context.SaveChangesAsync();
+                        foreach (TreeItemViewModel treeItemViewModel in _treeItems)
+                        {
+                            if (treeItemViewModel.Id == ((Lop)_selectedTreeItem.Item).Makhoi)
+                            {
+                                foreach (TreeItemViewModel child in treeItemViewModel.Children)
+                                {
+                                    if (child.Id == _selectedTreeItem.Id && child.Item is Lop @class)
+                                    {
+                                        
+                                       @class.Siso -= SelectedStudents.Count;
+                                       SelectedTreeItem.NotifyItemChange();
+                                        NotPlaceNum += SelectedStudents.Count;
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        foreach (StudentDisplayViewModel studentDisplayViewModel in studentDisplayViewModels)
+                        {
+                            Students.Remove(studentDisplayViewModel);
+                        }
+                        SelectedStudents.Clear();
+
+
+
+                    }
+                    MessageBox.Show("Hủy phân lớp thành công!");
+
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+
+            }
+        }
         private async Task PlaceStudent()
         {
             try
@@ -324,13 +401,19 @@ namespace Academix.ViewModels.Main.Student
 
                 using (var context = new QuanlyhocsinhContext())
                 {
+                    Thamso MaximumClassSize = await context.Thamsos.FirstOrDefaultAsync(ts => ts.Tenthamso == "SiSoToiDa");
+                  
 
-
-                    if (isAlreadyPlaced && _selectedClass.Malop == _selectedTreeItem.Id)
+                    if (_isAlreadyPlaced && _selectedClass.Malop == _selectedTreeItem.Id)
                         throw new Exception("Học sinh đã có trong lớp!");
                         List<StudentDisplayViewModel> studentDisplayViewModels = SelectedStudents.Cast<StudentDisplayViewModel>().ToList();
+                        if(MaximumClassSize != null && (_selectedClass.Siso + studentDisplayViewModels.Count) > MaximumClassSize.Giatri)
+                        {
+                        throw new Exception($"Sĩ số vượt mức tối đa là {MaximumClassSize.Giatri}!");
 
-                        foreach (StudentDisplayViewModel student in studentDisplayViewModels)
+                    }
+
+                    foreach (StudentDisplayViewModel student in studentDisplayViewModels)
                         {
 
                             List<CtLop> ctLops = await context.CtLops.Where(ct => ct.Mahs == student.Id && ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc).ToListAsync();
@@ -356,7 +439,7 @@ namespace Academix.ViewModels.Main.Student
                                     {
                                         if (child.Id == _selectedClass.Malop && child.Item is Lop clas)
                                         {
-                                            if (isAlreadyPlaced && _selectedTreeItem != null && SelectedTreeItem.Item is Lop @class)
+                                            if (_isAlreadyPlaced && _selectedTreeItem != null && SelectedTreeItem.Item is Lop @class)
                                             {
                                                 @class.Siso -= SelectedStudents.Count;
                                                 SelectedTreeItem.NotifyItemChange();
@@ -373,23 +456,15 @@ namespace Academix.ViewModels.Main.Student
                             {
                                 Students.Remove(studentDisplayViewModel);
                             }
-                            NotPlaceNum = studentDisplayViewModels.Count;
+                            if(!IsAlreadyPlaced)
+                                NotPlaceNum = studentDisplayViewModels.Count;
 
                             SelectedStudents.Clear();
-                            MessageBox.Show("Chuyển lớp thành công!");
-
-
-
-
 
 
                         
                     }
-                    
-                    
-                    
-                   
-
+                    MessageBox.Show("Chuyển lớp thành công!");
 
 
                 }

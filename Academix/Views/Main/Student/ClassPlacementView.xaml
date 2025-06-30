@@ -107,6 +107,9 @@
                 <StackPanel Orientation="Horizontal"
                     FlowDirection="RightToLeft">
                     <Button Content="Chuyển đến lớp" Command="{Binding PlaceStudentCommand}" />
+                    <Button Content="Hủy phân lớp" 
+                            Command="{Binding UnPlaceStudentCommand}"
+                            Visibility="{Binding IsAlreadyPlaced, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </StackPanel>
             </Border>
         </StackPanel>
@@ -305,7 +308,7 @@ AlternationCount="10000"
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Lớp trước đó" 
                     Binding="{Binding ClassName}"
-                    Width="200">
+                    Width="160">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}"
                             BasedOn="{StaticResource LightBlueHeader}"/>

@@ -15,7 +15,7 @@ public partial class Hocsinh
 
     public string Diachi { get; set; } = null!;
 
-    public string Email { get; set; } = null!;
+    public string? Email { get; set; }
 
     public virtual ICollection<CtBangdiemmonhoc> CtBangdiemmonhocs { get; set; } = new List<CtBangdiemmonhoc>();
 

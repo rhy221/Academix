@@ -81,7 +81,12 @@ namespace Academix.ViewModels.Main.Report
 
         public string SelectedSubjectName
         {
-            get => _selectedSubject.Tenmh;
+            get
+            {
+                if (_selectedSubject != null)
+                    return _selectedSubject.Tenmh;
+                return "";
+            }
             set
             {
                 _selectedSubject.Tenmh = value;
@@ -91,7 +96,12 @@ namespace Academix.ViewModels.Main.Report
 
         public string SelectedSemesterName
         {
-            get => _selectedSemester.Tenhocky;
+            get
+            {
+                if (_selectedSemester != null)
+                    return _selectedSemester.Tenhocky;
+                return "";
+            }
             set
             {
                 _selectedSemester.Tenhocky = value;

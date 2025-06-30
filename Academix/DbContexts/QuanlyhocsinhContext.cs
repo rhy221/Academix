@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Academix.Models;
-using Academix.Models.Main;
 using Microsoft.EntityFrameworkCore;
-
+using Academix.Models;
 namespace Academix.DbContexts;
 
 public partial class QuanlyhocsinhContext : DbContext
@@ -57,7 +55,7 @@ public partial class QuanlyhocsinhContext : DbContext
     {
         modelBuilder.Entity<Bangdiemmonhoc>(entity =>
         {
-            entity.HasKey(e => e.Mabdmh).HasName("PK__BANGDIEM__F4CFCE775C39D2C2");
+            entity.HasKey(e => e.Mabdmh).HasName("PK__BANGDIEM__F4CFCE772965FB09");
 
             entity.ToTable("BANGDIEMMONHOC");
 
@@ -81,22 +79,22 @@ public partial class QuanlyhocsinhContext : DbContext
             entity.HasOne(d => d.MahockyNavigation).WithMany(p => p.Bangdiemmonhocs)
                 .HasForeignKey(d => d.Mahocky)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BANGDIEMM__MAHOC__571DF1D5");
+                .HasConstraintName("FK__BANGDIEMM__MAHOC__5E8A0973");
 
             entity.HasOne(d => d.MalopNavigation).WithMany(p => p.Bangdiemmonhocs)
                 .HasForeignKey(d => d.Malop)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BANGDIEMM__MALOP__5535A963");
+                .HasConstraintName("FK__BANGDIEMM__MALOP__5CA1C101");
 
             entity.HasOne(d => d.MamhNavigation).WithMany(p => p.Bangdiemmonhocs)
                 .HasForeignKey(d => d.Mamh)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BANGDIEMMO__MAMH__5629CD9C");
+                .HasConstraintName("FK__BANGDIEMMO__MAMH__5D95E53A");
         });
 
         modelBuilder.Entity<Bctongkethocky>(entity =>
         {
-            entity.HasKey(e => e.Mabctkhocky).HasName("PK__BCTONGKE__DE6521E557AFFF1F");
+            entity.HasKey(e => e.Mabctkhocky).HasName("PK__BCTONGKE__DE6521E5DC017B54");
 
             entity.ToTable("BCTONGKETHOCKY");
 
@@ -116,17 +114,17 @@ public partial class QuanlyhocsinhContext : DbContext
             entity.HasOne(d => d.MahockyNavigation).WithMany(p => p.Bctongkethockies)
                 .HasForeignKey(d => d.Mahocky)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BCTONGKET__MAHOC__70DDC3D8");
+                .HasConstraintName("FK__BCTONGKET__MAHOC__719CDDE7");
 
             entity.HasOne(d => d.ManamhocNavigation).WithMany(p => p.Bctongkethockies)
                 .HasForeignKey(d => d.Manamhoc)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BCTONGKET__MANAM__71D1E811");
+                .HasConstraintName("FK__BCTONGKET__MANAM__72910220");
         });
 
         modelBuilder.Entity<Bctongketmon>(entity =>
         {
-            entity.HasKey(e => e.Mabctkmon).HasName("PK__BCTONGKE__DCCA9B0EEBE8666B");
+            entity.HasKey(e => e.Mabctkmon).HasName("PK__BCTONGKE__DCCA9B0EF90829D1");
 
             entity.ToTable("BCTONGKETMON");
 
@@ -150,28 +148,24 @@ public partial class QuanlyhocsinhContext : DbContext
             entity.HasOne(d => d.MahockyNavigation).WithMany(p => p.Bctongketmons)
                 .HasForeignKey(d => d.Mahocky)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BCTONGKET__MAHOC__693CA210");
+                .HasConstraintName("FK__BCTONGKET__MAHOC__69FBBC1F");
 
             entity.HasOne(d => d.MamhNavigation).WithMany(p => p.Bctongketmons)
                 .HasForeignKey(d => d.Mamh)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BCTONGKETM__MAMH__68487DD7");
+                .HasConstraintName("FK__BCTONGKETM__MAMH__690797E6");
 
             entity.HasOne(d => d.ManamhocNavigation).WithMany(p => p.Bctongketmons)
                 .HasForeignKey(d => d.Manamhoc)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BCTONGKET__MANAM__6A30C649");
+                .HasConstraintName("FK__BCTONGKET__MANAM__6AEFE058");
         });
 
         modelBuilder.Entity<CtBangdiemmonhoc>(entity =>
         {
-            entity.HasKey(e => e.Mactbdmh).HasName("PK__CT_BANGD__273B105327C3A8EC");
+            entity.HasKey(e => e.Mactbdmh).HasName("PK__CT_BANGD__273B10537328963A");
 
-            entity.ToTable("CT_BANGDIEMMONHOC", tb =>
-                {
-                    tb.HasTrigger("TRG_CAPNHAT_DIEM_TRUNG_BINH_HOC_KY");
-                    tb.HasTrigger("TRG_Update_CT_BCTONGKETMON");
-                });
+            entity.ToTable("CT_BANGDIEMMONHOC");
 
             entity.Property(e => e.Mactbdmh)
                 .HasMaxLength(10)
@@ -190,17 +184,17 @@ public partial class QuanlyhocsinhContext : DbContext
             entity.HasOne(d => d.MabdmhNavigation).WithMany(p => p.CtBangdiemmonhocs)
                 .HasForeignKey(d => d.Mabdmh)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_BANGDI__MABDM__5FB337D6");
+                .HasConstraintName("FK__CT_BANGDI__MABDM__6166761E");
 
             entity.HasOne(d => d.MahsNavigation).WithMany(p => p.CtBangdiemmonhocs)
                 .HasForeignKey(d => d.Mahs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_BANGDIE__MAHS__60A75C0F");
+                .HasConstraintName("FK__CT_BANGDIE__MAHS__625A9A57");
         });
 
         modelBuilder.Entity<CtBctongkethocky>(entity =>
         {
-            entity.HasKey(e => new { e.Mabctkhocky, e.Malop }).HasName("PK__CT_BCTON__D9C6FFC4BC08251F");
+            entity.HasKey(e => new { e.Mabctkhocky, e.Malop }).HasName("PK__CT_BCTON__D9C6FFC49C6AAD15");
 
             entity.ToTable("CT_BCTONGKETHOCKY");
 
@@ -219,17 +213,17 @@ public partial class QuanlyhocsinhContext : DbContext
             entity.HasOne(d => d.MabctkhockyNavigation).WithMany(p => p.CtBctongkethockies)
                 .HasForeignKey(d => d.Mabctkhocky)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_BCTONG__MABCT__74AE54BC");
+                .HasConstraintName("FK__CT_BCTONG__MABCT__756D6ECB");
 
             entity.HasOne(d => d.MalopNavigation).WithMany(p => p.CtBctongkethockies)
                 .HasForeignKey(d => d.Malop)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_BCTONG__MALOP__75A278F5");
+                .HasConstraintName("FK__CT_BCTONG__MALOP__76619304");
         });
 
         modelBuilder.Entity<CtBctongketmon>(entity =>
         {
-            entity.HasKey(e => new { e.Mabctkmon, e.Malop }).HasName("PK__CT_BCTON__DB69452FE2EBC03F");
+            entity.HasKey(e => new { e.Mabctkmon, e.Malop }).HasName("PK__CT_BCTON__DB69452F0992D520");
 
             entity.ToTable("CT_BCTONGKETMON");
 
@@ -248,19 +242,19 @@ public partial class QuanlyhocsinhContext : DbContext
             entity.HasOne(d => d.MabctkmonNavigation).WithMany(p => p.CtBctongketmons)
                 .HasForeignKey(d => d.Mabctkmon)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_BCTONG__MABCT__6D0D32F4");
+                .HasConstraintName("FK__CT_BCTONG__MABCT__6DCC4D03");
 
             entity.HasOne(d => d.MalopNavigation).WithMany(p => p.CtBctongketmons)
                 .HasForeignKey(d => d.Malop)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_BCTONG__MALOP__6E01572D");
+                .HasConstraintName("FK__CT_BCTONG__MALOP__6EC0713C");
         });
 
         modelBuilder.Entity<CtDiemmonhoc>(entity =>
         {
-            entity.HasKey(e => new { e.Mactbdmh, e.Maloaidiem, e.Lan }).HasName("PK__CT_DIEMM__5622FFDF95E5FD57");
+            entity.HasKey(e => new { e.Mactbdmh, e.Maloaidiem, e.Lan }).HasName("PK__CT_DIEMM__5622FFDFCA7D7087");
 
-            entity.ToTable("CT_DIEMMONHOC", tb => tb.HasTrigger("TRG_CAPNHAT_DIEM_TRUNG_BINH_MON"));
+            entity.ToTable("CT_DIEMMONHOC");
 
             entity.Property(e => e.Mactbdmh)
                 .HasMaxLength(10)
@@ -276,23 +270,19 @@ public partial class QuanlyhocsinhContext : DbContext
             entity.HasOne(d => d.MactbdmhNavigation).WithMany(p => p.CtDiemmonhocs)
                 .HasForeignKey(d => d.Mactbdmh)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_DIEMMO__MACTB__6477ECF3");
+                .HasConstraintName("FK__CT_DIEMMO__MACTB__65370702");
 
             entity.HasOne(d => d.MaloaidiemNavigation).WithMany(p => p.CtDiemmonhocs)
                 .HasForeignKey(d => d.Maloaidiem)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_DIEMMO__MALOA__656C112C");
+                .HasConstraintName("FK__CT_DIEMMO__MALOA__662B2B3B");
         });
 
         modelBuilder.Entity<CtLop>(entity =>
         {
-            entity.HasKey(e => new { e.Malop, e.Mahs, e.Mahocky }).HasName("PK__CT_LOP__1B0CD90441F03090");
+            entity.HasKey(e => new { e.Malop, e.Mahs, e.Mahocky }).HasName("PK__CT_LOP__1B0CD904842141FD");
 
-            entity.ToTable("CT_LOP", tb =>
-                {
-                    tb.HasTrigger("trg_UpdateSiSo_Delete");
-                    tb.HasTrigger("trg_UpdateSiSo_Insert");
-                });
+            entity.ToTable("CT_LOP");
 
             entity.Property(e => e.Malop)
                 .HasMaxLength(10)
@@ -311,17 +301,17 @@ public partial class QuanlyhocsinhContext : DbContext
             entity.HasOne(d => d.MahockyNavigation).WithMany(p => p.CtLops)
                 .HasForeignKey(d => d.Mahocky)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_LOP__MAHOCKY__0E6E26BF");
+                .HasConstraintName("FK__CT_LOP__MAHOCKY__59C55456");
 
             entity.HasOne(d => d.MahsNavigation).WithMany(p => p.CtLops)
                 .HasForeignKey(d => d.Mahs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_LOP__MAHS__0D7A0286");
+                .HasConstraintName("FK__CT_LOP__MAHS__58D1301D");
 
             entity.HasOne(d => d.MalopNavigation).WithMany(p => p.CtLops)
                 .HasForeignKey(d => d.Malop)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_LOP__MALOP__0C85DE4D");
+                .HasConstraintName("FK__CT_LOP__MALOP__57DD0BE4");
         });
 
         modelBuilder.Entity<Hocky>(entity =>
@@ -335,13 +325,13 @@ public partial class QuanlyhocsinhContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("MAHOCKY");
             entity.Property(e => e.Tenhocky)
-                .HasMaxLength(10)
+                .HasMaxLength(20)
                 .HasColumnName("TENHOCKY");
         });
 
         modelBuilder.Entity<Hocsinh>(entity =>
         {
-            entity.HasKey(e => e.Mahs).HasName("PK__HOCSINH__603F20DD1D5ED92A");
+            entity.HasKey(e => e.Mahs).HasName("PK__HOCSINH__603F20DDCF124170");
 
             entity.ToTable("HOCSINH");
 
@@ -357,7 +347,6 @@ public partial class QuanlyhocsinhContext : DbContext
                 .HasColumnName("EMAIL");
             entity.Property(e => e.Gioitinh)
                 .HasMaxLength(3)
-                .IsUnicode(false)
                 .HasColumnName("GIOITINH");
             entity.Property(e => e.Hoten)
                 .HasMaxLength(50)
@@ -400,7 +389,7 @@ public partial class QuanlyhocsinhContext : DbContext
 
         modelBuilder.Entity<Lop>(entity =>
         {
-            entity.HasKey(e => e.Malop).HasName("PK__LOP__7A3DE211A1816766");
+            entity.HasKey(e => e.Malop).HasName("PK__LOP__7A3DE21188B0701B");
 
             entity.ToTable("LOP");
 
@@ -419,17 +408,18 @@ public partial class QuanlyhocsinhContext : DbContext
             entity.Property(e => e.Siso).HasColumnName("SISO");
             entity.Property(e => e.Tenlop)
                 .HasMaxLength(10)
+                .IsUnicode(false)
                 .HasColumnName("TENLOP");
 
             entity.HasOne(d => d.MakhoiNavigation).WithMany(p => p.Lops)
                 .HasForeignKey(d => d.Makhoi)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__LOP__MAKHOI__47DBAE45");
+                .HasConstraintName("FK__LOP__MAKHOI__540C7B00");
 
             entity.HasOne(d => d.ManamhocNavigation).WithMany(p => p.Lops)
                 .HasForeignKey(d => d.Manamhoc)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__LOP__MANAMHOC__48CFD27E");
+                .HasConstraintName("FK__LOP__MANAMHOC__55009F39");
         });
 
         modelBuilder.Entity<Monhoc>(entity =>

@@ -7,7 +7,7 @@ public partial class Hocky
 {
     public string Mahocky { get; set; } = null!;
 
-    public string Tenhocky { get; set; } = null!;
+    public string? Tenhocky { get; set; }
 
     public virtual ICollection<Bangdiemmonhoc> Bangdiemmonhocs { get; set; } = new List<Bangdiemmonhoc>();
 

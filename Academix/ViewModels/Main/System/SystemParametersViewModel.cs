@@ -172,9 +172,18 @@ namespace Academix.ViewModels.Main.System
             {
                 
                 if (MinimumAge >= MaximumAge)
-                    throw new Exception("Tuổi tối thiểu không được lớn hơn tuổi tối đa");
+                    throw new Exception("Tuổi tối thiểu không được lớn hơn hoặc bằng tuổi tối đa");
                 if (MinimumScore >= MaximumScore)
-                    throw new Exception("Điểm tối thiểu không được lớn hơn điển tối đa");
+                    throw new Exception("Điểm tối thiểu không được lớn hơn hoặc bằng điểm tối đa");
+                if(MinimumAge < 0 || 
+                    MaximumAge < 0 ||
+                    MinimumScore < 0 ||
+                    MaximumScore < 0 ||
+                    MaximumClassize < 0 ||
+                    PassingGrade < 0 ||
+                    SubjectPassingGrade < 0)
+                    throw new Exception("Điểm thông số không thể mang giá trị âm");
+
                 using (var context = new QuanlyhocsinhContext())
                 {
                     List<Thamso> parameters = await context.Thamsos.ToListAsync();

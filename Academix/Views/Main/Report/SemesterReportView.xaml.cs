@@ -24,7 +24,6 @@ namespace Academix.Views
         public SemesterReportView()
         {
             InitializeComponent();
-            this.DataContext = new SemesterReportViewModel();
         }
     }
 }

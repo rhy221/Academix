@@ -93,7 +93,7 @@ namespace Academix.ViewModels.Main.Student
                     {
                         Thamso maximumClassSize = thamsos.FirstOrDefault(t => t.Tenthamso == "SiSoToiDa");
 
-                        if (_selectedClass.Siso == maximumClassSize.Giatri)
+                        if (_selectedClass.Siso >= maximumClassSize.Giatri)
                             throw new Exception($"Không thể thêm học sinh vì vượt qua sĩ số tối đa là {maximumClassSize.Giatri}");
                         Hocsinh student = new Hocsinh(GenerateIdService.GenerateId(), _fullName, _selectedGender, _dateOfBirth ?? new DateTime(), _selectedProvince.name + "_" + _selectedDistrict.name + "_" + _selectedWard.name, _email);
                         List<Hocky> semesters = await context.Hockies.ToListAsync();

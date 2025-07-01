@@ -155,7 +155,7 @@ namespace Academix.ViewModels.Main.Class
         public string SearchClassName { get; set; }
 
 
-        private ClassViewModel _selectedClass;
+        private ClassViewModel _selectedClass = new ClassViewModel(new Lop(), "", "");
         public ClassViewModel SelectedClass
         {
             get
@@ -165,12 +165,15 @@ namespace Academix.ViewModels.Main.Class
             }
             set
             {
-
-                _selectedClass = value;
-                EditClassName = _selectedClass.ClassName;
-                EditClassGrade = _grade.FirstOrDefault(g => g.Makhoi == _selectedClass.Class.Makhoi);
-                EditClassSchoolYear = _schoolYears.FirstOrDefault(sy => sy.Manamhoc == _selectedClass.Class.Manamhoc);
-                OnPropertyChanged(nameof(SelectedClass));
+                if(value != null)
+                {
+                    _selectedClass = value;
+                    EditClassName = _selectedClass.ClassName;
+                    EditClassGrade = _grade.FirstOrDefault(g => g.Makhoi == _selectedClass.Class.Makhoi);
+                    EditClassSchoolYear = _schoolYears.FirstOrDefault(sy => sy.Manamhoc == _selectedClass.Class.Manamhoc);
+                    OnPropertyChanged(nameof(SelectedClass));
+                }
+               
             }
         }
 
@@ -356,6 +359,8 @@ namespace Academix.ViewModels.Main.Class
         {
             try
             {
+                if (_selectedClass == null)
+                    return;
                 if (string.IsNullOrWhiteSpace(EditClassName) || EditClassGrade == null || EditClassSchoolYear == null)
                     throw new Exception("Xin hãy nhập thông tin đầy đủ!");
 
@@ -383,9 +388,11 @@ namespace Academix.ViewModels.Main.Class
                                    .Include(l => l.CtLops)
                                    .FirstOrDefaultAsync(l => l.Malop == _selectedClass.Id);
                     
-                    int position = Classes.IndexOf(_selectedClass);
-                    _selectedClass = new ClassViewModel(@class, @class.MakhoiNavigation.Tenkhoi, @class.ManamhocNavigation.ToString());
-                    Classes[position] = _selectedClass;
+                    int position = _classes.IndexOf(_selectedClass);
+                    ClassViewModel newClass = new ClassViewModel(@class, @class.MakhoiNavigation.Tenkhoi, @class.ManamhocNavigation.ToString());
+                    Classes.RemoveAt(position);
+                    Classes.Insert(position, newClass);
+                    _selectedClass = newClass;
                     OnPropertyChanged(nameof(Classes)); 
                     MessageBox.Show("Thay đổi lớp thành công");
                 }

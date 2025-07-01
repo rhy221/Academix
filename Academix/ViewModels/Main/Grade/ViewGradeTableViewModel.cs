@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Academix.DbContexts;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 
 namespace Academix.ViewModels.Main.Grade
@@ -33,7 +34,16 @@ namespace Academix.ViewModels.Main.Grade
             }
         }
 
-        public ObservableCollection<DataGridColumn> DynamicColumns { get; set; } = new ObservableCollection<DataGridColumn>();
+        private ObservableCollection<DataGridColumn> _dynamicColumns = new ObservableCollection<DataGridColumn>();
+        public ObservableCollection<DataGridColumn> DynamicColumns
+        {
+            get => _dynamicColumns;
+            set
+            {
+                _dynamicColumns = value;
+                OnPropertyChanged(nameof(DynamicColumns));
+            }
+        }
 
         public string ClassName => _bangdiemmonhoc.MalopNavigation.Tenlop;
         public string SubjectName => _bangdiemmonhoc.MamhNavigation.Tenmh;
@@ -68,11 +78,14 @@ namespace Academix.ViewModels.Main.Grade
                     GradeTableItemViewModel gradeTableItemViewModel = new GradeTableItemViewModel(student);
                     if(student.CtBangdiemmonhocs.Count > 0)
                     {
-                        //foreach(Loaidiem scoreType in scoreTypes)
+                        //foreach (Loaidiem scoreType in scoreTypes)
                         //{
                         //    foreach (CtDiemmonhoc ctDiemmonhoc in student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Where(ct => ct.Maloaidiem == scoreType.Maloaidiem))
                         //    {
-                        //        gradeTableItemViewModel.OralScoresList.Add(ctDiemmonhoc.Diem);
+                        //        if (gradeTableItemViewModel.Scores[scoreType.Maloaidiem] == null)
+                        //            gradeTableItemViewModel.Scores[scoreType.Maloaidiem] = "";
+                        //        gradeTableItemViewModel.Scores[scoreType.Maloaidiem] += ctDiemmonhoc.Diem + " ";
+
 
                         //    }
                         //}
@@ -99,9 +112,21 @@ namespace Academix.ViewModels.Main.Grade
                         }
                         gradeTableItemViewModel.GPA = Math.Round(student.CtBangdiemmonhocs.FirstOrDefault().Dtbmon, 2);
                     }
+                    
                    
                     gradeTableItemViewModels.Add(gradeTableItemViewModel);
                 }
+                //foreach (Loaidiem scoretype in scoreTypes)
+                //{
+                //    DynamicColumns.Add(new DataGridTextColumn()
+                //    {
+                //        Header = scoretype.Tenloaidiem,
+                //        Width = 100,
+                //        //Binding = new Binding($"gradeTableItemViewModel.Scores[{scoretype.Maloaidiem}]")
+
+                //    });
+
+                //}
                 GradeTableItems = gradeTableItemViewModels;
             }
         }

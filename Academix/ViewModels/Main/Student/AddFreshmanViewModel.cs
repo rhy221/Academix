@@ -105,16 +105,15 @@ namespace Academix.ViewModels.Main.Student
                         ;
 
                         context.Hocsinhs.Add(student);
-                        await context.SaveChangesAsync();
                     }
                     else
                     {
 
                         Hocsinh student = new Hocsinh(GenerateIdService.GenerateId(), _fullName, _selectedGender, _dateOfBirth ?? new DateTime(), _selectedProvince.name + "_" + _selectedDistrict.name + "_" + _selectedWard.name, _email);
                         context.Hocsinhs.Add(student);
-                        await context.SaveChangesAsync();
                     }
-
+                    await context.SaveChangesAsync();
+                    _selectedClass.Siso++;
 
                     MessageBox.Show("Thêm học sinh thành công!");
                 }

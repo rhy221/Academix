@@ -107,6 +107,7 @@ namespace Academix.ViewModels.Main.Student
                     }
                     context.Hocsinhs.Add(student);
                     await context.SaveChangesAsync();
+                    _selectedClass.Siso++;
                     AddStudent?.Invoke(student.Mahs);
                     MessageBox.Show("Thêm học sinh thành công!");
                 }
@@ -114,7 +115,7 @@ namespace Academix.ViewModels.Main.Student
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.StackTrace);
+                MessageBox.Show(ex.Message);
             }
             finally
             {

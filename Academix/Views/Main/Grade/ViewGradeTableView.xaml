@@ -154,10 +154,10 @@ Value="0,0,20,0"/>
             <DataGrid.Foreground>
                 <StaticResource ResourceKey="GrayForeground"/>
             </DataGrid.Foreground>
-            <DataGrid.ColumnHeaderStyle>
+            <!--<DataGrid.ColumnHeaderStyle>
                 <Style TargetType="DataGridColumnHeader"
                       BasedOn="{StaticResource LightBlueHeader}"/>
-            </DataGrid.ColumnHeaderStyle>
+            </DataGrid.ColumnHeaderStyle>-->
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Setter Property="TextBlock.TextAlignment" 

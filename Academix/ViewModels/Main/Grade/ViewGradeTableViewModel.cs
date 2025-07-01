@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Academix.DbContexts;
+using System.Windows.Controls;
 
 
 namespace Academix.ViewModels.Main.Grade
@@ -31,6 +32,8 @@ namespace Academix.ViewModels.Main.Grade
                 OnPropertyChanged(nameof(GradeTableItems));
             }
         }
+
+        public ObservableCollection<DataGridColumn> DynamicColumns { get; set; } = new ObservableCollection<DataGridColumn>();
 
         public string ClassName => _bangdiemmonhoc.MalopNavigation.Tenlop;
         public string SubjectName => _bangdiemmonhoc.MamhNavigation.Tenmh;
@@ -58,12 +61,21 @@ namespace Academix.ViewModels.Main.Grade
                                                       .Include(hs => hs.CtBangdiemmonhocs.Where(ct => ct.Mabdmh == _bangdiemmonhoc.Mabdmh))
                                                       .ThenInclude(ct => ct.CtDiemmonhocs)
                                                       .ToListAsync();
+                List<Loaidiem> scoreTypes = await context.Loaidiems.OrderBy(ld => ld.Hesold).ToListAsync();
                 ObservableCollection<GradeTableItemViewModel> gradeTableItemViewModels = new ObservableCollection<GradeTableItemViewModel>();
                 foreach(Hocsinh student in students)
                 {
                     GradeTableItemViewModel gradeTableItemViewModel = new GradeTableItemViewModel(student);
                     if(student.CtBangdiemmonhocs.Count > 0)
                     {
+                        //foreach(Loaidiem scoreType in scoreTypes)
+                        //{
+                        //    foreach (CtDiemmonhoc ctDiemmonhoc in student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Where(ct => ct.Maloaidiem == scoreType.Maloaidiem))
+                        //    {
+                        //        gradeTableItemViewModel.OralScoresList.Add(ctDiemmonhoc.Diem);
+
+                        //    }
+                        //}
                         foreach (CtDiemmonhoc ctDiemmonhoc in student.CtBangdiemmonhocs.FirstOrDefault().CtDiemmonhocs.Where(ct => ct.Maloaidiem == "M1"))
                         {
                             gradeTableItemViewModel.OralScoresList.Add(ctDiemmonhoc.Diem);

@@ -14,7 +14,8 @@ namespace Academix.ViewModels.Main.Grade
         public string Id => _student.Mahs;
         
         public string Name => _student.Hoten;
-
+        
+        public Dictionary<string, string> Scores = new Dictionary<string, string>();
         public List<double> OralScoresList { get; set; } = new List<double>();
         public List<double> ShortScoresList { get; set; } = new List<double>();
         public List<double> PeriodScoresList { get; set; } = new List<double>();

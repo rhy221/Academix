@@ -7,6 +7,8 @@
                           xmlns:viewModels="clr-namespace:Academix.ViewModels"
                               xmlns:converters="clr-namespace:Academix.Converters"
                                       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+                      xmlns:dePros="clr-namespace:Academix.DependencyProperties"
+
              mc:Ignorable="d" 
               d:DesignHeight="720" d:DesignWidth="1340">
 
@@ -124,15 +126,15 @@ Value="0,0,20,0"/>
             SelectionUnit="FullRow"
             SelectionMode="Single"
             AlternationCount="10000"
-            FontSize="20"
+            FontSize="16"
             FontWeight="Bold"
             ColumnHeaderHeight="50" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             EnableColumnVirtualization="True"
             EnableRowVirtualization="True" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False"
-                      >
+                >
             <DataGrid.Resources>
-
+             
                 <!--<Style TargetType="DataGridColumnHeadersPresenter">
                         <Setter Property="Height" Value="60"/>
                     </Style>-->
@@ -152,6 +154,10 @@ Value="0,0,20,0"/>
             <DataGrid.Foreground>
                 <StaticResource ResourceKey="GrayForeground"/>
             </DataGrid.Foreground>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader"
+                      BasedOn="{StaticResource LightBlueHeader}"/>
+            </DataGrid.ColumnHeaderStyle>
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Setter Property="TextBlock.TextAlignment" 

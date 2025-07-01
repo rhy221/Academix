@@ -17,6 +17,7 @@
     <None Remove="DbScripts\PQNDscript.sql" />
     <None Remove="DbScripts\QLHSscript.sql" />
     <None Remove="PHANQUYENNGUOIDUNG.mdf" />
+    <None Remove="QUANLYHOCSINH.mdf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +28,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="PHANQUYENNGUOIDUNG.mdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="QUANLYHOCSINH.mdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -179,10 +179,11 @@ namespace Academix.ViewModels.Main.Student
                     }
                     TreeItems = treeItemViewModels;
                     Namhoc previousSchoolYear = await context.Namhocs.FirstOrDefaultAsync(nh => nh.Nam1 == _schoolYearStore.SelectedSchoolYear.Nam1 - 1);
-                    if(previousSchoolYear != null)
+                    List<Hocsinh> students;
+                    if (previousSchoolYear != null)
                     {
-                        List<Hocsinh> students = await context.Hocsinhs
-                                               .Include(hs => hs.CtLops.Where(ct => ct.MalopNavigation.Manamhoc == previousSchoolYear.Manamhoc || ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
+                        students = await context.Hocsinhs
+                                               .Include(hs => hs.CtLops.Where(ct => ct.MalopNavigation.Manamhoc == previousSchoolYear.Manamhoc))
                                                .ThenInclude(ct => ct.MalopNavigation)
                                                .Where(hs => !hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc) && !hs.CtLops.Any(ct => ct.MalopNavigation.Makhoi == "K12"))
                                                .ToListAsync();
@@ -193,15 +194,22 @@ namespace Academix.ViewModels.Main.Student
                         //    .Include(hs => hs.CtLops)
                         //    .ThenInclude(ct => ct.MalopNavigation)
                         //    .ToListAsync();
-                        ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
-                        foreach (Hocsinh student in students)
-                        {
-                            studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
-                        }
-                        NotPlaceNum = studentDisplayViewModels.Count;
-                        Students = studentDisplayViewModels;
+                        
                     }
-                   
+                    else
+                    {
+                         students = await context.Hocsinhs                                             
+                                              .Where(hs => !hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc) && !hs.CtLops.Any(ct => ct.MalopNavigation.Makhoi == "K12"))
+                                              .ToListAsync();
+                    }
+                    ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
+                    foreach (Hocsinh student in students)
+                    {
+                        studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
+                    }
+                    NotPlaceNum = studentDisplayViewModels.Count;
+                    Students = studentDisplayViewModels;
+
                 }
             }
             catch(Exception ex)
@@ -220,15 +228,21 @@ namespace Academix.ViewModels.Main.Student
             using (var context = new QuanlyhocsinhContext())
             {
                 Namhoc previousSchoolYear = await context.Namhocs.FirstOrDefaultAsync(nh => nh.Nam1 == _schoolYearStore.SelectedSchoolYear.Nam1 - 1);
-                if(previousSchoolYear != null)
+                List<Hocsinh> students;
+                if (previousSchoolYear != null)
                 {
-
+                    students = await context.Hocsinhs.Where(hs => hs.CtLops.Any(ct => ct.Malop == @class.Malop))
+                   .Include(hs => hs.CtLops.Where(ct => ct.MalopNavigation.Manamhoc == previousSchoolYear.Manamhoc))
+                   .ThenInclude(ct => ct.MalopNavigation)
+                   .ToListAsync();
                 }
-                List<Hocsinh> students = await context.Hocsinhs.Where(hs => hs.CtLops.Any(ct => ct.Malop == @class.Malop))
-                    .Include(hs => hs.CtLops.Where(ct => ct.MalopNavigation.Manamhoc == previousSchoolYear.Manamhoc || ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
-                    .ThenInclude(ct => ct.MalopNavigation)
-                    .ToListAsync();
-                ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
+                else
+                {
+                    students = await context.Hocsinhs.Where(hs => hs.CtLops.Any(ct => ct.Malop == @class.Malop))
+                  .ToListAsync();
+                }
+
+                    ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
                 foreach (Hocsinh student in students)
                 {
                     studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
@@ -239,45 +253,7 @@ namespace Academix.ViewModels.Main.Student
 
         }
 
-        private async Task Filter()
-        {
-            if (_selectedGrade == null)
-                return;
-            string underGradeId = "";
-
-            switch (_selectedGrade.Makhoi)
-            {
-                case "K10":
-                    break;
-                case "K11":
-                    underGradeId = "K10";
-                    break;
-                case "K12":
-                    underGradeId = "K11";
-                    break;
-
-            }
-
-            using (var context = new QuanlyhocsinhContext())
-            {
-                if(string.IsNullOrEmpty(underGradeId))
-                {
-
-                }
-                else
-                {
-                    List<Hocsinh> students = await context.Hocsinhs.Where(hs => hs.CtLops.Any(ct => ct.MalopNavigation.Makhoi == underGradeId)).ToListAsync();
-
-                }
-
-                //ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
-                //foreach (Hocsinh student in students)
-                //{
-                //    studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
-                //}
-                //Students = studentDisplayViewModels;
-            }
-        }
+        
         private async Task NotPlaceFilter()
         {
             try
@@ -285,10 +261,11 @@ namespace Academix.ViewModels.Main.Student
                 using (var context = new QuanlyhocsinhContext())
                 {
                     Namhoc previousSchoolYear = await context.Namhocs.FirstOrDefaultAsync(nh => nh.Nam1 == _schoolYearStore.SelectedSchoolYear.Nam1 - 1);
+                    List<Hocsinh> students;
                     if (previousSchoolYear != null)
                     {
-                        List<Hocsinh> students = await context.Hocsinhs
-                                               .Include(hs => hs.CtLops.Where(ct => ct.MalopNavigation.Manamhoc == previousSchoolYear.Manamhoc || ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc))
+                        students = await context.Hocsinhs
+                                               .Include(hs => hs.CtLops.Where(ct => ct.MalopNavigation.Manamhoc == previousSchoolYear.Manamhoc))
                                                .ThenInclude(ct => ct.MalopNavigation)
                                                .Where(hs => !hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc) && !hs.CtLops.Any(ct => ct.MalopNavigation.Makhoi == "K12"))
                                                .ToListAsync();
@@ -299,14 +276,21 @@ namespace Academix.ViewModels.Main.Student
                         //    .Include(hs => hs.CtLops)
                         //    .ThenInclude(ct => ct.MalopNavigation)
                         //    .ToListAsync();
-                        ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
-                        foreach (Hocsinh student in students)
-                        {
-                            studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
-                        }
-                        Students = studentDisplayViewModels;
-                        SelectedTreeItem = null;
+                       
                     }
+                    else
+                    {
+                        students = await context.Hocsinhs
+                                              .Where(hs => !hs.CtLops.Any(ct => ct.MalopNavigation.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc) && !hs.CtLops.Any(ct => ct.MalopNavigation.Makhoi == "K12"))
+                                              .ToListAsync();
+                    }
+                    ObservableCollection<StudentDisplayViewModel> studentDisplayViewModels = new ObservableCollection<StudentDisplayViewModel>();
+                    foreach (Hocsinh student in students)
+                    {
+                        studentDisplayViewModels.Add(new StudentDisplayViewModel(student));
+                    }
+                    Students = studentDisplayViewModels;
+                    SelectedTreeItem = null;
                     IsAlreadyPlaced = false;
 
                 }
@@ -373,7 +357,6 @@ namespace Academix.ViewModels.Main.Student
                         SelectedStudents.Clear();
 
 
-
                     }
                     MessageBox.Show("Hủy phân lớp thành công!");
 
@@ -402,16 +385,16 @@ namespace Academix.ViewModels.Main.Student
                 using (var context = new QuanlyhocsinhContext())
                 {
                     Thamso MaximumClassSize = await context.Thamsos.FirstOrDefaultAsync(ts => ts.Tenthamso == "SiSoToiDa");
-                  
 
                     if (_isAlreadyPlaced && _selectedClass.Malop == _selectedTreeItem.Id)
                         throw new Exception("Học sinh đã có trong lớp!");
                         List<StudentDisplayViewModel> studentDisplayViewModels = SelectedStudents.Cast<StudentDisplayViewModel>().ToList();
-                        if(MaximumClassSize != null && (_selectedClass.Siso + studentDisplayViewModels.Count) > MaximumClassSize.Giatri)
-                        {
-                        throw new Exception($"Sĩ số vượt mức tối đa là {MaximumClassSize.Giatri}!");
+                     
+                        if(MaximumClassSize != null && (_selectedClass.Siso + SelectedStudents.Count) > MaximumClassSize.Giatri)
+                        
+                            throw new Exception($"Sĩ số vượt mức tối đa là {MaximumClassSize.Giatri}!");
 
-                    }
+                    
 
                     foreach (StudentDisplayViewModel student in studentDisplayViewModels)
                         {
@@ -441,9 +424,13 @@ namespace Academix.ViewModels.Main.Student
                                         {
                                             if (_isAlreadyPlaced && _selectedTreeItem != null && SelectedTreeItem.Item is Lop @class)
                                             {
+                                                Lop classs = _classes.FirstOrDefault(l => l.Malop == @class.Malop);
+                                                if (classs != null)
+                                                    classs.Siso -= SelectedStudents.Count;
                                                 @class.Siso -= SelectedStudents.Count;
                                                 SelectedTreeItem.NotifyItemChange();
                                             }
+                                            _selectedClass.Siso += SelectedStudents.Count;
                                             clas.Siso += SelectedStudents.Count;
                                             child.NotifyItemChange();
                                             break;

@@ -400,14 +400,14 @@ namespace Academix.ViewModels.Main.Student
                     if(_selectedGrade.IsAll)
                     {
                         if (!_selectedClass.IsAll)
-                            query = query.Where(hs => hs.CtLops.FirstOrDefault().Malop == _selectedClass.Malop);
+                            query = query.Where(hs => hs.CtLops.Any(ct => ct.Malop == _selectedClass.Malop));
                     }         
                     else
                     {
                         if (!_selectedClass.IsAll)
-                            query = query.Where(hs => hs.CtLops.FirstOrDefault().Malop == _selectedClass.Malop);
+                            query = query.Where(hs => hs.CtLops.Any(ct => ct.Malop == _selectedClass.Malop));
                         else
-                            query = query.Where(hs => hs.CtLops.FirstOrDefault().MalopNavigation.Makhoi == _selectedGrade.Makhoi);
+                            query = query.Where(hs => hs.CtLops.Any(ct => ct.MalopNavigation.Makhoi == _selectedGrade.Makhoi));
 
                     }
                     if (_selectedGender != "[Tất cả]")

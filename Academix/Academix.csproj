@@ -14,6 +14,25 @@
     <None Remove="Assets\AcademixWhiteLogo.png" />
     <None Remove="Assets\HamBarBG.png" />
     <None Remove="Assets\palette.png" />
+    <None Remove="DbScripts\PQNDscript.sql" />
+    <None Remove="DbScripts\QLHSscript.sql" />
+    <None Remove="PHANQUYENNGUOIDUNG.mdf" />
+    <None Remove="QUANLYHOCSINH.mdf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DbScripts\PQNDscript.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DbScripts\QLHSscript.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PHANQUYENNGUOIDUNG.mdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="QUANLYHOCSINH.mdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

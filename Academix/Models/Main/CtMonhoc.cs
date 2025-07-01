@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Academix.Models.Main;
+namespace Academix.Models;
 
 public partial class CtMonhoc
 {

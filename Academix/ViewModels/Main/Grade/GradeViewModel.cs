@@ -180,105 +180,7 @@ namespace Academix.ViewModels.Main.Grade
             }
         }
 
-        //private void UpdateIndexes()
-        //{
-        //    for (int i = 0; i < FilteredStudents.Count; i++)
-        //    {
-        //        FilteredStudents[i].Index = i + 1;
-        //    }
-        //}
-
-
-        //private bool _isNumericUpDownEnabled = true;
-        //public bool IsNumericUpDownEnabled
-        //{
-        //    get => _isNumericUpDownEnabled;
-        //    set
-        //    {
-        //        if (_isNumericUpDownEnabled != value)
-        //        {
-        //            _isNumericUpDownEnabled = value;
-        //            OnPropertyChanged(nameof(IsNumericUpDownEnabled));
-        //        }
-        //    }
-        //}
-        //private void UpdateNumericUpDownState()
-        //{
-        //    if (SelectedScoreType == "Điểm cuối kỳ")
-        //    {
-        //        IsNumericUpDownEnabled = false;
-        //    }
-        //    else
-        //    {
-        //        IsNumericUpDownEnabled = true;
-        //    }
-        //}
-
-
-        //private int numberOfScoreColumns = 1;
-        //public int NumberOfScoreColumns
-        //{
-        //    get => numberOfScoreColumns;
-        //    set
-        //    {
-        //        // Lưu giá trị cũ để so sánh
-        //        int oldValue = numberOfScoreColumns;
-
-        //        // Nếu giá trị không đổi thì không làm gì
-        //        if (value == oldValue) return;
-
-        //        // --- LOGIC GIẢM SỐ CỘT ---
-        //        if (value < oldValue)
-        //        {
-        //            // Vị trí (index) của cột điểm sắp bị xóa
-        //            int columnIndexToRemove = value;
-
-        //            // Tìm các học sinh đã có điểm ở cột này
-        //            var studentsWithScore = FilteredStudents
-        //                .Where(s => s.Scores.Count > columnIndexToRemove && s.Scores[columnIndexToRemove].HasValue)
-        //                .ToList();
-
-        //            if (studentsWithScore.Any())
-        //            {
-        //                // Nếu có học sinh đã nhập điểm, hiển thị thông báo và không cho giảm
-        //                var studentNames = string.Join(", ", studentsWithScore.Select(s => s.Name));
-        //                MessageBox.Show($"Không thể giảm số lần điểm. Các học sinh sau đã có điểm ở cột này: {studentNames}.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
-
-        //                // Trả lại giá trị cũ cho NumericUpDown trên UI
-        //                OnPropertyChanged(nameof(NumberOfScoreColumns)); // Báo cho UI rằng giá trị đã bị "khôi phục"
-        //                return; // Dừng thực thi
-        //            }
-        //        }
-
-        //        // Nếu điều kiện giảm được thỏa mãn, hoặc nếu là tăng, thì tiến hành cập nhật
-        //        {
-        //            if (numberOfScoreColumns != value)
-        //            {
-        //                numberOfScoreColumns = value;
-        //                OnPropertyChanged(nameof(NumberOfScoreColumns));
-        //            }
-        //        }
-
-        //        // Cập nhật lại kích thước của các collection Scores
-        //        foreach (var student in FilteredStudents)
-        //        {
-        //            // Tăng: Thêm các giá trị null
-        //            while (student.Scores.Count < numberOfScoreColumns)
-        //            {
-        //                student.Scores.Add(null);
-        //            }
-        //            // Giảm: Xóa các phần tử cuối
-        //            while (student.Scores.Count > numberOfScoreColumns)
-        //            {
-        //                student.Scores.RemoveAt(student.Scores.Count - 1);
-        //            }
-        //        }
-
-
-        //    }
-        //}
-
-        //#endregion
+       
 
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -296,10 +198,33 @@ namespace Academix.ViewModels.Main.Grade
             _filteredClassList = new ObservableCollection<Lop>();
             _scoreTypes = new ObservableCollection<Loaidiem>();
             _no = 1;
+            _schoolYearStore.SelectedSchoolYearChanged += Update;
             SaveCommand = new AsyncRelayCommand(SaveChanges);
             DeleteCommand = new AsyncRelayCommand(Delete);
             ViewGradeTableCommand = new AsyncRelayCommand(ViewGradeTable);
             Task.Run(LoadDataAsync).ConfigureAwait(false);
+        }
+
+        ~GradeViewModel()
+        {
+            _schoolYearStore.SelectedSchoolYearChanged -= Update;
+        }
+        private void Update()
+        {
+            FilteredStudents.Clear();
+            UpdateClasses();
+        }
+
+        private async Task UpdateClasses()
+        {
+            using (var context = new QuanlyhocsinhContext())
+            {
+                _filteredClassList.Clear();
+                _classList = await context.Lops
+                                                   .Where(l => l.Manamhoc == _schoolYearStore.SelectedSchoolYear.Manamhoc)
+                                                   .ToListAsync();
+                SelectedGrade = null;
+            }
         }
 
         private async Task LoadDataAsync()

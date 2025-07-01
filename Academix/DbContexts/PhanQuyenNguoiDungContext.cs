@@ -17,7 +17,7 @@ namespace Academix.DbContexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         
-          =>  optionsBuilder.UseSqlServer("Server=DESKTOP-NQOI7D0;Database=PHANQUYENNGUOIDUNG;Trusted_Connection=True;TrustServerCertificate=True");
+          =>  optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\PHANQUYENNGUOIDUNG.mdf;Integrated Security=True;TrustServerCertificate=True");
         
 
 

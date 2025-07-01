@@ -49,7 +49,7 @@ public partial class QuanlyhocsinhContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-NQOI7D0;Database=QUANLYHOCSINH;Trusted_Connection=True;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\QUANLYHOCSINH.mdf;Integrated Security=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -165,7 +165,11 @@ public partial class QuanlyhocsinhContext : DbContext
         {
             entity.HasKey(e => e.Mactbdmh).HasName("PK__CT_BANGD__273B10537328963A");
 
-            entity.ToTable("CT_BANGDIEMMONHOC");
+            entity.ToTable("CT_BANGDIEMMONHOC", tb =>
+            {
+                tb.HasTrigger("TRG_CAPNHAT_DIEM_TRUNG_BINH_HOC_KY");
+                tb.HasTrigger("TRG_Update_CT_BCTONGKETMON");
+            });
 
             entity.Property(e => e.Mactbdmh)
                 .HasMaxLength(10)
@@ -254,7 +258,7 @@ public partial class QuanlyhocsinhContext : DbContext
         {
             entity.HasKey(e => new { e.Mactbdmh, e.Maloaidiem, e.Lan }).HasName("PK__CT_DIEMM__5622FFDFCA7D7087");
 
-            entity.ToTable("CT_DIEMMONHOC");
+            entity.ToTable("CT_DIEMMONHOC", tb => tb.HasTrigger("TRG_CAPNHAT_DIEM_TRUNG_BINH_MON"));
 
             entity.Property(e => e.Mactbdmh)
                 .HasMaxLength(10)
@@ -280,9 +284,14 @@ public partial class QuanlyhocsinhContext : DbContext
 
         modelBuilder.Entity<CtLop>(entity =>
         {
-            entity.HasKey(e => new { e.Malop, e.Mahs, e.Mahocky }).HasName("PK__CT_LOP__1B0CD904842141FD");
+            entity.HasKey(e => new { e.Malop, e.Mahs, e.Mahocky }).HasName("PK__CT_LOP__1B0CD904BC592D63");
 
-            entity.ToTable("CT_LOP");
+            entity.ToTable("CT_LOP", tb =>
+            {
+                tb.HasTrigger("TRG_Update_CT_BCTONGKETHOCKY");
+                tb.HasTrigger("trg_UpdateSiSo_Delete");
+                tb.HasTrigger("trg_UpdateSiSo_Insert");
+            });
 
             entity.Property(e => e.Malop)
                 .HasMaxLength(10)
@@ -301,17 +310,17 @@ public partial class QuanlyhocsinhContext : DbContext
             entity.HasOne(d => d.MahockyNavigation).WithMany(p => p.CtLops)
                 .HasForeignKey(d => d.Mahocky)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_LOP__MAHOCKY__59C55456");
+                .HasConstraintName("FK__CT_LOP__MAHOCKY__7B264821");
 
             entity.HasOne(d => d.MahsNavigation).WithMany(p => p.CtLops)
                 .HasForeignKey(d => d.Mahs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_LOP__MAHS__58D1301D");
+                .HasConstraintName("FK__CT_LOP__MAHS__7A3223E8");
 
             entity.HasOne(d => d.MalopNavigation).WithMany(p => p.CtLops)
                 .HasForeignKey(d => d.Malop)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CT_LOP__MALOP__57DD0BE4");
+                .HasConstraintName("FK__CT_LOP__MALOP__793DFFAF");
         });
 
         modelBuilder.Entity<Hocky>(entity =>

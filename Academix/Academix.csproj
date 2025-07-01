@@ -16,6 +16,8 @@
     <None Remove="Assets\palette.png" />
     <None Remove="DbScripts\PQNDscript.sql" />
     <None Remove="DbScripts\QLHSscript.sql" />
+    <None Remove="PHANQUYENNGUOIDUNG.mdf" />
+    <None Remove="QUANLYHOCSINH.mdf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +26,12 @@
     </Content>
     <Content Include="DbScripts\QLHSscript.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PHANQUYENNGUOIDUNG.mdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="QUANLYHOCSINH.mdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

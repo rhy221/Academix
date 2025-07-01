@@ -69,26 +69,30 @@ namespace Academix.ViewModels.Main.System
             set
             {
                 _selectedSubject = value;
-                SelectedSubjectName = value.Name;
-                SelectedSubjectMultiplier = value.Multiplier;
-                OnPropertyChanged(nameof(SelectedSubject));
-                OnPropertyChanged(nameof(SelectedSubjectName));
-                OnPropertyChanged(nameof(SelectedSubjectMultiplier));
-                foreach(ScoreTypeViewModel scoreTypeViewModel in _selectedSubjectScoreTypes)
+                if(value != null)
                 {
-                    bool isFound = false;
-                    foreach(Loaidiem scoreType in value.ScoreTypes)
+                    SelectedSubjectName = value.Name;
+                    SelectedSubjectMultiplier = value.Multiplier;
+                    OnPropertyChanged(nameof(SelectedSubject));
+                    OnPropertyChanged(nameof(SelectedSubjectName));
+                    OnPropertyChanged(nameof(SelectedSubjectMultiplier));
+                    foreach (ScoreTypeViewModel scoreTypeViewModel in _selectedSubjectScoreTypes)
                     {
-                        if(scoreType.Maloaidiem == scoreTypeViewModel.Id)
+                        bool isFound = false;
+                        foreach (Loaidiem scoreType in value.ScoreTypes)
                         {
-                            isFound = true;
-                            break;
-                        }
+                            if (scoreType.Maloaidiem == scoreTypeViewModel.Id)
+                            {
+                                isFound = true;
+                                break;
+                            }
 
+                        }
+                        scoreTypeViewModel.IsChecked = isFound;
                     }
-                    scoreTypeViewModel.IsChecked = isFound;
+                    OnPropertyChanged(nameof(SelectedSubjectScoreTypes));
                 }
-                OnPropertyChanged(nameof(SelectedSubjectScoreTypes));
+                
             }
         }
         public string SelectedSubjectName { get; set; }

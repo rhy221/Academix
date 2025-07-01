@@ -35,9 +35,13 @@ namespace Academix.ViewModels.Main.System
             set
             {
                 _selectedSemester = value;
-                ModifiedSemesterName = _selectedSemester.Name;
-                OnPropertyChanged(nameof(ModifiedSemesterName));
-                OnPropertyChanged(nameof(SelectedSemester));
+                if(_selectedSemester != null)
+                {
+                    ModifiedSemesterName = _selectedSemester.Name;
+                    OnPropertyChanged(nameof(ModifiedSemesterName));
+                    OnPropertyChanged(nameof(SelectedSemester));
+                }
+                
             }
         }
 

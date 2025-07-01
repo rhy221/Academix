@@ -165,9 +165,9 @@ namespace Academix.ViewModels.Main.Class
             }
             set
             {
-                if(value != null)
+                _selectedClass = value;
+                if (_selectedClass != null)
                 {
-                    _selectedClass = value;
                     EditClassName = _selectedClass.ClassName;
                     EditClassGrade = _grade.FirstOrDefault(g => g.Makhoi == _selectedClass.Class.Makhoi);
                     EditClassSchoolYear = _schoolYears.FirstOrDefault(sy => sy.Manamhoc == _selectedClass.Class.Manamhoc);

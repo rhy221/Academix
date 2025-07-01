@@ -61,10 +61,14 @@ namespace Academix.ViewModels.Main.System
             set
             {
                 _selectedScoreType = value;
-                SelectedScoreTypeName = value.Name;
-                SelectedScoreTypeMultiplier = value.Multiplier;
-                OnPropertyChanged(nameof(SelectedScoreTypeName));
-                OnPropertyChanged(nameof(SelectedScoreTypeMultiplier));
+                if(_selectedScoreType != null)
+                {
+                    SelectedScoreTypeName = value.Name;
+                    SelectedScoreTypeMultiplier = value.Multiplier;
+                    OnPropertyChanged(nameof(SelectedScoreTypeName));
+                    OnPropertyChanged(nameof(SelectedScoreTypeMultiplier));
+                }
+                
             }
         }
 

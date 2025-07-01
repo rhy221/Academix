@@ -36,9 +36,13 @@ namespace Academix.ViewModels.Main.System
             set
             {
                 _selectedSchoolYear = value;
-                ModifiedSchoolYear = _selectedSchoolYear.ToString();
-                OnPropertyChanged(nameof(ModifiedSchoolYear));
-                OnPropertyChanged(nameof(SelectedSchoolYear));
+                if(_selectedSchoolYear != null)
+                {
+                    ModifiedSchoolYear = _selectedSchoolYear.ToString();
+                    OnPropertyChanged(nameof(ModifiedSchoolYear));
+                    OnPropertyChanged(nameof(SelectedSchoolYear));
+                }
+               
             }
         }
 

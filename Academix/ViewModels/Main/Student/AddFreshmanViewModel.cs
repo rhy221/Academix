@@ -102,9 +102,11 @@ namespace Academix.ViewModels.Main.Student
                             student.CtLops.Add(new CtLop(_selectedClass.Malop, _studentID, semester.Mahocky, 0d));
 
                         }
-                        ;
+                        
 
                         context.Hocsinhs.Add(student);
+                        _selectedClass.Siso++;
+
                     }
                     else
                     {
@@ -113,7 +115,6 @@ namespace Academix.ViewModels.Main.Student
                         context.Hocsinhs.Add(student);
                     }
                     await context.SaveChangesAsync();
-                    _selectedClass.Siso++;
 
                     MessageBox.Show("Thêm học sinh thành công!");
                 }

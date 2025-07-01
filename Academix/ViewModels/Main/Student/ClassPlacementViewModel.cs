@@ -427,13 +427,10 @@ namespace Academix.ViewModels.Main.Student
                                 {
                                     if (_isAlreadyPlaced && _selectedTreeItem != null && SelectedTreeItem.Item is Lop @class)
                                     {
-                                        Lop classs = _classes.FirstOrDefault(l => l.Malop == @class.Malop);
-                                        if (classs != null)
-                                            classs.Siso -= SelectedStudents.Count;
+                                        
                                         @class.Siso -= SelectedStudents.Count;
                                         SelectedTreeItem.NotifyItemChange();
                                     }
-                                    _selectedClass.Siso += SelectedStudents.Count;
                                     clas.Siso += SelectedStudents.Count;
                                     child.NotifyItemChange();
                                     break;
